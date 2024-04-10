@@ -1,56 +1,61 @@
-# Hotel Web Project
+# Proyecto Web de Hotel
 
-This is a web page project for a hotel, developed as part of a full-stack project.
+Esta es una página web para un hotel, desarrollada como parte de un proyecto full-stack.
 
-### Table of Contents
-1. [Description](#description)
-2. [Technologies Used](#technologías-utilizadas)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-3. [Installation](#instalación)
-4. [Configuration](#configuración)
-5. [Usage](#uso)
-6. [Authors](#autores)
+## Tabla de contenidos
 
-### Description
-The hotel's website provides detailed information about services, available rooms, prices, and reservations. It also includes features such as user registration and reservation management.
+- [Proyecto Web de Hotel](#proyecto-web-de-hotel)
+  - [Tabla de contenidos](#tabla-de-contenidos)
+    - [Descripción](#descripción)
+    - [Tecnologías usadas](#tecnologías-usadas)
+      - [Frontend](#frontend)
+      - [Backend](#backend)
+    - [Base de Datos](#base-de-datos)
+    - [Instalacion](#instalacion)
+    - [Usage](#usage)
+    - [Autores](#autores)
 
-### Technologies Used
-#### Frontend:
+### Descripción
+
+El sitio web del hotel proporciona información detallada sobre servicios, habitaciones disponibles, precios y reservas. También incluye características como registro de usuarios y gestión de reservas.
+
+### Tecnologías usadas
+
+#### Frontend
+
 - HTML5
 - CSS3
 - JavaScript (React.js)
-#### Backend:
+
+#### Backend
+
 - Node.js
 - Express.js
 - MongoDB
 
-### Installation
-1. Clone the repository: git clone https://github.com/your-username/hotel-web.git
-2. Navigate to the project directory: cd hotel-web
-3. Install frontend and backend dependencies:
+### [Base de Datos](BD/base_de_datos.md)
+
+En este otro readme se ve lo necesario de la base de datos
+
+### Instalacion
+
+1. Clonar el repositorio
+2. Install frontend and backend dependencies:
 
 ```bash
-cd frontend
-npm install
-cd ..
 cd backend
 npm install
-```
-
-### Configuration
-1. Create a .env file in the backend directory and configure necessary environment variables, such as the MongoDB database connection and API keys.
-```bash
-DB_URL=mongodb://localhost:27017/hotel
-API_KEY=my_secret_key
+cd frontend
+npm install
 ```
 
 ### Usage
-1. Start the backend server: npm start in the backend directory.
-2. Start the frontend server: npm start in the frontend directory.
-3. Open your browser and visit http://localhost:3000 to view the hotel's website.
 
-### Authors
+1. Inicia el servidor backend: npm start en el directorio backend.
+2. Inicia el servidor frontend: npm start en el directorio frontend.
+3. Abre tu navegador y visita [http://localhost:3000](http://localhost:3000) para ver el sitio web del hotel.
+
+### Autores
 
 Jose Ignacio Sanchez Zeledon
 
