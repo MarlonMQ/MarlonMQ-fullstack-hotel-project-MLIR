@@ -13,6 +13,7 @@ Esta es una página web para un hotel, desarrollada como parte de un proyecto fu
     - [Base de Datos](#base-de-datos)
     - [Instalacion](#instalacion)
     - [Prototipo de baja fidelidad](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
+    - [Prototipo de baja fidelidad: enlace web](https://www.figma.com/file/OFNy7myUIhZMrpd3iX6IKa/Low-Fidelity-Prototype?type=design&node-id=0-1&mode=design)
     - [Usage](#usage)
     - [Autores](#autores)
 
