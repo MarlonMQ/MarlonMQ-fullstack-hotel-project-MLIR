@@ -20,6 +20,6 @@ Una vez que los cambios hayan sido fusionados a la rama principal, se puede desp
 
 Mantener un control de versiones en el que cada actualización se explique con un mensaje descriptivo el que se ha modificado y porqué.
 
-## Actualizar 
+## Actualizar
 
 A medida que otros miembros del equipo realicen cambios en el repositorio central, los desarrolladores deben asegurarse de actualiar su copia local con regularidad para mantenerla sincronizada con la última versión del proyecto.
