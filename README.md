@@ -26,14 +26,16 @@ El sitio web del hotel proporciona información detallada sobre servicios, habit
 #### Frontend
 
 - HTML5
-- CSS3
+- CSS
 - JavaScript (React.js)
 
 #### Backend
 
 - Node.js
 - Express.js
-- MongoDB
+- SQL
+
+ ### [User Persona ](https://www.canva.com/design/DAGB-ZCBiA0/2AxU5ZSihHsgPBm9dHqHkQ/edit?utm_content=DAGB-ZCBiA0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ### [Base de Datos](BD/base_de_datos.md)
 
