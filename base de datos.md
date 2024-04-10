@@ -63,7 +63,6 @@ CREATE TABLE reserve(
   id_user VARCHAR(255),
   id_service INT,
   FOREIGN KEY (id_user) REFERENCES t_user(email),
-  FOREIGN KEY (id_service) REFERENCES service(id_service),
 )
 ```
 
@@ -167,7 +166,6 @@ VALUES
   ('user1@example.com', 'John', 'Doe', 'password1', '123456789', '1990-05-15', 'American', 1),
   ('user2@example.com', 'Jane', 'Smith', 'password2', '987654321', '1985-10-20', 'British', 0),
   ('user3@example.com', 'Alice', 'Johnson', 'password3', '555555555', '2000-03-08', 'Canadian', 1);
-
 ```
 
 ### Ingreso de datos a rol
@@ -234,12 +232,11 @@ VALUES
 ### Ingreso de datos a reserva
 
 ```sql
-INSERT INTO reserve (arrival_date, departure_date, reserve_status, id_user, id_service)
+INSERT INTO reserve (arrival_date, departure_date, reserve_status, id_user)
 VALUES 
-  ('2024-05-01', '2024-05-05', 'Confirmed', 'user1@example.com', 1),
-  ('2024-06-10', '2024-06-15', 'Pending', 'user2@example.com', 2),
-  ('2024-07-20', '2024-07-25', 'Confirmed', 'user3@example.com', 3);
-
+  ('2024-05-01', '2024-05-05', 'Confirmed', 'user1@example.com'),
+  ('2024-06-10', '2024-06-15', 'Pending', 'user2@example.com'),
+  ('2024-07-20', '2024-07-25', 'Confirmed', 'user3@example.com');
 ```
 
 ### Ingreso de datos a factura
@@ -270,7 +267,6 @@ VALUES
   (1, 1),
   (2, 2),
   (3, 3);
-
 ```
 
 ## Consultas Básicas
