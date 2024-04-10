@@ -12,7 +12,7 @@ Esta es una página web para un hotel, desarrollada como parte de un proyecto fu
       - [Backend](#backend)
     - [Base de Datos](#base-de-datos)
     - [Instalacion](#instalacion)
-    - [Prototipo de baja fidelidad](./low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
+    - [Prototipo de baja fidelidad](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
     - [Usage](#usage)
     - [Autores](#autores)
 
