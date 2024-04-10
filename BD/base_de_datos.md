@@ -1,6 +1,7 @@
 # Base De Datos
 
 * [Diagramas ER](#diagramas-er)
+* [Restricciones de Entidades y Relaciones](#restricciones-de-entidades-y-relaciones)
 * [Creación](#creación-base-de-datos)
 * [Ingreso de datos](#ejemplo-de-ingreso-de-datos)
 * [Búsquedas básicas](#consultas-básicas)
@@ -11,12 +12,73 @@
 
 ![Diagrama ER](BD_images/Atributos.drawio.svg)
 
+## Restricciones de Entidades y Relaciones
+
+1.**t_user**:
+
+* La columna email debe ser única ya que es la clave primaria o un identificador único para cada usuario.
+  
+2.**payment_method**:
+
+* La columna `id_payment_method` debe ser única ya que es la clave primaria.
+* La columna `id_user` debe ser una clave externa que hace referencia a la columna email en la tabla `t_user`, lo que indica que cada método de pago está asociado a un usuario específico.
+  
+3.**role:**
+
+* La columna `id_role` debe ser única ya que es la clave primaria.
+* La columna `id_user` debe ser una clave externa que hace referencia a la columna email en la tabla `t_user`, lo que indica que cada rol está asociado a un usuario específico.
+  
+4.**room:**
+
+* La columna `id_room` debe ser única ya que es la clave primaria.
+
+5.**service:**
+
+* La columna `id_service` debe ser única ya que es la clave primaria.
+
+6.**payment_method:**
+
+* La columna `id_payment` debe ser única ya que es la clave primaria.
+* La columna `id_user` debe ser una clave externa que hace referencia a la columna email en la tabla `t_user`, lo que indica que cada método de pago está asociado a un usuario específico.
+
+7.**transference:**
+
+* La columna `id_transference` debe ser única ya que es la clave primaria.
+* La columna `id_payment_method` debe ser una clave externa que hace referencia a la columna `id_payment_method` en la tabla `payment_method`, lo que indica que cada transferencia está asociada a un método de pago específico.
+
+8.**credit_card:**
+
+* La columna `id_credit_card` debe ser única ya que es la clave primaria.
+* La columna `id_payment_method` debe ser una clave externa que hace referencia a la columna `id_payment_method` en la tabla `payment_method`, lo que indica que cada tarjeta de crédito está asociada a un método de pago específico.
+
+9.**reserve:**
+
+* La columna `id_reserve` debe ser única ya que es la clave primaria.
+* La columna `id_user` debe ser una clave externa que hace referencia a la columna email en la tabla `t_user`, lo que indica que cada reserva está asociada a un usuario específico.
+* La columna `id_service` debe ser una clave externa que hace referencia a la columna `id_service` en la tabla service, lo que indica que una reserva puede estar asociada a un servicio específico.
+
+10.**invoice:**
+
+* La columna `id_invoice` debe ser única ya que es la clave primaria.
+* La columna `id_user` debe ser una clave externa que hace referencia a la columna email en la tabla `t_user`, lo que indica que cada factura está asociada a un usuario específico.
+* La columna `id_reserve` debe ser una clave externa que hace referencia a la columna `id_reserve` en la tabla reserve, lo que indica que una factura puede estar asociada a una reserva específica.
+
+11.**relacion reserve y room**
+
+* La columna `id_reserve` en la tabla `reservexroom` debe ser una clave externa que hace referencia a la columna `id_reserve` en la tabla `reserve`, indicando la asociación de cada reserva con una habitación específica.
+* La columna `id_room` en la tabla `reservexroom` debe ser una clave externa que hace referencia a la columna `id_room` en la tabla `room`, indicando la habitación reservada para cada reserva.
+
+12.**relacion reserve y service**
+
+* La columna `id_reserve` en la tabla `reservexservice` debe ser una clave externa que hace referencia a la columna `id_reserve` en la tabla `reserve`, indicando la asociación de cada reserva con un servicio específico.
+* La columna `id_service` en la tabla `reservexservice` debe ser una clave externa que hace referencia a la columna `id_service` en la tabla `service`, indicando el servicio reservado para cada reserva.
+
 ## Creación base de datos
 
 ### Crear la tabla usuario
 
 ```sql
-CREATE TABLE t_user(
+CREATE TABLE `t_user`(
   email VARCHAR(255) PRIMARY KEY NOT NULL,
   name VARCHAR(100),
   last_name VARCHAR(100),
@@ -32,10 +94,10 @@ CREATE TABLE t_user(
 
 ```sql
 CREATE TABLE role(
-  id_role INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+  `id_role` INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   role_name VARCHAR(100),
-  id_user VARCHAR(255),
-  FOREIGN KEY (id_user) REFERENCES t_user(email),
+  `id_user` VARCHAR(255),
+  FOREIGN KEY (`id_user`) REFERENCES `t_user`(email),
 )
 ```
 
@@ -43,7 +105,7 @@ CREATE TABLE role(
 
 ```sql
 CREATE TABLE room(
-  id_room INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+  `id_room` INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   room_type VARCHAR(100),
   price_per_night DECIMAL(10,2),
   availability BIT,
@@ -60,9 +122,9 @@ CREATE TABLE reserve(
   arrival_date DATE,
   departure_date DATE,
   reserve_status VARCHAR(100),
-  id_user VARCHAR(255),
-  id_service INT,
-  FOREIGN KEY (id_user) REFERENCES t_user(email),
+  `id_user` VARCHAR(255),
+  `id_service` INT,
+  FOREIGN KEY (`id_user`) REFERENCES `t_user`(email),
 )
 ```
 
@@ -74,9 +136,9 @@ CREATE TABLE invoice(
   issue_date DATE,
   total_amount DECIMAL(10,2),
   payment_status VARCHAR(100),
-  id_user VARCHAR(255),
+  `id_user` VARCHAR(255),
   id_reserve INT,
-  FOREIGN KEY (id_user) REFERENCES t_user(email),
+  FOREIGN KEY (`id_user`) REFERENCES `t_user`(email),
   FOREIGN KEY (id_reserve) REFERENCES reserve(id_reserve),
 )
 ```
@@ -85,7 +147,7 @@ CREATE TABLE invoice(
 
 ```sql
 CREATE TABLE service(
-  id_service INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+  `id_service` INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   description TEXT,
   service_price DECIMAL(10,2),
   availability BIT
@@ -96,10 +158,10 @@ CREATE TABLE service(
 
 ```sql
 CREATE TABLE payment_method(
-  id_payment_method INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+  `id_payment_method` INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   payment_method_name VARCHAR(100),
-  id_user VARCHAR(255),
-  FOREIGN KEY (id_user) REFERENCES t_user(email)
+  `id_user` VARCHAR(255),
+  FOREIGN KEY (`id_user`) REFERENCES `t_user`(email)
 )
 ```
 
@@ -113,8 +175,8 @@ CREATE TABLE transference(
   bank_name VARCHAR(100),
   account_number VARCHAR(20),
   account_holder VARCHAR(100),
-  id_payment_method INT, 
-  FOREIGN KEY (id_payment_method) REFERENCES payment_method(id_payment_method)
+  `id_payment_method` INT, 
+  FOREIGN KEY (`id_payment_method`) REFERENCES payment_method(`id_payment_method`)
 )
 ```
 
@@ -127,8 +189,8 @@ CREATE TABLE credit_card(
   expiration_date DATE,
   cvv INT,
   credit_card_holder VARCHAR(100),
-  id_payment_method INT,
-  FOREIGN KEY (id_payment_method) REFERENCES payment_method(id_payment_method)
+  `id_payment_method` INT,
+  FOREIGN KEY (`id_payment_method`) REFERENCES payment_method(`id_payment_method`)
 )
 ```
 
@@ -138,9 +200,9 @@ CREATE TABLE credit_card(
 CREATE TABLE reserveXroom(
   id_reserve_room INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   id_reserve INT,
-  id_room INT,
+  `id_room` INT,
   FOREIGN KEY (id_reserve) REFERENCES reserve(id_reserve),
-  FOREIGN KEY (id_room) REFERENCES room(id_room)
+  FOREIGN KEY (`id_room`) REFERENCES room(`id_room`)
 )
 ```
 
@@ -150,9 +212,9 @@ CREATE TABLE reserveXroom(
 CREATE TABLE reserveXservice(
   id_reserve_service INT PRIMARY KEY NOT NULL IDENTITY(1,1),
   id_reserve INT,
-  id_service INT,
+  `id_service` INT,
   FOREIGN KEY (id_reserve) REFERENCES reserve(id_reserve),
-  FOREIGN KEY (id_service) REFERENCES service(id_service)
+  FOREIGN KEY (`id_service`) REFERENCES service(`id_service`)
 )
 ```
 
@@ -161,7 +223,7 @@ CREATE TABLE reserveXservice(
 ### Ingreso de datos a usuario
 
 ```sql
-INSERT INTO t_user (email, name, last_name, password, phone_number, birth_date, nationality, marketing_consent)
+INSERT INTO `t_user` (email, name, last_name, password, phone_number, birth_date, nationality, marketing_consent)
 VALUES 
   ('user1@example.com', 'John', 'Doe', 'password1', '123456789', '1990-05-15', 'American', 1),
   ('user2@example.com', 'Jane', 'Smith', 'password2', '987654321', '1985-10-20', 'British', 0),
@@ -171,7 +233,7 @@ VALUES
 ### Ingreso de datos a rol
 
 ```sql
-INSERT INTO role (role_name, id_user)
+INSERT INTO role (role_name, `id_user`)
 VALUES 
   ('Admin', 'user1@example.com'),
   ('User', 'user2@example.com'),
@@ -202,7 +264,7 @@ VALUES
 ### Ingreso de datos a metodo de pago
 
 ```sql
-INSERT INTO payment_method (payment_method_name, id_user)
+INSERT INTO payment_method (payment_method_name, `id_user`)
 VALUES 
   ('Credit Card', 'user1@example.com'),
   ('Credit Card', 'user2@example.com'),
@@ -212,7 +274,7 @@ VALUES
 ### Ingreso de datos a transferencia
 
 ```sql
-INSERT INTO transference (transference_name, transference_date, bank_name, account_number, account_holder, id_payment_method)
+INSERT INTO transference (transference_name, transference_date, bank_name, account_number, account_holder, `id_payment_method`)
 VALUES 
   ('Rent Payment', '2024-04-09', 'Bank A', '1234567890', 'John Doe', 1),
   ('Utilities', '2024-04-10', 'Bank B', '0987654321', 'Jane Smith', 2),
@@ -222,7 +284,7 @@ VALUES
 ### Ingreso de datos a tarjeta de pago
 
 ```sql
-INSERT INTO credit_card (credit_card_number, expiration_date, cvv, credit_card_holder, id_payment_method)
+INSERT INTO credit_card (credit_card_number, expiration_date, cvv, credit_card_holder, `id_payment_method`)
 VALUES 
   ('1234567890123456', '2025-12-31', 123, 'John Doe', 1),
   ('9876543210987654', '2026-11-30', 456, 'Jane Smith', 2),
@@ -232,7 +294,7 @@ VALUES
 ### Ingreso de datos a reserva
 
 ```sql
-INSERT INTO reserve (arrival_date, departure_date, reserve_status, id_user)
+INSERT INTO reserve (arrival_date, departure_date, reserve_status, `id_user`)
 VALUES 
   ('2024-05-01', '2024-05-05', 'Confirmed', 'user1@example.com'),
   ('2024-06-10', '2024-06-15', 'Pending', 'user2@example.com'),
@@ -242,7 +304,7 @@ VALUES
 ### Ingreso de datos a factura
 
 ```sql
-INSERT INTO invoice (issue_date, total_amount, payment_status, id_user, id_reserve)
+INSERT INTO invoice (issue_date, total_amount, payment_status, `id_user`, id_reserve)
 VALUES 
   ('2024-04-09', 100.00, 'Paid', 'user1@example.com', 1),
   ('2024-04-10', 150.00, 'Pending', 'user2@example.com', 2),
@@ -252,7 +314,7 @@ VALUES
 ### Ingreso de datos a reserva y cuarto
 
 ```sql
-INSERT INTO reserveXroom (id_reserve, id_room)
+INSERT INTO reserveXroom (id_reserve, `id_room`)
 VALUES 
   (1, 1),
   (2, 2),
@@ -262,7 +324,7 @@ VALUES
 ### Ingreso de datos a reserva y servicio
 
 ```sql
-INSERT INTO reserveXservice (id_reserve, id_service)
+INSERT INTO reserveXservice (id_reserve, `id_service`)
 VALUES 
   (1, 1),
   (2, 2),
@@ -275,10 +337,10 @@ VALUES
 
 ```sql
 SELECT *
-FROM t_user AS u
-LEFT JOIN payment_method AS pm ON u.email = pm.id_user
-LEFT JOIN reserve AS r ON u.email = r.id_user
-LEFT JOIN invoice AS inv ON u.email = inv.id_user
+FROM `t_user` AS u
+LEFT JOIN payment_method AS pm ON u.email = pm.`id_user`
+LEFT JOIN reserve AS r ON u.email = r.`id_user`
+LEFT JOIN invoice AS inv ON u.email = inv.`id_user`
 WHERE u.email = 'user1@example.com';
 ```
 
@@ -298,7 +360,7 @@ SELECT * FROM invoice WHERE payment_status = 'Pending';
 
 ```sql
 SELECT * FROM reserve AS r
-JOIN room AS rm ON r.id_room = rm.id_room
+JOIN room AS rm ON r.`id_room` = rm.`id_room`
 WHERE rm.room_type = 'Double';
 ```
 
@@ -323,5 +385,5 @@ SELECT * FROM credit_card WHERE expiration_date < DATEADD(month, 1, GETDATE());
 ### Obtener todos los usuarios que dieron su consentimiento para recibir marketing
 
 ```sql
-SELECT * FROM t_user WHERE marketing_consent = 1;
+SELECT * FROM `t_user` WHERE marketing_consent = 1;
 ```
