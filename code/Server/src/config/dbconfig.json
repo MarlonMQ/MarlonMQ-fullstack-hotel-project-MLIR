@@ -1,0 +1,10 @@
+{
+  "user": "sa",
+  "password": "Ignacio01.",
+  "server": "localhost",
+  "database": "database_app",
+  "options": {
+    "encrypt": false,
+    "trustServerCertificate": true
+  }
+}
