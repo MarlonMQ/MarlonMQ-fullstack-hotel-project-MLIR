@@ -2,3 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .primary-title {  
+      @apply text-4xl;
+      @apply font-black;
+      @apply tracking-widest;
+      font-family: 'Roboto', serif;
+    }
+    .secondary-title {  
+      @apply text-2xl;
+      @apply font-bold;
+      @apply tracking-widest;
+      font-family: 'Roboto', serif;
+    }
+    .tertiary-title {  
+      @apply text-xl;
+      @apply font-normal;
+      @apply tracking-wide;
+      font-family: 'Roboto', serif;
+    }
+    .primary-text {  
+      @apply text-nowrap;
+      @apply italic;
+      @apply tracking-wide;
+      font-family: 'Roboto', serif;
+    }
+    .secondary-text {  
+      @apply text-nowrap;
+      @apply italic;
+      @apply tracking-wider;
+      font-family: 'Roboto', serif;
+    }
+    .testimony-text {  
+      @apply text-nowrap;
+      @apply text-2xl;  
+      @apply font-semibold;
+      font-family: 'Parisienne', serif;
+    }	
+  }
+
+
+
+
