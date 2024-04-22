@@ -26,7 +26,7 @@ function NavBar() {
 
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 
-            <div className="relative flex h-28 items-center justify-between">
+            <div className="relative flex h-20 sm:h-28 items-center justify-between">
 
                 {/* Boton para desplegar info del disclosure */}
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -55,7 +55,7 @@ function NavBar() {
                 {/* Hidden = Display: none.*/}
                 {/* Esta hidden siempre, pero si es mayor que sm entonces pasa a block y si se ve*/}
 
-                <div className="hidden sm:ml-6 sm:block my-auto">
+                <div className="hidden sm:ml-6 sm:block sm:my-auto">
 
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
