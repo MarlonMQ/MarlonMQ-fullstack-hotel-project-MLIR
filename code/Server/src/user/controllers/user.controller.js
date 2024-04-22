@@ -1,7 +1,7 @@
 import UserServices from '../services/user.services.js';
 
 class UserController {
-
+  
   static async getUsers(req, res) {
     console.log('GET /users');
     try {
