@@ -9,9 +9,10 @@ export const CarouselComponent = () => {
         <Carousel autoplay>
               <div>
 
-                <div className='hidden block'>
+                <div className='hidden sm:block'>
                   <img className='brightness-50' src="../src/assets/hotelPictures/Hotel-image01.jpg" alt="hotel image 01" />
                 </div>
+
                 <div className="block sm:hidden">
                   <img className='brightness-50 h-screen' src="../src/assets/hotelPictures/Hotel-image05.jpg" alt="hotel image 01" />
                 </div>

@@ -16,10 +16,6 @@ module.exports = {
         'third': '#034078',
         'fourth': '#7dd3fc',
       },
-      translate: {
-        'xNegativeSecondImg': '100%',
-        'xNegativeThirdImg': '200%',
-       },
     },
   },
 }
