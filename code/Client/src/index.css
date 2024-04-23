@@ -22,7 +22,8 @@
       font-family: 'Roboto', serif;
     }
     .primary-text {  
-      @apply not-italic;
+      @apply text-nowrap;
+      @apply italic;
       @apply tracking-wide;
       font-family: 'Roboto', serif;
     }
