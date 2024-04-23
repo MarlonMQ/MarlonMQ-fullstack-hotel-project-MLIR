@@ -2,10 +2,10 @@ import sql from 'mssql';
 // import bdConfig from './dbconfig.json'
 
 const bdConfig = {
-  "user": "Randy",
-  "password": "1234",
+  "user": "sa",
+  "password": "Ignacio01.",
   "server": "localhost",
-  "database": "PruebaServer",
+  "database": "database_app",
   "options": {
     "encrypt": false,
     "trustServerCertificate": true
