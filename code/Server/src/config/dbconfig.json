@@ -1,8 +1,8 @@
 {
-  "user": "sa",
-  "password": "Ignacio01.",
+  "user": "Randy",
+  "password": "hola1234",
   "server": "localhost",
-  "database": "database_app",
+  "database": "PruebaServer",
   "options": {
     "encrypt": false,
     "trustServerCertificate": true
