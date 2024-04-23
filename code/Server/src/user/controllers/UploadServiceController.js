@@ -1,8 +1,9 @@
+//uploadServiceController.js
 import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
 
 export class UploadServiceController {
-    // aqui se guarda la info en la bd
+    // aqui se guarda la info en la base de datos
     static async uploadService(req, res) {
         let db = null;
         try {
@@ -20,6 +21,22 @@ export class UploadServiceController {
             console.error('Error al guardar en la base de datos', error);
             res.status(500).send('Error al guardar la información del servicio');
     }
+}
+    static async listServices(req, res) {
+        let db = null;
+        console.log('estoy recargando los servicios');
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            const results = await db.query('SELECT ServiceId, title, imageUrl FROM services');
+            res.json(results.recordset); 
+        } catch (error) {
+            console.error('Failed to fetch services:', error);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            if (db) {
+                db.close();
+            }
+        }
 }
 
 }

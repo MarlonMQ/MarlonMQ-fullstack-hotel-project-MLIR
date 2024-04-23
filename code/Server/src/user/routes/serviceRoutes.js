@@ -31,7 +31,7 @@ class ServiceRoutes {
         });
 
         // Ruta para obtener todos los servicios
-        this.router.get('/', (req, res) => {
+        this.router.get('/all', (req, res) => {
             UploadServiceController.listServices(req, res);
         });
 

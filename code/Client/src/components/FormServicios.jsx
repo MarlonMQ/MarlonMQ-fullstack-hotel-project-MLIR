@@ -19,8 +19,8 @@ const UploadServiceForm = () => {
         .required('El título es obligatorio'),
       image: Yup.mixed()
         .required('Una imagen es necesaria')
-        .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 1024 * 1024))
-        .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png"].includes(value.type)))
+        .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2080 * 2080))
+        .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
     }),
     // envio al back //
     onSubmit: async (values) => {
@@ -103,7 +103,6 @@ const UploadServiceForm = () => {
         </div>
 
         <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-fourth hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            
           Subir Servicio
         </button>
       </form>
