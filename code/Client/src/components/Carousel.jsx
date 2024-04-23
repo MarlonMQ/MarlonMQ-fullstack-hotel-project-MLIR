@@ -1,47 +1,30 @@
 import React from 'react'
 import { Carousel } from 'antd';
 
-export const CarouselComponent = () => {
+export const CarouselComponent = ({images}) => {
+
+  const {desktopImages, mobileImages} = images;
+
   return (
     <>
       <div className='relative'>
 
         <Carousel autoplay>
-              <div>
+          {
+            desktopImages.map( (path, index) => {
+                return (
+                  <div key={index}>
+                    <div className='hidden sm:block'>
+                      <img className='brightness-50' src={`${path}`} alt="hotel image" />
+                    </div>
 
-                <div className='hidden sm:block'>
-                  <img className='brightness-50' src="../src/assets/hotelPictures/Hotel-image01.jpg" alt="hotel image 01" />
-                </div>
-
-                <div className="block sm:hidden">
-                  <img className='brightness-50 h-screen' src="../src/assets/hotelPictures/Hotel-image05.jpg" alt="hotel image 01" />
-                </div>
-
-              </div>
-
-              <div>
-
-                <div className='hidden sm:block'>
-                  <img className='brightness-50' src="../src/assets/hotelPictures/Hotel-image02.jpg" alt="hotel image 02" />
-                </div>
-
-                <div className="block sm:hidden">
-                  <img className='brightness-50 h-screen' src="../src/assets/hotelPictures/Hotel-image06.jpg" alt="hotel image 01" />
-                </div>
-
-              </div>
-
-              <div>
-                <div className='hidden sm:block'>
-                  <img className='brightness-50' src="../src/assets/hotelPictures/Hotel-image03.jpg" alt="hotel image 03" />
-                  
-                </div>
-
-                <div className="block sm:hidden">
-                  <img className='brightness-50 h-screen' src="../src/assets/hotelPictures/Hotel-image07.jpg" alt="hotel image 01" />
-                </div>
-
-              </div>
+                    <div className="block sm:hidden">
+                      <img className='brightness-50 h-screen' src={`${mobileImages[index]}`} alt="hotel image mobile design" />
+                    </div>
+                  </div>
+                )
+            })
+          }
         </Carousel>
 
         <div className='absolute inset-y-1/3 left-20 mt-2'>
