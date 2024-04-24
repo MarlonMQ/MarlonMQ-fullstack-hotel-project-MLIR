@@ -16,7 +16,6 @@ const GrayBox = ({ title, buttonText, hrefLink, hrefText, onButtonClick, childre
       
         {/* Botón al final */}
         <FormButton onClick={onButtonClick}>{buttonText}</FormButton>
-        <Link to={hrefLink}>{hrefText}</Link>
 
         {/* Términos y condiciones */}
         <div className="text-center pt-3">
