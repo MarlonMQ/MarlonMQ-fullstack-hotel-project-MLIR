@@ -43,15 +43,15 @@ function SignUpPage() {
     },
   });
   const handleButtonClick = () => { 
-// Ejecutar handleSubmit para validar el formulario actual
-     // Ejecutar handleSubmit para validar el formulario actual
-    if (!formik.errors.email && !formik.errors.password && !formik.errors.confirmPassword && window == 0) {
-      setWindow(1); // Mostrar el segundo FormBox solo si no hay errores en el primer formulario
-    } else if (!formik.errors.name && !formik.errors.lastName && !formik.errors.birthDate && !formik.errors.phone && window == 1) {
+    formik.handleSubmit();
+    if (window == 0 && !formik.errors.email && !formik.errors.password && !formik.errors.confirmPassword){
+      if(formik.values.email != '' && formik.values.password != '' && formik.values.confirmPassword != ''){
+        formik.setTouched({}, false);
+        setWindow(1); // Mostrar el segundo FormBox solo si no hay errores en el primer formulario
+      }
+    } else if (window == 1 && !formik.errors.name && !formik.errors.lastName && !formik.errors.birthDate && !formik.errors.phone ) {
+      formik.setTouched({}, false);
       setWindow(2); // Mostrar el tercer FormBox solo si no hay errores en el segundo formulario
-    } else if (!formik.errors.country && !formik.errors.region && !formik.errors.address && window == 2) {
-      
-      console.log('Formulario enviado:', formik.values);
     }
   };
 
