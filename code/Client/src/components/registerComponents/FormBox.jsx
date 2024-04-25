@@ -1,13 +1,13 @@
 import React from 'react';
 
-const FormBox = ({ title, type, error, value, change, blur }) => {
+const FormBox = ({ title, name, type, error, value, change, blur }) => {
     return (
-        <div className=" relative w-full mb-5 group">
+        <div className=" relative w-full mb-6 group">
             <input 
                 value={value} 
                 onChange={change} 
                 id={title}
-                name={type} 
+                name={name} 
                 type={type} 
                 onBlur={blur} 
                 placeholder=" "

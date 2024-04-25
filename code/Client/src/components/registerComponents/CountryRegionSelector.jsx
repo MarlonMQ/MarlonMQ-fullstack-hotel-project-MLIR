@@ -8,7 +8,9 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
       <CountryDropdown
         className={`block py-2.5 px-1 w-full text-sm text-gray-900 rounded-lg border-3 appearance-none dark:black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer left`}
         value={country}
-        onChange={selectCountry} />
+        onChange={selectCountry}
+        defaultOptionLabel = "Selecciona un país" 
+        />    
         {countryError && <p className="text-red-500 text-xs pt-2">{countryError}</p>}
     </div>
     <div className=" relative w-full mb-5 group">
@@ -16,6 +18,7 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
         className={`block py-2.5 px-1 w-full text-sm text-gray-900 rounded-lg border-3 appearance-none dark:black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer left`}
         country={country}
         value={region}
+        blankOptionLabel = "Selecciona una región"
         onChange={selectRegion} />
         {regionError && <p className="text-red-500 text-xs pt-2">{regionError}</p>}
     </div>
