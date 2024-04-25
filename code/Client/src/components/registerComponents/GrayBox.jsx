@@ -5,9 +5,9 @@ import FormButton from './FormButton';
 const GrayBox = ({ title, buttonText, hrefLink, hrefText, onButtonClick, children }) => {
   return (
     <div className="bg-gray-300 rounded-lg h-4/5 w-4/5 min-w-[300px] min-h-[400px] grid grid-rows-3 justify-center p-8 shadow-lg shadow-gray-500">
-      <h2 className="secondary-title text-center py-5">{title}</h2>
+      <h2 className="secondary-title text-center">{title}</h2>
 
-      <div className="flex flex-col justify-center items-center "> 
+      <div className="flex flex-col justify-center items-center mb-10"> 
         {/* Form */}
         {children}
       </div>

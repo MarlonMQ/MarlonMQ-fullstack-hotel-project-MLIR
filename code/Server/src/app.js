@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import UserRoutes from './user/routes/user.route.js';
+import LoginRoutes from './user/routes/login.route.js';
 
 // Create express app
 const app = express();
@@ -17,7 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // rutas
-app.use('/users', UserRoutes);
+app.use('/login', LoginRoutes);
 
 
 // Start server
