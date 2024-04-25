@@ -5,7 +5,7 @@ const bdConfig = {
   "user": "sa",
   "password": "Ignacio01.",
   "server": "localhost",
-  "database": "database_app",
+  "database": "hotel_db",
   "options": {
     "encrypt": false,
     "trustServerCertificate": true
@@ -33,7 +33,6 @@ class DbConnection {
         console.log('Conexión anterior cerrada');
       }
       this.pool = await sql.connect(bdConfig);
-      console.log('Conexión exitosa a la base de datos');
       return this.pool;
     } catch (error) {
       console.error('Error de conexión', error);
@@ -44,7 +43,6 @@ class DbConnection {
     try {
       if (this.pool) {
         await this.pool.close();
-        console.log('Conexión cerrada');
       }
     } catch (error) {
       console.error('Error al cerrar la conexión', error);
