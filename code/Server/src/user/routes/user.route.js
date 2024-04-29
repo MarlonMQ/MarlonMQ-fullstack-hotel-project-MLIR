@@ -1,7 +1,5 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controller.js";
-import multer from 'multer';
-
 
 class UserRoutes {
   constructor() {
