@@ -1,41 +1,45 @@
 import sql from 'mssql';
-// import bdConfig from './dbconfig.json'
 
 const bdConfig = {
-  "user": "sa",
-  "password": "Ignacio01.",
-  "server": "localhost",
-  "database": "hotel_db",
-  "options": {
-    "encrypt": false,
-    "trustServerCertificate": true
+  user: 'sa',
+  password: 'Ignacio01.',
+  server: 'localhost',
+  database: 'hotel_db',
+  options: {
+    encrypt: false,
+    trustServerCertificate: true
   }
-}
-
-let instance = null;
+};
 
 class DbConnection {
+  static instance = null;
+  pool = null;
+
   constructor() {
-    this.pool = null;
+    if (DbConnection.instance) {
+      return DbConnection.instance;
+    }
+    DbConnection.instance = this;
   }
 
   static getInstance() {
-    if (!instance) {
-      instance = new DbConnection();
+    if (!DbConnection.instance) {
+      DbConnection.instance = new DbConnection();
+      console.log('New instance created');
     }
-    return instance;
+    return DbConnection.instance;
   }
 
   async getConnection() {
     try {
       if (this.pool) {
-        await this.pool.close(); // Si ya existe una conexión, la cerramos
-        console.log('Conexión anterior cerrada');
+        await this.pool.close();
+        console.log('Previous connection closed');
       }
       this.pool = await sql.connect(bdConfig);
       return this.pool;
     } catch (error) {
-      console.error('Error de conexión', error);
+      console.error('Connection error', error);
     }
   }
 
@@ -45,7 +49,7 @@ class DbConnection {
         await this.pool.close();
       }
     } catch (error) {
-      console.error('Error al cerrar la conexión', error);
+      console.error('Error closing connection', error);
     }
   }
 }
