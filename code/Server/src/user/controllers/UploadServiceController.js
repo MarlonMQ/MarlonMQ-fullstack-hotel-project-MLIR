@@ -1,6 +1,7 @@
 //uploadServiceController.js
 import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
+import { deleteImageFromBucket } from '../services/bucketManager.js'; 
 
 export class UploadServiceController {
     // aqui se guarda la info en la base de datos
@@ -37,6 +38,27 @@ export class UploadServiceController {
                 db.close();
             }
         }
-}
-
-}
+    }
+    static async deleteService(req, res) {
+        const imageUrl = req.query.url;
+    
+        let db = null;
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            // Eliminar el servicio de la base de datos
+            await db.query(`DELETE FROM services WHERE imageUrl = '${imageUrl}'`);
+    
+            // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
+            deleteImageFromBucket(imageUrl);
+    
+            res.status(200).send('Service deleted successfully');
+        } catch (error) {
+            console.error('Error deleting service', error);
+            res.status(500).send('Internal server error');
+        } finally {
+            if (db) {
+                db.close();
+            }
+        }
+    }
+}    

@@ -1,12 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import UserRoutes from './user/routes/user.route.js';
-<<<<<<< HEAD
 import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-=======
->>>>>>> cb3a36c554296c07c100e3a390160090bd4f8497
+
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Create express app
@@ -28,6 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // rutas
 app.use('/users', UserRoutes);
+app.use('/services', servceRoutes);
 
 
 // Start server

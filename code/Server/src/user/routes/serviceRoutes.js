@@ -46,7 +46,7 @@ class ServiceRoutes {
         });
 
         // Ruta para eliminar un servicio específico
-        this.router.delete('/:id', (req, res) => {
+        this.router.delete('/deleteService', (req, res) => {
             UploadServiceController.deleteService(req, res);
         });
     }
