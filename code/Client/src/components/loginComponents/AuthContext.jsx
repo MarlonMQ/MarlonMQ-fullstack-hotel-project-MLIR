@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => {
     const localToken = window.localStorage.getItem('authToken');
-    return localToken ? JSON.parse(localToken) : null;
+    return localToken && typeof localToken === 'string' && localToken !== 'undefined' ? JSON.parse(localToken) : null;
   });
 
   const login = (receivedToken) => {
