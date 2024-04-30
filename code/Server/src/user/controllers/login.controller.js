@@ -7,11 +7,15 @@ class LoginController {
       const { email, password } = req.body;
       const user = await LoginServices.login(email, password);
       if (!user) {
+
         res.status(401);
         res.send('Invalid email or password');
+        
       } else {
         const rol = await LoginServices.getRol(email);
         const accessToken = await LoginServices.generateAccessToken(user);
+
+        res.status(200);
         res.header('authorization', rol, accessToken).json({
           message: 'Login successful',
           rol : rol,

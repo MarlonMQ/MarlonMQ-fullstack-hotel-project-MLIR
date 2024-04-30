@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { AuthContext } from '../components/loginComponents/AuthContext';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 
 function LoginPage()  {
+
+  const { login } = useContext(AuthContext); // Obtén la función login del contexto de autenticación
 
   const formik = useFormik({
     initialValues: {
@@ -16,17 +19,20 @@ function LoginPage()  {
       email: Yup.string().email('Correo electrónico inválido').required('Campo requerido'),
       password: Yup.string().required('Contraseña requerida'),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setErrors }) => {
       try {
         const response = await axios.post('http://localhost:4000/login', values);
         if (response.status === 200) {
-          // window.localStorage.setItem('token', response.data.token); // PREGUNTAR AL PROFE SI ES EL MISMO LOCAL STORAGE
-          window.location.href = '/Home';
-        } else {
-          alert('Usuario o contraseña incorrectos');
+          const token = response.data.token;
+          login(token);
+          window.location.href = '/';
         }
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 401) {
+          setErrors({ password: 'Correo o contraseña equivocadas.' });
+        } else {
+          console.error(error);
+        }
       }
     },
   });
