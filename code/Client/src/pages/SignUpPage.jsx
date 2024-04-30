@@ -5,6 +5,7 @@ import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-countr
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
+import axios from 'axios';
 
 function SignUpPage() {
   const [window, setWindow] = useState(0); // Estado para controlar la visibilidad del primer FormBox
@@ -24,6 +25,7 @@ function SignUpPage() {
       country: '',
       region: '',
       address: '',
+      rol: 'user',
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Correo electrónico inválido').required('Campo requerido'),
@@ -37,9 +39,20 @@ function SignUpPage() {
       region: Yup.string().required('Campo requerido'),
       address: Yup.string().required('Campo requerido'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Lógica para enviar el formulario
       console.log('Formulario enviado:', values);
+      try {
+        const response = await axios.post('http://localhost:4000/signup', values);
+        if (response.status === 201) {
+          // window.localStorage.setItem('token', response.data.token); // PREGUNTAR AL PROFE SI ES EL MISMO LOCAL STORAGE
+          window.location.href = '/Home';
+        } else {
+          alert('correo ya registrado');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
   });
   const handleButtonClick = () => { 
