@@ -23,7 +23,7 @@ class LoginServices {
     try {
       return jwt.sign(
         { email: user[0].email },
-        'secret',
+        process.env.SECRET_KEY,
         { expiresIn: '1h' }
       );
     }
