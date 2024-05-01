@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { AuthContext } from '../components/loginComponents/AuthContext';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox.jsx';
+import Axios from '../services/Axios.js';
 
 function LoginPage()  {
 
@@ -21,7 +22,7 @@ function LoginPage()  {
     }),
     onSubmit: async (values, { setErrors }) => {
       try {
-        const response = await axios.post('http://localhost:4000/login', values);
+        const response = await Axios.post('/login', values);
         if (response.status === 200) {
           const token = response.data.token;
           login(token);
