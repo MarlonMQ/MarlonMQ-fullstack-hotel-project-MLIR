@@ -1,8 +1,8 @@
 import sql from 'mssql';
 
 const bdConfig = {
-  user: 'sa',
-  password: 'Ignacio01.',
+  user: 'marlon',
+  password: '123',
   server: 'localhost',
   database: 'hotel_db',
   options: {

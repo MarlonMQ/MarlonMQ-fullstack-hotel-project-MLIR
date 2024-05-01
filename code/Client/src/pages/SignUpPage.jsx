@@ -43,7 +43,9 @@ function SignUpPage() {
       // Lógica para enviar el formulario
       console.log('Formulario enviado:', values);
       try {
+        
         const response = await axios.post('http://localhost:4000/signup', values);
+        
         if (response.status === 201) {
           // window.localStorage.setItem('token', response.data.token); // PREGUNTAR AL PROFE SI ES EL MISMO LOCAL STORAGE
           window.location.href = '/Home';

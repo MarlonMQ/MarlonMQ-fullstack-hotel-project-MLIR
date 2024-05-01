@@ -4,8 +4,8 @@ class SignupController {
   static async signup(req, res) {
     console.log('POST /signup');
     try {
-      const { email, password, name, lastName, phone_number, birth_date, rol } = req.body;
-      const result = await SignupServices.signup(email, password, name, lastName, phone_number, birth_date, rol);
+      const { email, name, lastName, phone, birthDate, rol} = req.body;
+      const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
       if (!result) {
         res.status(401);
         res.send('User already exists or registration failed');
