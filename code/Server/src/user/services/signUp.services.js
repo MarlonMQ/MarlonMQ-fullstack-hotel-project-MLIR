@@ -1,18 +1,31 @@
 import DbConnection from "../../config/dbconnection.js";
+import sql from "mssql"; // Asegúrate de importar el módulo sql
 
 class SignupServices {
+  
   static async signup(email, name, lastName, phone_number, birth_date, rol) {
+    console.log(email, name, lastName, phone_number, birth_date, rol);
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
-        .input('email', email)
-        .input('name', name)
-        .input('lastName', lastName)
-        .input('phone_number', phone_number)
-        .input('birth_date', birth_date)
-        .input('rol', rol)
-        .query('INSERT INTO t_users (email, name, lastName, phone_number, birth_date, rol) VALUES (@email, @name, @lastName, @phone_number, @birth_date, @rol)');
+      .input('email', sql.VarChar, email)
+      .input('name', sql.VarChar, name)
+      .input('last_name', sql.VarChar, lastName)
+      .input('phone_number', sql.VarChar, phone_number)
+      .input('birth_date', sql.Date, new Date(birth_date))
+      .input('rol', sql.VarChar, rol)
+      .query('INSERT INTO t_user(email, name, last_name, phone_number, birth_date, rol) VALUES (@email, @name, @last_name, @phone_number, @birth_date, @rol)');
     await DbConnection.getInstance().closeConnection();
-    return result;
+    return result.recordset;
+  }
+
+  static async signupPassword(email, password) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .input('password', sql.VarChar, password)
+      .query('INSERT INTO password(email, password) VALUES (@email, @password)');
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset;
   }
 }
 

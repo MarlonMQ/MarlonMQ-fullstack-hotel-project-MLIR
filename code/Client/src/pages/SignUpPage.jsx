@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
-import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
-import axios from 'axios';
 
 function SignUpPage() {
   const [window, setWindow] = useState(0); // Estado para controlar la visibilidad del primer FormBox
@@ -43,17 +42,20 @@ function SignUpPage() {
       // Lógica para enviar el formulario
       console.log('Formulario enviado:', values);
       try {
-        
         const response = await axios.post('http://localhost:4000/signup', values);
-        
-        if (response.status === 201) {
-          // window.localStorage.setItem('token', response.data.token); // PREGUNTAR AL PROFE SI ES EL MISMO LOCAL STORAGE
-          window.location.href = '/Home';
+        if (response.status === 200) {
+          console.log('Usuario registrado exitosamente', response.status);
+          window.location.href = '/';
+          
         } else {
           alert('correo ya registrado');
         }
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 401) {
+          console.log('acá');
+          setWindow(0); // Mostrar el primer FormBox si hay un error (correo o contraseña equivocadas
+          setErrors({ email: 'Correo o contraseña equivocadas.' });
+        }
       }
     },
   });
