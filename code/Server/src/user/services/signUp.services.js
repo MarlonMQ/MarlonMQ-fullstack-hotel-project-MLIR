@@ -27,6 +27,15 @@ class SignupServices {
     await DbConnection.getInstance().closeConnection();
     return result.recordset;
   }
+
+  static async findUser(email) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .query('SELECT * FROM t_user WHERE email = @email');
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset;
+  }
 }
 
 export default SignupServices;

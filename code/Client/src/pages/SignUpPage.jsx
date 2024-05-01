@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,8 +7,7 @@ import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
 
 function SignUpPage() {
-  const [window, setWindow] = useState(0); // Estado para controlar la visibilidad del primer FormBox
-  
+  const [view, setview] = useState(0); // Estado para controlar la visibilidad del primer FormBox
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
 
@@ -38,7 +37,7 @@ function SignUpPage() {
       region: Yup.string().required('Campo requerido'),
       address: Yup.string().required('Campo requerido'),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, {setErrors}) => {
       // Lógica para enviar el formulario
       console.log('Formulario enviado:', values);
       try {
@@ -46,30 +45,31 @@ function SignUpPage() {
         if (response.status === 200) {
           console.log('Usuario registrado exitosamente', response.status);
           window.location.href = '/';
-          
-        } else {
-          alert('correo ya registrado');
         }
       } catch (error) {
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 400) {
           console.log('acá');
-          setWindow(0); // Mostrar el primer FormBox si hay un error (correo o contraseña equivocadas
-          setErrors({ email: 'Correo o contraseña equivocadas.' });
+          setview(0); // Mostrar el primer FormBox si hay un error (correo o contraseña equivocadas
+          setErrors({ email: 'El correo ya está registrado' });
+        } else {
+          console.error(error);
         }
       }
+      return 0;
     },
   });
+  
   const handleButtonClick = () => { 
-    formik.handleSubmit();
-    if (window == 0 && !formik.errors.email && !formik.errors.password && !formik.errors.confirmPassword){
-      if(formik.values.email != '' && formik.values.password != '' && formik.values.confirmPassword != ''){
+      formik.handleSubmit();
+      if (view == 0 && !formik.errors.email && !formik.errors.password && !formik.errors.confirmPassword){
+        if(formik.values.email != '' && formik.values.password != '' && formik.values.confirmPassword != '' && formik.values.name == ''){
+          formik.setTouched({}, false);
+          setview(1); // Mostrar el segundo FormBox solo si no hay errores en el primer formulario
+        }
+      } else if (view == 1 && !formik.errors.name && !formik.errors.lastName && !formik.errors.birthDate && !formik.errors.phone ) {
         formik.setTouched({}, false);
-        setWindow(1); // Mostrar el segundo FormBox solo si no hay errores en el primer formulario
+        setview(2); // Mostrar el tercer FormBox solo si no hay errores en el segundo formulario
       }
-    } else if (window == 1 && !formik.errors.name && !formik.errors.lastName && !formik.errors.birthDate && !formik.errors.phone ) {
-      formik.setTouched({}, false);
-      setWindow(2); // Mostrar el tercer FormBox solo si no hay errores en el segundo formulario
-    }
   };
 
   const selectCountry = (val) => {
@@ -81,8 +81,9 @@ function SignUpPage() {
 
   const selectRegion = (val) => {
     formik.handleChange('region')(val);
-    setRegion(val);
+    setRegion(val); 
   };
+
   return (
     <div className="flex flex-col sm:flex-row h-screen">
       <div className="w-full mb-20 sm:w-1/2 bg-white p-8 flex flex-col justify-center items-center">
@@ -98,12 +99,13 @@ function SignUpPage() {
           onButtonClick={handleButtonClick}
         >
 
-          {window == 0 && (
+          {view == 0 && (
             <>
           <FormBox
               title="Correo Electrónico"
               name="email"
               type="email"
+              value={formik.values.email}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.email && formik.errors.email}
@@ -112,6 +114,7 @@ function SignUpPage() {
               title="Contraseña"
               name="password"
               type="password"
+              value={formik.values.password}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.password && formik.errors.password}
@@ -120,18 +123,20 @@ function SignUpPage() {
               title="Confirmar Contraseña"
               name="confirmPassword"
               type="password"
+              value={formik.values.confirmPassword}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.confirmPassword && formik.errors.confirmPassword}
           />
           </>
         )}
-        {window == 1 && (
+        {view == 1 && (
           <>
           <FormBox
               title="Nombre"
               name="name"
               type="text"
+              value={formik.values.name}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.name && formik.errors.name}
@@ -140,6 +145,7 @@ function SignUpPage() {
               title="Apellidos"
               name="lastName"
               type="text"
+              value={formik.values.lastName}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.lastName && formik.errors.lastName}
@@ -148,6 +154,7 @@ function SignUpPage() {
               title="Fecha de Nacimiento"
               name="birthDate"
               type="date"
+              value={formik.values.birthDate}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.birthDate && formik.errors.birthDate}
@@ -156,18 +163,19 @@ function SignUpPage() {
               title="Teléfono"
               name="phone"
               type="tel"
+              value={formik.values.phone}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.phone && formik.errors.phone}
           />
           </>
         )}
-        {window == 2 && (
+        {view == 2 && (
           <>
           <CountryRegionSelector
-            country = {country}
+            country = {formik.values.country}
             selectCountry = {selectCountry}
-            region = {region}
+            region = {formik.values.region}
             selectRegion ={selectRegion}
             countryError={formik.touched.country && formik.errors.country}
             regionError={formik.touched.region && formik.errors.region}
@@ -176,6 +184,7 @@ function SignUpPage() {
               title="Dirección"
               name="address"
               type="text"
+              value={formik.values.address}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.address && formik.errors.address} 
@@ -197,3 +206,4 @@ function SignUpPage() {
 }
 
 export default SignUpPage;
+
