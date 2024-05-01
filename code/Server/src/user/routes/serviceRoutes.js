@@ -26,7 +26,7 @@ class ServiceRoutes {
 
     setupRoutes() {
         // Ruta para cargar un servicio
-        this.router.post('/upload-service', this.upload.single('image'), (req, res) => {
+        this.router.post('/', this.upload.single('image'), (req, res) => {
             UploadServiceController.uploadService(req, res);
         });
 
@@ -46,7 +46,7 @@ class ServiceRoutes {
         });
 
         // Ruta para eliminar un servicio específico
-        this.router.delete('/deleteService', (req, res) => {
+        this.router.delete('/', (req, res) => {
             UploadServiceController.deleteService(req, res);
         });
     }

@@ -3,6 +3,7 @@ import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
 import { deleteImageFromBucket } from '../services/bucketManager.js'; 
 
+
 export class UploadServiceController {
     // aqui se guarda la info en la base de datos
     static async uploadService(req, res) {
@@ -41,6 +42,7 @@ export class UploadServiceController {
     }
     static async deleteService(req, res) {
         const imageUrl = req.query.url;
+        const baseDir = 'C:/Users/ransa/OneDrive/Desktop/fullstack-hotel-project-mlir/code/Server/src';
     
         let db = null;
         try {
@@ -49,7 +51,7 @@ export class UploadServiceController {
             await db.query(`DELETE FROM services WHERE imageUrl = '${imageUrl}'`);
     
             // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
-            deleteImageFromBucket(imageUrl);
+            deleteImageFromBucket(imageUrl, baseDir);
     
             res.status(200).send('Service deleted successfully');
         } catch (error) {
