@@ -5,7 +5,7 @@ import FormServicios from '../components/Services/FormServicios';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 const Facilities = () => {
-    const admin = false;
+    const admin = true;
     const [services, setServices] = useState([]);
     
         useEffect(() => {

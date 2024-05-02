@@ -3,7 +3,7 @@ import axios from 'axios';
 import { DeleteConfirmation } from './ServicesUtils';
 
 export default function CardsFacilities({ image, title }) {
-  const admin = false;
+  const admin = true;
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const deleteService = (imageUrl) => {
