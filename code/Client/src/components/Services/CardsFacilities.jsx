@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
-import { DeleteConfirmation } from './ServicesUtils';
+import { DeleteConfirmation } from './FacilitiesUtils';
 
 export default function CardsFacilities({ image, title }) {
   const admin = true;

@@ -3,8 +3,8 @@ import ReservationForm from "../components/Reserves/ReservationFoarm";
 
 const reservations = () => {
     return (
-        <div>
-        <h2 className="HOLA ESTAS SON LAS RESERVAS"></h2>
+        <div className="min-h-screen bg-white">
+        <h2 className="mb-12 mt-12 text-center primary-title ">RESERVAS</h2>
         <ReservationForm/>
         </div>
     )

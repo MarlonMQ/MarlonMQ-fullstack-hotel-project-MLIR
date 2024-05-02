@@ -1,7 +1,7 @@
 import React from 'react';
 import CardsFacilities from '../components/Services/CardsFacilities';
 import '../index.css';
-import FormServicios from '../components/Services/FormServicios';
+import FormServicios from '../components/Services/FoamFacilities';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 const Facilities = () => {
