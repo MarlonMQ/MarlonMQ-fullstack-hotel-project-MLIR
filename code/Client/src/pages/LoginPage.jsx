@@ -55,14 +55,18 @@ function LoginPage()  {
           >
             <FormBox
               title="Correo Electrónico"
+              name="email"
               type="email"
+              value={formik.values.email}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.email && formik.errors.email}
             />
             <FormBox
               title="Contraseña"
+              name="password"
               type="password"
+              value={formik.values.password}
               change={formik.handleChange}
               blur={formik.handleBlur}
               error={formik.touched.password && formik.errors.password}
