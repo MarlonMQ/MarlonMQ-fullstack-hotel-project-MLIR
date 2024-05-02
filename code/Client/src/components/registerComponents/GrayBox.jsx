@@ -4,16 +4,13 @@ import FormButton from './FormButton';
 
 const GrayBox = ({ title, buttonText, hrefLink, hrefText, onButtonClick, children }) => {
   return (
-    <div className="bg-gray-300 rounded-lg h-4/5 w-4/5 min-w-[300px] min-h-[400px] grid grid-rows-3 justify-center p-8 shadow-lg shadow-gray-500">
+    <div className="flex flex-col gap-4  bg-gray-300 rounded-lg justify-center p-8 shadow-lg shadow-gray-500">
       <h2 className="secondary-title text-center">{title}</h2>
 
-      <div className="flex flex-col justify-center items-center mb-10"> 
+      <div> 
         {/* Form */}
         {children}
-      </div>
-
-      <div className="flex flex-col items-center justify-center"> 
-      
+      </div>    
         {/* Botón al final */}
         <FormButton onClick={onButtonClick}>{buttonText}</FormButton>
 
@@ -23,8 +20,7 @@ const GrayBox = ({ title, buttonText, hrefLink, hrefText, onButtonClick, childre
         </div>
 
         {/* Opción para ir a otra página */}
-        <Link to={hrefLink} className="text-sm text-blue-500 hover:underline">{hrefText}</Link>
-      </div>
+        <Link to={hrefLink} className="text-center text-blue-500 hover:underline">{hrefText}</Link>
     </div>
   );
 };

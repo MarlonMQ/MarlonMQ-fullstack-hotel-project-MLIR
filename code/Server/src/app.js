@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import LoginRoutes from './user/routes/login.route.js';
+import SignUpRoutes from './user/routes/signUp.route.js';
 
 // Create express app
 const app = express();
@@ -18,7 +19,7 @@ app.use(cors(corsOptions));
 
 // rutas
 app.use('/login', LoginRoutes);
-
+app.use('/signup', SignUpRoutes);
 
 // Start server
 const PORT = process.env.PORT || 4000;
