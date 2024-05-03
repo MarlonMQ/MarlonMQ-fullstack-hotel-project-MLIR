@@ -6,19 +6,23 @@ import { deleteImageFromBucket } from '../services/bucketManager.js';
 export class UploadServiceController {
     // aqui se guarda la info en la base de datos
     static async uploadService(req, res) {
+        console.log("here");
         let db = null;
         try {
             db = await DbConnection.getInstance().getConnection();
             const { title } = req.body;
-            const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+            console.log("title is: ", title);
 
+            const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+            console.log("image url: ", imageUrl);
             await db.request()
                 .input('Title', sql.NVarChar(255), title)  
                 .input('ImageUrl', sql.NVarChar(500), imageUrl)  
-                .query('INSERT INTO Services (Title, ImageUrl) VALUES (@Title, @ImageUrl)');  
+                .query('INSERT INTO Services (Title, ImageUrl) VALUES (@Title, @ImageUrl)');
 
             res.json({ message: 'Servicio subido con éxito', title, imageUrl });
         } catch (error) {
+            console.log("Upload services fallo");
             console.error('Error al guardar en la base de datos', error);
             res.status(500).send('Error al guardar la información del servicio');
     }

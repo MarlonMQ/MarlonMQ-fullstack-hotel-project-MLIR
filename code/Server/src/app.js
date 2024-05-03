@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url';
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = "C:\\Usuarios\\Marvin Lisandro\\Escritorio\\P.I\\fullstack-hotel-project-mlir\\code\\Server\\src"
+console.log("Dir name",__dirname);
 // Create express app
 const app = express();
 
@@ -24,7 +26,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
 app.use('/users', UserRoutes);
 app.use('/services', servceRoutes);

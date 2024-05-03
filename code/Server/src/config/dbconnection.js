@@ -2,16 +2,16 @@ import sql from 'mssql';
 // import bdConfig from './dbconfig.json'
 
 const bdConfig = {
-  "user": "Randy",
-  "password": "1234",
+  "user": "usr_aas",
+  "password": "pwd_lisandro",
   "server": "localhost",
-  "database": "PruebaServer",
+  "database": "HotelHazbin",
+  "port": 58339,
   "options": {
     "encrypt": false,
     "trustServerCertificate": true
   }
 }
-
 
 
 let instance = null;

@@ -1,8 +1,9 @@
 {
-  "user": "sa",
-  "password": "Ignacio01.",
+  "user": "usr_aas",
+  "password": "pwd_lisandro",
   "server": "localhost",
-  "database": "database_app",
+  "database": "HotelHazbin",
+  "port": 58339,
   "options": {
     "encrypt": false,
     "trustServerCertificate": true

@@ -22,6 +22,7 @@ const UploadServiceForm = () => {
         .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2080 * 2080))
         .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
     }),
+
     // envio al back //
     onSubmit: async (values) => {
         console.log('Título recibido:', values.title);
@@ -30,8 +31,8 @@ const UploadServiceForm = () => {
         const formData = new FormData();
         formData.append('title', values.title);
         formData.append('image', values.image);
-    
         try {
+            console.log("axios post");
             const response = await axios.post('http://localhost:4000/services/upload-service', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -76,6 +77,8 @@ const UploadServiceForm = () => {
   return (
     <div className="max-w-md mx-auto bg-white p-8 border border-gray-300  rounded-lg mt-12 mb-12 max-h-auto shadow-xl">
       <form onSubmit={formik.handleSubmit} className="space-y-6">
+        
+        {/* Campo 01 */}
         <div>
           <label htmlFor="title" className="text-sm font-medium text-gray-700">Título del Servicio</label>
           <input
@@ -87,8 +90,10 @@ const UploadServiceForm = () => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
-        </div>
 
+        </div>
+        
+        {/* Campo 02 */}
         <div>
           <label htmlFor="image" className="text-sm font-medium text-gray-700">Imagen del Servicio</label>
           <input
