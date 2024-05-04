@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 
-export default function CardsFacilities({ image, title}) {
+export default function CardsFacilities({ image, title, setServices, services}) {
 
     const deleteService = (imageUrl) => {
         axios.delete(`http://localhost:4000/services/deleteService?url=${imageUrl}`)
