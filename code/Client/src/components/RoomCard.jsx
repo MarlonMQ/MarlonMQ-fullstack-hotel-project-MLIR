@@ -2,17 +2,17 @@ import React from 'react'
 
 export const RoomCard = ({data}) => {
     console.log("data en room card", data);
-    const {room_type, price_per_night, quantity_available} = data;
+    const {room_type, price_per_night, quantity_available, id_room} = data;
 
 
   return (
     <>
         <div className='rounded-md border-2 border-secondary'>
             <div className='rounded-md border-2'>
-                <img src="../src/assets/logo/hazbin-logo.jpg" alt=""/>
+                <img src={`../src/assets/roomsPictures/RoomType0${id_room}.jpg`} alt=""/>
             </div>
             <div className='bg-primary py-2 text-white text-center Roboto'>
-                <h2>{room_type}</h2>
+                <h2>{room_type} Room</h2>
             </div>
             <div className='flex justify-between px-12 py-4'>
                 <div className='flex cursor-pointer'>

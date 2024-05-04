@@ -20,14 +20,13 @@ const RoomsPage = () => {
     console.log(dataRooms);
   return (
     <>
-        <div className="grid grid-cols-3 gap-4 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
             {
                 dataRooms.map( (room) => {
                     return <RoomCard key={room.id_room} data={room}/>
                 })
             }
         </div>
-
     </>
   )
 }
