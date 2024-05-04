@@ -1,0 +1,29 @@
+# Archivos temporales o generados
+node_modules
+/dist
+
+# Archivos y carpetas específicos de IDEs
+.idea/
+.vscode/
+
+# Archivos de dependencias específicos
+*/package-lock.json
+yarn.lock
+
+# Archivos de construcción o compilación
+/build
+.DS_Store
+
+# Logs y archivos temporales
+logs/
+*.log
+
+# Archivos de configuración
+.env
+
+# Archivos de caché o datos generados
+.cache/
+
+# Archivos de respaldo
+*.bak
+*.backup

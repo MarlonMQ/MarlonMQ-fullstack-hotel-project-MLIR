@@ -4,6 +4,7 @@ import UserRoutes from './user/routes/user.route.js';
 import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import RoomsRoutes from './user/routes/rooms.route.js';
 
 
 
@@ -30,6 +31,7 @@ console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
 app.use('/users', UserRoutes);
 app.use('/services', servceRoutes);
+app.use('/rooms', RoomsRoutes);
 
 
 // Start server
