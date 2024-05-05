@@ -33,7 +33,6 @@ const Facilities = () => {
             {services.map(service => (
                     <CardsFacilities key={service.imageUrl} title={service.title} image={service.imageUrl} />
                 ))}
-              {admin === true ? <FormServicios/> : null}
 
         </div>
     );

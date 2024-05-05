@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import Facilities from './pages/Facilities'
 import Reservations from './pages/Reservations'
+import AdminServicesPanel from './components/Services/AdminPanel.jsx'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/SignUp" element={<SignUpPage/>}/>
           <Route path = "/Facilities" element = {< Facilities/>} /> 
         <Route path = "/Reservations" element = {< Reservations/>} />
+        <Route path = "/AdminServicesPanel" element = {< AdminServicesPanel/>} />
         </Routes>
       </AuthProvider>
     </Router>
