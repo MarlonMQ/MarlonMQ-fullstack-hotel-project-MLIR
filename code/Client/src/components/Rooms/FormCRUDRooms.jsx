@@ -7,7 +7,8 @@ import FormRooms from "./FormRooms";
 function FormCRUDRooms() {
     const [rooms, setRooms] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [serviceToDelete, setServiceToDelete] = useState(null);
+    // Guarda el que voy a borrar
+    const [roomToDelete, setRoomToDelete] = useState(null);
 
     useEffect(() => {
         fetchServices();
@@ -23,15 +24,16 @@ function FormCRUDRooms() {
             });
     };
 
-    const initiateDeleteService = (service) => {
-        setServiceToDelete(service);
+    const initiateDeleteRoom = (service) => {
+        console.log(service);
+        setRoomToDelete(service);
         setShowConfirmation(true);
     };
 
-    const deleteService = () => {
-        axios.delete(`http://localhost:4000/services/?url=${serviceToDelete.imageUrl}`)
+    const deleteRoom = () => {
+        axios.delete(`http://localhost:4000/rooms/?url=${roomToDelete.image_url}`)
             .then(() => {
-                setRooms(rooms.filter(s => s.ServiceId !== serviceToDelete.ServiceId));
+                setRooms(rooms.filter(s => s.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
             })
             .catch(error => {
@@ -74,7 +76,7 @@ function FormCRUDRooms() {
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <button
-                                        onClick={() => initiateDeleteService(room)}
+                                        onClick={() => initiateDeleteRoom(room)}
                                         className="text-red-500 hover:text-red-700">
                                         Delete
                                     </button>
@@ -89,7 +91,7 @@ function FormCRUDRooms() {
                 <DeleteConfirmation
                     show={showConfirmation}
                     onClose={() => setShowConfirmation(false)}
-                    onConfirm={deleteService}
+                    onConfirm={deleteRoom}
                 />
             )}
         </div>

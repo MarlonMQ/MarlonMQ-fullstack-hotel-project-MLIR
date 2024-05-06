@@ -5,7 +5,7 @@ import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './user/routes/rooms.route.js';
-import multer from 'multer';
+
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

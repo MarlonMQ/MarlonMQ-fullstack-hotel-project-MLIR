@@ -1,6 +1,9 @@
 import DbConnection from "../../config/dbconnection.js";
+import { deleteImageFromBucket } from "../services/bucketManager.js";
 import RoomsServices from "../services/rooms.services.js";
 import sql from 'mssql';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 class RoomsController {
 
@@ -45,28 +48,35 @@ class RoomsController {
         }
     }
     
-    static async deleteRoom() {
+    static async deleteRoom(req, res) {
         const imageUrl = req.query.url;
-        const baseDir = 'C:/Users/Marvin Lisandro/Desktop/fullstack-hotel-project-mlir/code/Server/src';
+        console.log("Image url req", imageUrl);
+        // URL actual hasta el .js
+        const __filename = fileURLToPath(import.meta.url);
+        console.log("filename dir:", __filename);
+        // directorio padre de este .js
+        const __dirname = path.dirname(__filename);
 
-        // let db = null;
-        // try {
-        //     db = await DbConnection.getInstance().getConnection();
-        //     // Eliminar el servicio de la base de datos
-        //     await db.query(`DELETE FROM services WHERE imageUrl = '${imageUrl}'`);
+        const baseDir = path.join(__dirname, '../../');
+        console.log("test dir:", baseDir);
+        let db = null;
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            // Eliminar el servicio de la base de datos
+            await db.query(`DELETE FROM room WHERE image_url = '${imageUrl}'`);
 
-        //     // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
-        //     deleteImageFromBucket(imageUrl, baseDir);
+            // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
+            deleteImageFromBucket(imageUrl, baseDir);
 
-        //     res.status(200).send('Service deleted successfully');
-        // } catch (error) {
-        //     console.error('Error deleting service', error);
-        //     res.status(500).send('Internal server error');
-        // } finally {
-        //     if (db) {
-        //         db.close();
-        //     }
-        // }
+            res.status(200).send('Service deleted successfully');
+        } catch (error) {
+            console.error('Error deleting service', error);
+            res.status(500).send('Internal server error');
+        } finally {
+            if (db) {
+                db.close();
+            }
+        }
     }
 }
 

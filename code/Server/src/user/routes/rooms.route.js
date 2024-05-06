@@ -1,5 +1,4 @@
 import { Router } from "express";
-import multer from 'multer';
 import RoomsController from "../controllers/rooms.controller.js";
 import upload from "../../multer.config.js";
 
