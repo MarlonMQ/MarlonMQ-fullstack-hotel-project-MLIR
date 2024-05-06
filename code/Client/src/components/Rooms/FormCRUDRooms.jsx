@@ -4,25 +4,32 @@ import { DeleteConfirmation } from '../Services/FacilitiesUtils';
 import FormRooms from "./FormRooms";
 
 
-function FormCRUDRooms({setTest, test}) {
+function FormCRUDRooms() {
+
     const [rooms, setRooms] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     // Guarda el que voy a borrar
     const [roomToDelete, setRoomToDelete] = useState(null);
 
-    useEffect(() => {
-        fetchServices();
-    }, [test]);
 
-    const fetchServices = () => {
-        axios.get('http://localhost:4000/rooms/getDataRooms')
-            .then(response => {
-                setRooms(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching rooms', error);
-            });
-    };
+    useEffect(() => {
+        const fetchServices = () => {
+            axios.get('http://localhost:4000/rooms/getDataRooms')
+                .then(response => {
+                    setRooms(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching services', error);
+                });
+        };
+
+        fetchServices(); // Fetch immediately on component mount
+        const interval = setInterval(fetchServices, 10000); // Refresh every 10 seconds
+
+        return () => clearInterval(interval); // Clean up interval on component unmount
+    }, []);
+
+
 
     const initiateDeleteRoom = (service) => {
         console.log(service);
@@ -35,7 +42,6 @@ function FormCRUDRooms({setTest, test}) {
             .then(() => {
                 setRooms(rooms.filter(s => s.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
-                setTest((c) => c+1);
             })
             .catch(error => {
                 console.error('Error deleting service', error);
@@ -43,7 +49,7 @@ function FormCRUDRooms({setTest, test}) {
     };
     return (
         <div className="container mx-auto mt-10 border-l border-r border-gray-300">
-            <FormRooms setTest = {setTest} test={test}/>
+            <FormRooms />
             <table className="min-w-full leading-normal">
                 <thead>
                     <tr>

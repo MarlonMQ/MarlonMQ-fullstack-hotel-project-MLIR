@@ -3,20 +3,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
-const FormRooms = ({setTest, test}) => {
+
+const FormRooms = () => {
+
+
     /* estado y valores iniciales  */
   const [imagePreview, setImagePreview] = useState(null);
-  const [valuesForm, setValuesForm] = useState({
-    type: 'q',
-    price: 0,
-    availables: 0,
-    image: null,
-  });
-
-  useEffect(() => {
-    console.log("Values form", valuesForm);
-  }, [valuesForm])
-  
 
 
   const formik = useFormik({
@@ -24,6 +16,8 @@ const FormRooms = ({setTest, test}) => {
       type: '',
       price: 0,
       availables: 0,
+      capacity: 0,
+      description: '',
       image: null,
     },
   
@@ -49,15 +43,9 @@ const FormRooms = ({setTest, test}) => {
         formData.append('type', values.type);
         formData.append('price', values.price);
         formData.append('availables', values.availables);
+        formData.append('capacity', values.capacity);
+        formData.append('description', values.description);
         formData.append('image', values.image);
-
-        // setValuesForm(formData.values);
-        let arrayEntries = []
-        let index = 0;
-        for (const pair of formData.entries()) {
-          arrayEntries[index] = pair[1];
-          index = index + 1;
-        }
 
 
         try {
@@ -69,13 +57,7 @@ const FormRooms = ({setTest, test}) => {
             });
             console.log('room subido con éxito:', response.data);
             alert('room subido con éxito');
-            setTest((c) => c+1);
-            setValuesForm({
-              type: arrayEntries[0],
-              price: arrayEntries[1],
-              availables: arrayEntries[2],
-              image: arrayEntries[3],
-            })
+
             
         } catch (error) {
             console.error('Error al subir el room:', error);
@@ -159,7 +141,37 @@ const FormRooms = ({setTest, test}) => {
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
 
         </div>
-        
+
+        {/* Campo capacity*/}
+        <div>
+          <label htmlFor="price" className="text-sm font-medium text-gray-700">Capacidad</label>
+          <input
+            id="capacity"
+            name="capacity"
+            type="number"
+            onChange={formik.handleChange}
+            value={formik.values.capacity}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
+          />
+          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+
+        </div>
+
+        {/* Campo description*/}
+        <div>
+          <label htmlFor="price" className="text-sm font-medium text-gray-700">Descripcion</label>
+          <textarea
+            id="description"
+            name="description"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.description}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
+          />
+          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+
+        </div>
+
         {/* Campo image */}
         <div>
           <label htmlFor="image" className="text-sm font-medium text-gray-700">Imagen de la habitacion</label>

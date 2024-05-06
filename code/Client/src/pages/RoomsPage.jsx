@@ -4,7 +4,6 @@ import { RoomCard } from '../components/Rooms/RoomCard';
 import NavBar from '../components/NavBar';
 import { CarouselComponent } from '../components/Carousel';
 import { Footer } from '../components/Footer';
-import FormCRUDRooms from '../components/Rooms/FormCRUDRooms';
 
 
 // Las imagenes deberian ser distintas para cada page, al menos las desktop.
@@ -20,25 +19,29 @@ const images = {
         "../src/assets/hotelPictures/Hotel-image07.jpg"
     ],
 }
-const RoomsPage = () => {
+const RoomsPage = () => {    
+
 
     const [dataRooms, setDataRooms] = useState([]);
-    const [test, setTest] = useState(0);
 
-    useEffect(() => {
-        console.log("test modificado", test);
-    }, [test])
     
 
     useEffect(() => {
-        axios.get('http://localhost:4000/rooms/getDataRooms')
-            .then(response => {
-                setDataRooms(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching services - Room Page', error);
-            });
-    }, [test]);
+        const fetchServices = () => {
+            axios.get('http://localhost:4000/rooms/getDataRooms')
+                .then(response => {
+                    setDataRooms(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching services', error);
+                });
+        };
+
+        fetchServices(); // Fetch immediately on component mount
+        const interval = setInterval(fetchServices, 10000); // Refresh every 10 seconds
+
+        return () => clearInterval(interval); // Clean up interval on component unmount
+    }, []);
     // console.log("Data rooms........................", dataRooms);
   return (
     <>
@@ -55,7 +58,7 @@ const RoomsPage = () => {
             }
         </div>
 
-        <FormCRUDRooms setTest = {setTest} test={test}/>
+        {/* <FormCRUDRooms/> */}
         <Footer/>
     </>
   )

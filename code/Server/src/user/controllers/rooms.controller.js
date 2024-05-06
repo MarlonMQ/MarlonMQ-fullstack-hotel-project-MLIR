@@ -25,7 +25,7 @@ class RoomsController {
         let db = null;
         try {
             db = await DbConnection.getInstance().getConnection();
-            const { type, price, availables } = req.body;
+            const { type, price, availables, capacity, description } = req.body;
             console.log("----Info received", type);
             console.log("----Info received", price);
             console.log("----Info received", availables);
@@ -37,8 +37,10 @@ class RoomsController {
                 .input('room_type', sql.VarChar(), type)
                 .input('price_per_night', sql.Int(), price)
                 .input('quantity_available', sql.Int(), availables)
+                .input('capacity', sql.Int(), capacity)
+                .input('description', sql.VarChar(), description)
                 .input('Image_url', sql.VarChar(500), imageUrl)
-                .query('INSERT INTO room (room_type, price_per_night, quantity_available, image_url) VALUES (@room_type, @price_per_night, @quantity_available, @Image_url)');
+                .query('INSERT INTO room (room_type, price_per_night, quantity_available, capacity, description, image_url) VALUES (@room_type, @price_per_night, @quantity_available, @capacity, @description, @Image_url)');
 
             res.json({ message: 'Room subido con éxito', type, price, availables, imageUrl });
         } catch (error) {
