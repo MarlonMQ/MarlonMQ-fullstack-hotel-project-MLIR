@@ -4,6 +4,7 @@ import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import LoginRoutes from './user/routes/login.route.js';
 import SignUpRoutes from './user/routes/signUp.route.js';
+import reservationRoutes from './user/routes/reservationRoutes.js';
 
 import { fileURLToPath } from 'url';
 
@@ -31,6 +32,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/services', servceRoutes);
 app.use('/login', LoginRoutes);
 app.use('/signup', SignUpRoutes);
+app.use('/reservations', reservationRoutes);
 
 
 // Start server

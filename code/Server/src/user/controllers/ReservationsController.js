@@ -1,26 +1,62 @@
 import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export class ReservationsController {
 
-    constructor() {
-        // Aquí puedes inicializar cualquier estado o configuración necesaria
-    }
 
-    // Método para obtener todas las reservaciones
-    static async getAllReservations(req, res) {
-        // Lógica para obtener todas las reservaciones desde la base de datos o cualquier otra fuente de datos
-    }
-
-    // Método para obtener una reserva por su ID
-    static async getReservationById(req, res) {
-        // Lógica para obtener una reserva específica por su ID desde la base de datos o cualquier otra fuente de datos
-    }
-
-    // Método para crear una nueva reserva
+    // Metodo para ingresar una reserva
     static async createReservation(req, res) {
-        // Lógica para crear una nueva reserva en la base de datos o cualquier otra fuente de datos
+        console.log(req.body);
+
+        let db = null;
+        const { email, lastName, checkIn, checkOut } = req.body; // Asegúrate de que estos datos se envíen desde el cliente
+
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            await db.request()
+            .input('Email', sql.VarChar, email)
+            .input('apellido', sql.VarChar, lastName)  // Make sure 'lastName' matches 'Apellido' in your SQL query
+            .input('fecha_inico', sql.Date, checkIn)
+            .input('fecha_fin', sql.Date, checkOut)
+            .query('INSERT INTO RESERVAS (email, apellido, fecha_inicio, fecha_fin) VALUES (@Email, @apellido, @fecha_inico, @fecha_fin)');
+
+            res.json({ message: 'Reserva creada con éxito.' });
+        } catch (error) {
+            console.error('Error al guardar la reserva:', error);
+            res.status(500).send('Error al guardar la información de la reserva');
+        }
+    
+}
+
+
+    // Método para obtener todas las reservas
+// Método para obtener todas las reservas
+static async getReservations(req, res) {
+    let db = null;
+    try {
+        db = await DbConnection.getInstance().getConnection();
+        const results = await db.query('SELECT id_reserva, email, apellido, fecha_inicio, fecha_fin FROM RESERVAS');
+        res.json(results.recordset); // Devuelve un array de objetos JSON con las reservas
+    } catch (err) {
+        res.status(500).send('Error al obtener las reservas: ' + err.message);
     }
+}
+
+    static async getReservationById(req, res) {
+        let db = null;
+        const { id } = req.body;
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            const results = await db.query(`SELECT id_reserva, email, apellido, fecha_inicio, fecha_fin FROM RESERVAS WHERE id_reserva = ${id}`);
+            res.json(results.recordset[0]); // Devuelve un objeto JSON con la reserva correspondiente
+        } catch (err) {
+            res.status(500).send('Error al obtener la reserva: ' + err.message);
+        }
+    }
+
 
     // Método para actualizar una reserva existente
     static async updateReservation(req, resa) {
