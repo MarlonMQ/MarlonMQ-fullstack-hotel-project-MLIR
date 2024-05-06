@@ -1,15 +1,17 @@
 import React from 'react'
 
 export const RoomCard = ({data}) => {
-    console.log("data en room card", data);
-    const {room_type, price_per_night, quantity_available, id_room} = data;
+    // console.log("data en room card", data);
+    const {room_type, price_per_night, quantity_available, id_room, image_url} = data;
 
+    console.log("----------image url----------", data.image_url);
 
   return (
     <>
         <div className='rounded-md border-2 border-secondary'>
             <div className='rounded-md border-2'>
-                <img src={`../src/assets/roomsPictures/RoomType0${id_room}.jpg`} alt=""/>
+                <img src={data.image_url} alt="Descripción de la imagen"/>
+
             </div>
             <div className='bg-primary py-2 text-white text-center Roboto'>
                 <h2>{room_type} Room</h2>

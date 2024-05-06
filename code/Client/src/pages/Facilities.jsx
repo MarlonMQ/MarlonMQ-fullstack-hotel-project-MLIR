@@ -1,7 +1,7 @@
 import React from 'react';
-import CardsFacilities from '../components/CardsFacilities';
+import CardsFacilities from '../components/Services/CardsFacilities';
 import '../index.css';
-import FormServicios from '../components/FormServicios';
+import UploadServiceForm from '../components/Services/FoamFacilities';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
@@ -55,7 +55,7 @@ const Facilities = () => {
             {services.map(service => (
                     <CardsFacilities key={service.imageUrl} title={service.title} image={service.imageUrl} setServices = {setServices} services = {services}/>
                 ))}
-            <FormServicios/>
+            <UploadServiceForm/>
 
         </div>
 

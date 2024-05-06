@@ -24,19 +24,16 @@
 
     .primary-text {
       @apply text-base;
-      @apply text-nowrap;
       @apply italic;
       @apply tracking-wide;
       font-family: 'Roboto', serif;
     }
     .secondary-text {  
-      @apply text-nowrap;
       @apply italic;
       @apply tracking-wider;
       font-family: 'Roboto', serif;
     }
     .testimony-text {  
-      @apply text-nowrap;
       @apply text-2xl;  
       @apply font-semibold;
       font-family: 'Parisienne', serif;

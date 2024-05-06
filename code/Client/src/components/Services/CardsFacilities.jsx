@@ -14,6 +14,7 @@ export default function CardsFacilities({ image, title, setServices, services}) 
             });
     };
     
+    console.log("facilities: ",image);
 
     return (
         <div className="relative flex flex-col items-center mb-10 ">

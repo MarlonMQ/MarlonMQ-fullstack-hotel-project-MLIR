@@ -40,6 +40,7 @@ const UploadServiceForm = () => {
             });
             console.log('Servicio subido con éxito:', response.data);
             alert('Servicio subido con éxito');
+            
         } catch (error) {
             console.error('Error al subir el servicio:', error);
             if (error.response) {
@@ -75,7 +76,7 @@ const UploadServiceForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 border border-gray-300  rounded-lg mt-12 mb-12 max-h-auto shadow-xl">
+    <div className=" mx-auto bg-white p-8 border border-gray-300 mt-12 mb-12">
       <form onSubmit={formik.handleSubmit} className="space-y-6">
         
         {/* Campo 01 */}

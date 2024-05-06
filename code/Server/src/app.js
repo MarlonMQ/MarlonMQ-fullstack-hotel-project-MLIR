@@ -5,7 +5,7 @@ import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './user/routes/rooms.route.js';
-
+import multer from 'multer';
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,8 +25,11 @@ const corsOptions = {
 }
 
 
+
 app.use(cors(corsOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
 app.use('/users', UserRoutes);
