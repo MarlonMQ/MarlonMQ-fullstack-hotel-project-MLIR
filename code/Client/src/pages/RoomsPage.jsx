@@ -23,6 +23,12 @@ const images = {
 const RoomsPage = () => {
 
     const [dataRooms, setDataRooms] = useState([]);
+    const [test, setTest] = useState(0);
+
+    useEffect(() => {
+        console.log("test modificado", test);
+    }, [test])
+    
 
     useEffect(() => {
         axios.get('http://localhost:4000/rooms/getDataRooms')
@@ -32,8 +38,8 @@ const RoomsPage = () => {
             .catch(error => {
                 console.error('Error fetching services - Room Page', error);
             });
-    }, []);
-    console.log("Data rooms........................", dataRooms);
+    }, [test]);
+    // console.log("Data rooms........................", dataRooms);
   return (
     <>
         <NavBar/>
@@ -49,7 +55,7 @@ const RoomsPage = () => {
             }
         </div>
 
-        <FormCRUDRooms/>
+        <FormCRUDRooms setTest = {setTest} test={test}/>
         <Footer/>
     </>
   )

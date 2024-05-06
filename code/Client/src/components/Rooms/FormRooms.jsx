@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
-const FormRooms = () => {
+const FormRooms = ({setTest, test}) => {
     /* estado y valores iniciales  */
   const [imagePreview, setImagePreview] = useState(null);
+  const [valuesForm, setValuesForm] = useState({
+    type: 'q',
+    price: 0,
+    availables: 0,
+    image: null,
+  });
+
+  useEffect(() => {
+    console.log("Values form", valuesForm);
+  }, [valuesForm])
+  
+
 
   const formik = useFormik({
     initialValues: {
@@ -39,6 +51,15 @@ const FormRooms = () => {
         formData.append('availables', values.availables);
         formData.append('image', values.image);
 
+        // setValuesForm(formData.values);
+        let arrayEntries = []
+        let index = 0;
+        for (const pair of formData.entries()) {
+          arrayEntries[index] = pair[1];
+          index = index + 1;
+        }
+
+
         try {
             console.log("axios post");
             const response = await axios.post('http://localhost:4000/rooms/', formData, {
@@ -48,6 +69,13 @@ const FormRooms = () => {
             });
             console.log('room subido con éxito:', response.data);
             alert('room subido con éxito');
+            setTest((c) => c+1);
+            setValuesForm({
+              type: arrayEntries[0],
+              price: arrayEntries[1],
+              availables: arrayEntries[2],
+              image: arrayEntries[3],
+            })
             
         } catch (error) {
             console.error('Error al subir el room:', error);
@@ -83,16 +111,6 @@ const FormRooms = () => {
     }
   };
 
-//   const test = async() => {
-  
-//     const res = await axios.post("http://localhost:4000/rooms/uploadRoom", {tipo: "room-1"} ,{
-//         headers: {
-//             'Content-Type': 'application/json',
-//         }
-//     });
-//   }
-
-//   test();
   return (
     <div className=" mx-auto bg-white p-8 border border-gray-300 mt-12 mb-12">
       <form onSubmit={formik.handleSubmit} className="space-y-6">

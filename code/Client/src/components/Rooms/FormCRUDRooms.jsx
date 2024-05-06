@@ -4,7 +4,7 @@ import { DeleteConfirmation } from '../Services/FacilitiesUtils';
 import FormRooms from "./FormRooms";
 
 
-function FormCRUDRooms() {
+function FormCRUDRooms({setTest, test}) {
     const [rooms, setRooms] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     // Guarda el que voy a borrar
@@ -12,7 +12,7 @@ function FormCRUDRooms() {
 
     useEffect(() => {
         fetchServices();
-    }, []);
+    }, [test]);
 
     const fetchServices = () => {
         axios.get('http://localhost:4000/rooms/getDataRooms')
@@ -35,15 +35,15 @@ function FormCRUDRooms() {
             .then(() => {
                 setRooms(rooms.filter(s => s.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
+                setTest((c) => c+1);
             })
             .catch(error => {
                 console.error('Error deleting service', error);
             });
     };
-    // console.log("______data rooms_________", rooms);
     return (
         <div className="container mx-auto mt-10 border-l border-r border-gray-300">
-            <FormRooms />
+            <FormRooms setTest = {setTest} test={test}/>
             <table className="min-w-full leading-normal">
                 <thead>
                     <tr>
