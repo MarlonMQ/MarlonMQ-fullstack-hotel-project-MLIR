@@ -3,9 +3,8 @@ import path from 'path';
 
 async function deleteImageFromBucket(imageUrl, baseDir) {
   const fileName = imageUrl.split('/').pop();
-  const currentDir = path.dirname(new URL(import.meta.url).pathname);
-  const filePath = path.resolve(currentDir, '../../uploads', fileName);
-
+  const filePath = path.resolve(baseDir, 'uploads', fileName);
+  
   try {
     await fsPromises.unlink(filePath);
     console.log(`File ${fileName} deleted from bucket`);

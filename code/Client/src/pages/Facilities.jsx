@@ -1,5 +1,5 @@
 import React from 'react';
-import CardsFacilities from '../components/Services/Services/CardsFacilities';
+
 import '../index.css';
 import FormServicios from '../components/Services/FoamFacilities';
 import axios from 'axios';
@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
 import NavBar from '../components/NavBar';
 import { CarouselComponent } from '../components/Carousel';
+import CardsFacilities from '../components/Services/CardsFacilities';
+import UploadServiceForm from '../components/Services/FoamFacilities';
 
 // Las imagenes deberian ser distintas para cada page, al menos las desktop.
 const images = {

@@ -7,7 +7,7 @@ export const AdminPanel = () => {
     <>
 
         <FormCRUDRooms />
-
+        
     </>
   )
 }

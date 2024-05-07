@@ -17,7 +17,7 @@ class ServiceRoutes {
 
     setupRoutes() {
         // Ruta para cargar un servicio
-        this.router.post('/', this.upload.single('image'), (req, res) => {
+        this.router.post('/', upload.single('image'), (req, res) => {
             UploadServiceController.uploadService(req, res);
         });
 

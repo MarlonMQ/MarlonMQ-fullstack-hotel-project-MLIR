@@ -33,13 +33,9 @@ const UploadServiceForm = () => {
       formData.append('title', values.title);
       formData.append('image', values.image);
 
-<<<<<<< HEAD
-        const formData = new FormData();
-        formData.append('title', values.title);
-        formData.append('image', values.image);
         try {
             console.log("axios post");
-            const response = await axios.post('http://localhost:4000/services/upload-service', formData, {
+            const response = await axios.post('http://localhost:4000/services/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -67,20 +63,6 @@ const UploadServiceForm = () => {
         }  
       },
     });
-=======
-      try {
-          const response = await axios.post('http://localhost:4000/services/', formData, {
-              headers: {
-                  'Content-Type': 'multipart/form-data'
-              }
-          });
-          setShowSuccessAlert(true);
-      } catch (error) {
-          setShowErrorAlert(true);
-      }
-  },
-});
->>>>>>> 50b720c785d864051cd777f26992ad1ba7112d0b
 
 //recibir imagen input //
   const handleImageChange = (event) => {
@@ -96,12 +78,6 @@ const UploadServiceForm = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className=" mx-auto bg-white p-8 border border-gray-300 mt-12 mb-12">
-      <form onSubmit={formik.handleSubmit} className="space-y-6">
-        
-        {/* Campo 01 */}
-=======
     <div className="max-w-md mx-auto bg-white p-8 border border-gray-300  rounded-lg mt-12 mb-12 max-h-auto shadow-xl">
       {showSuccessAlert && (
           <div className={alertClass('success')}>
@@ -115,7 +91,6 @@ const UploadServiceForm = () => {
             )}
         <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Servicio</h2>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
->>>>>>> 50b720c785d864051cd777f26992ad1ba7112d0b
         <div>
           <label htmlFor="title" className="text-sm font-medium text-gray-700">Título del Servicio</label>
           <input
