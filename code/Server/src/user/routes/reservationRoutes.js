@@ -20,6 +20,10 @@ class ReservationRoutes {
 
         });
 
+        this.router.delete('/:id', (req, res) => {
+            ReservationsController.deleteReservation(req, res);
+        });
+
     }
 
 

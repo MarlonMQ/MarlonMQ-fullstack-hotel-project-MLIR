@@ -4,21 +4,8 @@ import axios from 'axios';
 import ReservationTable from './ReservationTable';
 
 function ReservationForm() {
-    const [reservations, setReservations] = useState([]);
 
-    useEffect(() => {
-      const fetchReservations = async () => {
-        try {
-          const response = await axios.get('http://localhost:4000/reservations');
-          setReservations(response.data); // Asume que la API devuelve un array de reservas
-        } catch (error) {
-          console.error('Error al obtener las reservas:', error);
-        }
-      };
-  
-      fetchReservations();
-    }, []);
-  
+
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -90,6 +77,7 @@ function ReservationForm() {
                 console.log('Respuesta del servidor:', response.data);
                 alert('Reserva creada con éxito!');
                 console.log('Formulario enviado:', formData);
+                
 
                 // Aquí podrías redirigir al usuario o limpiar el formulario
                 setFormData({
@@ -176,7 +164,7 @@ function ReservationForm() {
                     </button>
                 </div>
             </form>
-            <ReservationTable reservations={reservations} />
+            <ReservationTable />
         </div>
     );
 }

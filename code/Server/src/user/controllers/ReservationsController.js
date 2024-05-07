@@ -59,13 +59,28 @@ static async getReservations(req, res) {
 
 
     // Método para actualizar una reserva existente
-    static async updateReservation(req, resa) {
-        // Lógica para actualizar una reserva existente en la base de datos o cualquier otra fuente de datos
-    }
-
-    // Método para eliminar una reserva por su ID
     static async deleteReservation(req, res) {
-        // Lógica para eliminar una reserva específica por su ID desde la base de datos o cualquier otra fuente de datos
+        const { id } = req.params; // Este es el email ahora, considera cambiar el nombre de la variable para evitar confusión
+        let db = null;
+    
+        try {
+            db = await DbConnection.getInstance().getConnection();
+            const result = await db.request()
+                .input('Email', sql.VarChar, id) // Cambiar a tipo adecuado si id es el correo
+                .query('DELETE FROM RESERVAS WHERE email = @Email');
+    
+            if (result.rowsAffected[0] > 0) {
+                res.json({ message: 'Reserva eliminada con éxito.' });
+            } else {
+                res.status(404).send('Reserva no encontrada.');
+            }
+        } catch (error) {
+            console.error('Error al eliminar la reserva:', error);
+            res.status(500).send('Error al eliminar la reserva');
+        }
     }
+    
+
+
 }
 

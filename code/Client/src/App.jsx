@@ -6,8 +6,8 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import Facilities from './pages/Facilities'
 import Reservations from './pages/Reservations'
-import AdminServicesPanel from './components/Services/AdminPanel.jsx'
-
+import ReservesAdmin from './pages/ReservesAdmin.jsx'
+import AdminPanelServices from './components//Services/AdminPanelServices.jsx'
 
 function App() {
 
@@ -20,7 +20,9 @@ function App() {
           <Route path="/SignUp" element={<SignUpPage/>}/>
           <Route path = "/Facilities" element = {< Facilities/>} /> 
         <Route path = "/Reservations" element = {< Reservations/>} />
-        <Route path = "/AdminServicesPanel" element = {< AdminServicesPanel/>} />
+        <Route path = "/ReservesAdmin" element = {< ReservesAdmin/>} />
+        <Route path = "/AdminPanelServices" element = {< AdminPanelServices/>} />
+
         </Routes>
       </AuthProvider>
     </Router>
