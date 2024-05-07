@@ -10,7 +10,7 @@ Esta es una página web para un hotel, desarrollada como parte de un proyecto fu
     - [Tecnologías usadas](#tecnologías-usadas)
       - [Frontend](#frontend)
       - [Backend](#backend)
-    - [Base de Datos](.BD/base_de_datos.md)
+    - [Base de Datos](./BD/base_de_datos.md)
     - [Prototipo de baja fidelidad](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
     - [Prototipo de baja fidelidad: enlace web](https://www.figma.com/file/OFNy7myUIhZMrpd3iX6IKa/Low-Fidelity-Prototype?type=design&node-id=0-1&mode=design)
     - [Manual de Usuario](#manual-de-usuario)
@@ -35,8 +35,6 @@ Este es un proyecto fullstack de la página web de un hotel en la cual no solame
 - SQL
 
  ### [User Persona ](https://www.canva.com/design/DAGB-ZCBiA0/2AxU5ZSihHsgPBm9dHqHkQ/edit?utm_content=DAGB-ZCBiA0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-
-### [Base de Datos](BD/base_de_datos.md)
 
 En este otro readme se ve lo necesario de la base de datos
 
