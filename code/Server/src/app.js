@@ -1,19 +1,18 @@
 import express from 'express';
 import cors from 'cors';
-import servceRoutes from './user/routes/serviceRoutes.js';
+import serviceRoutes from './facilities/routes/serviceRoutes.js';
 import path from 'path';
 import LoginRoutes from './user/routes/login.route.js';
 import SignUpRoutes from './user/routes/signUp.route.js';
-import reservationRoutes from './user/routes/reservationRoutes.js';
+import reservationRoutes from './reserves/routes/reservationRoutes.js';
 
 import { fileURLToPath } from 'url';
-import RoomsRoutes from './user/routes/rooms.route.js';
+import RoomsRoutes from './rooms/routes/rooms.route.js';
 
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// const __dirname = "C:\\Usuarios\\Marvin Lisandro\\Escritorio\\P.I\\fullstack-hotel-project-mlir\\code\\Server\\src"
-console.log("Dir name",__dirname);
+
 // Create express app
 const app = express();
 
@@ -33,9 +32,8 @@ app.use(cors(corsOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
-app.use('/services', servceRoutes);
+app.use('/services', serviceRoutes);
 app.use('/rooms', RoomsRoutes);
 app.use('/login', LoginRoutes);
 app.use('/signup', SignUpRoutes);
@@ -53,7 +51,6 @@ app.listen(PORT, () => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  console.log("pene");
   res.status(500).send('Something broke!');
 });
 

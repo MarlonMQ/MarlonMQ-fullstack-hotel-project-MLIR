@@ -7,7 +7,6 @@ async function deleteImageFromBucket(imageUrl, baseDir) {
   
   try {
     await fsPromises.unlink(filePath);
-    console.log(`File ${fileName} deleted from bucket`);
   } catch (error) {
     console.error('Error deleting file from bucket', error);
   }

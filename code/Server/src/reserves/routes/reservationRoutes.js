@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ReservationsController } from '../controllers/ReservationsController.js';
-
+import checkToken from '../../utils/checkToken.js';
 
 class ReservationRoutes {
     constructor() {
@@ -11,16 +11,15 @@ class ReservationRoutes {
 
     setupRoutes() {
         // Ruta para cargar un servicio
-        this.router.post('/', (req, res) => {
+        this.router.post('/',checkToken,  (req, res) => {
             ReservationsController.createReservation(req, res);
 
         });
-        this.router.get('/', (req, res) => {
+        this.router.get('/',checkToken,  (req, res) => {
             ReservationsController.getReservations(req, res);
-
         });
 
-        this.router.delete('/:id', (req, res) => {
+        this.router.delete('/:id',checkToken,  (req, res) => {
             ReservationsController.deleteReservation(req, res);
         });
 

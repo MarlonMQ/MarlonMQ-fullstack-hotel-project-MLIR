@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 
 const FormRooms = () => {
@@ -9,6 +10,8 @@ const FormRooms = () => {
 
     /* estado y valores iniciales  */
   const [imagePreview, setImagePreview] = useState(null);
+
+  const { token } = useContext(AuthContext);
 
 
   const formik = useFormik({
@@ -37,7 +40,6 @@ const FormRooms = () => {
 
     // envio al back //
     onSubmit: async (values) => {
-        console.log("Info recibida: ", values);
 
         const formData = new FormData();
         formData.append('type', values.type);
@@ -49,13 +51,12 @@ const FormRooms = () => {
 
 
         try {
-            console.log("axios post");
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             const response = await axios.post('http://localhost:4000/rooms/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('room subido con éxito:', response.data);
             alert('room subido con éxito');
 
             

@@ -19,20 +19,17 @@ function App() {
 
     <Router>
       <AuthProvider>
-
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/Login" element={<LoginPage/>}/>
           <Route path="/SignUp" element={<SignUpPage/>}/>
           <Route path = "/Facilities" element = {< Facilities/>} /> 
-        <Route path = "/Reservations" element = {< Reservations/>} />
-        <Route path = "/ReservesAdmin" element = {< ReservesAdmin/>} />
-        <Route path = "/Rooms" element = {< RoomsPage/>} />
-        <Route path = "/AdminPanel" element = {< AdminPanel/>} />
-        <Route path = "/AdminPanelServices" element = {< AdminPanelServices/>} />
-
+          <Route path = "/Reservations" element = {< Reservations/>} />
+          <Route path = "/ReservesAdmin" element = {< ReservesAdmin/>} />
+          <Route path = "/Rooms" element = {< RoomsPage/>} />
+          <Route path = "/AdminPanel" element = {< AdminPanel/>} />
+          <Route path = "/AdminPanelServices" element = {< AdminPanelServices/>} />
         </Routes>
-
       </AuthProvider>
     </Router>
   )

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { DeleteConfirmation } from '../Services/FacilitiesUtils';
 import moment from 'moment';
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 function ReservationTable() {
   const [reservations, setReservations] = useState([]);
@@ -10,7 +11,10 @@ function ReservationTable() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reservationToDelete, setReservationToDelete] = useState(null);
 
+  const { token } = useContext(AuthContext);
+
   const fetchReservations = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     axios.get('http://localhost:4000/reservations')
       .then(response => {
         setReservations(response.data);
@@ -45,9 +49,9 @@ function ReservationTable() {
 
   const deleteReservation = () => {
     if (reservationToDelete && reservationToDelete.id_reserva) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       axios.delete(`http://localhost:4000/reservations/${reservationToDelete.id_reserva}`)
         .then(response => {
-          console.log('Reserva eliminada:', response.data);
           fetchReservations();
           setShowConfirmation(false);
           setReservationToDelete(null);

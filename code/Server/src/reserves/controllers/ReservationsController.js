@@ -9,7 +9,6 @@ export class ReservationsController {
 
     // Metodo para ingresar una reserva
     static async createReservation(req, res) {
-        console.log(req.body);
 
         let db = null;
         const { email, lastName, checkIn, checkOut } = req.body; // Asegúrate de que estos datos se envíen desde el cliente
@@ -21,7 +20,7 @@ export class ReservationsController {
             .input('apellido', sql.VarChar, lastName)  // Make sure 'lastName' matches 'Apellido' in your SQL query
             .input('fecha_inico', sql.Date, checkIn)
             .input('fecha_fin', sql.Date, checkOut)
-            .query('INSERT INTO RESERVAS (email, apellido, fecha_inicio, fecha_fin) VALUES (@Email, @apellido, @fecha_inico, @fecha_fin)');
+            .query('INSERT INTO reserve (email, last_name, arrival_date, departure_date) VALUES (@Email, @apellido, @fecha_inico, @fecha_fin)');
 
             res.json({ message: 'Reserva creada con éxito.' });
         } catch (error) {
@@ -38,7 +37,7 @@ static async getReservations(req, res) {
     let db = null;
     try {
         db = await DbConnection.getInstance().getConnection();
-        const results = await db.query('SELECT id_reserva, email, apellido, fecha_inicio, fecha_fin FROM RESERVAS');
+        const results = await db.query('SELECT id_reserve, email, last_name, arrival_date, departure_date FROM reserve');
         res.json(results.recordset); // Devuelve un array de objetos JSON con las reservas
     } catch (err) {
         res.status(500).send('Error al obtener las reservas: ' + err.message);
@@ -50,7 +49,7 @@ static async getReservations(req, res) {
         const { id } = req.body;
         try {
             db = await DbConnection.getInstance().getConnection();
-            const results = await db.query(`SELECT id_reserva, email, apellido, fecha_inicio, fecha_fin FROM RESERVAS WHERE id_reserva = ${id}`);
+            const results = await db.query(`SELECT id_reserve, email, last_name, arrival_date, departure_date FROM reserve WHERE id_reserve = ${id}`);
             res.json(results.recordset[0]); // Devuelve un objeto JSON con la reserva correspondiente
         } catch (err) {
             res.status(500).send('Error al obtener la reserva: ' + err.message);
@@ -67,7 +66,7 @@ static async getReservations(req, res) {
             db = await DbConnection.getInstance().getConnection();
             const result = await db.request()
                 .input('id_reserva', sql.VarChar, id) // Cambiar a tipo adecuado si id es el correo
-                .query('DELETE FROM RESERVAS WHERE id_reserva = @id_reserva');
+                .query('DELETE FROM reserve WHERE id_reserve = @id_reserva');
     
             if (result.rowsAffected[0] > 0) {
                 res.json({ message: 'Reserva eliminada con éxito.' });

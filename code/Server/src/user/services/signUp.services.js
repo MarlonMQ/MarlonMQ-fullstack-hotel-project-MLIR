@@ -4,7 +4,6 @@ import sql from "mssql"; // Asegúrate de importar el módulo sql
 class SignupServices {
   
   static async signup(email, name, lastName, phone_number, birth_date, rol) {
-    console.log(email, name, lastName, phone_number, birth_date, rol);
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
       .input('email', sql.VarChar, email)

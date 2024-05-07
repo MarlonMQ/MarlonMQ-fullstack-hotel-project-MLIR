@@ -1,5 +1,5 @@
 import DbConnection from "../../config/dbconnection.js";
-import { deleteImageFromBucket } from "../services/bucketManager.js";
+import { deleteImageFromBucket } from "../../utils/bucketManager.js";
 import RoomsServices from "../services/rooms.services.js";
 import sql from 'mssql';
 import path from 'path';
@@ -8,10 +8,9 @@ import { fileURLToPath } from 'url';
 class RoomsController {
 
     static async getDataRooms(req, res) {
-        console.log("GET /data rooms");
         try {
             const quantity_available = await RoomsServices.getDataRooms();
-            // console.log("Data obtenida:", quantity_available);
+
             res.json(quantity_available);
         } catch (error) {
             res.status(500);
@@ -20,18 +19,14 @@ class RoomsController {
     }
 
     static async uploadRoom(req, res) {
-        console.log("---------upload room-----------");
-        console.log(req.body);
+        
         let db = null;
         try {
             db = await DbConnection.getInstance().getConnection();
             const { type, price, availables, capacity, description } = req.body;
-            console.log("----Info received", type);
-            console.log("----Info received", price);
-            console.log("----Info received", availables);
+            
 
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
-            console.log("image url: ", imageUrl);
 
             await db.request()
                 .input('room_type', sql.VarChar(), type)
@@ -44,7 +39,6 @@ class RoomsController {
 
             res.json({ message: 'Room subido con éxito', type, price, availables, imageUrl });
         } catch (error) {
-            console.log("Upload rooms fallo");
             console.error('Error al guardar en la base de datos', error);
             res.status(500).send('Error al guardar la información del room');
         }
@@ -52,15 +46,14 @@ class RoomsController {
     
     static async deleteRoom(req, res) {
         const imageUrl = req.query.url;
-        console.log("Image url req", imageUrl);
         // URL actual hasta el .js
         const __filename = fileURLToPath(import.meta.url);
-        console.log("filename dir:", __filename);
+
         // directorio padre de este .js
         const __dirname = path.dirname(__filename);
 
         const baseDir = path.join(__dirname, '../../');
-        console.log("test dir:", baseDir);
+
         let db = null;
         try {
             db = await DbConnection.getInstance().getConnection();
