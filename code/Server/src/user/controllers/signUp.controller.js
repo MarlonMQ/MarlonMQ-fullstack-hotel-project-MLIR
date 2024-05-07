@@ -1,4 +1,7 @@
 import SignupServices from "../services/signUp.services.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class SignupController {
   static async signup(req, res) {
@@ -15,9 +18,8 @@ class SignupController {
         const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
         console.log(result)
         if (result === undefined) {
-          
-          
-          await SignupServices.signupPassword(email, password);
+          const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);
+          await SignupServices.signupPassword(email, encryptedPassword);
   
           res.status(200).json({ message: 'User registered successfully' });
         }

@@ -1,5 +1,6 @@
 import DbConnection from "../../config/dbconnection.js";
 import sql from "mssql"; // Asegúrate de importar el módulo sql
+import CryptoJS from 'crypto-js';
 
 class SignupServices {
   
@@ -36,6 +37,11 @@ class SignupServices {
     await DbConnection.getInstance().closeConnection();
     return result.recordset;
   }
+  static async encrypt(password, key) {
+    const cipherText = CryptoJS.AES.encrypt(password, key).toString();
+    return cipherText;
+  }
+
 }
 
 export default SignupServices;
