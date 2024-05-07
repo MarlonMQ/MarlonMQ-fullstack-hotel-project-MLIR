@@ -19,13 +19,12 @@ class LoginServices {
     }
   
     const encryptedPasswordFromDB = result.recordset[0].password;
-    const decryptedPasswordFromUser = await LoginServices.decrypt(encryptedPasswordFromDB, process.env.SECRET_KEY);
+    const decryptedPasswordFromBD = await LoginServices.decrypt(encryptedPasswordFromDB, process.env.SECRET_KEY);
   
-    if (decryptedPasswordFromUser === password) {
-      return result.recordset;
-    } else {
+    if (decryptedPasswordFromBD !== password) {
       return null;
     }
+    return result.recordset;
   }
 
 
