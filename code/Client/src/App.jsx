@@ -10,7 +10,8 @@ import { AdminPanel } from './pages/AdminPanel'
 
 
 import Reservations from './pages/Reservations'
-
+import ReservesAdmin from './pages/ReservesAdmin.jsx'
+import AdminPanelServices from './components//Services/AdminPanelServices.jsx'
 
 function App() {
 
@@ -24,9 +25,12 @@ function App() {
           <Route path="/Login" element={<LoginPage/>}/>
           <Route path="/SignUp" element={<SignUpPage/>}/>
           <Route path = "/Facilities" element = {< Facilities/>} /> 
-          <Route path = "/Reservations" element = {< Reservations/>} />
-          <Route path = "/rooms" element = {< RoomsPage/>} />
-          <Route path = "/adminpanel" element = {< AdminPanel />} />
+        <Route path = "/Reservations" element = {< Reservations/>} />
+        <Route path = "/ReservesAdmin" element = {< ReservesAdmin/>} />
+        <Route path = "/Rooms" element = {< RoomsPage/>} />
+        <Route path = "/AdminPanel" element = {< AdminPanel/>} />
+        <Route path = "/AdminPanelServices" element = {< AdminPanelServices/>} />
+
         </Routes>
 
       </AuthProvider>

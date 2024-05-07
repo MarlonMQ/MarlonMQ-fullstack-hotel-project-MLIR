@@ -3,6 +3,9 @@ import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
 import { deleteImageFromBucket } from '../services/bucketManager.js'; 
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 
 dotenv.config();
 
@@ -51,7 +54,15 @@ export class UploadServiceController {
     }
     static async deleteService(req, res) {
         const imageUrl = req.query.url;
-        const baseDir = 'C:/Users/Marvin Lisandro/Desktop/fullstack-hotel-project-mlir/code/Server/src';
+        console.log("Image url req", imageUrl);
+        // URL actual hasta el .js
+        const __filename = fileURLToPath(import.meta.url);
+        console.log("filename dir:", __filename);
+        // directorio padre de este .js
+        const __dirname = path.dirname(__filename);
+
+        const baseDir = path.join(__dirname, '../../');
+        console.log("test dir:", baseDir);
 
         let db = null;
         try {

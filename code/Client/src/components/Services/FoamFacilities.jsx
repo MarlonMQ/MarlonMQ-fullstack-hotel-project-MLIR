@@ -78,7 +78,7 @@ const UploadServiceForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 border border-gray-300  rounded-lg mt-12 mb-12 max-h-auto shadow-xl">
+    <div className=" bg-white p-8 border-t   mt-12 mb-12 max-h-auto ">
       {showSuccessAlert && (
           <div className={alertClass('success')}>
             Servicio subido con éxito

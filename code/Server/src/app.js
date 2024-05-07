@@ -4,6 +4,7 @@ import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
 import LoginRoutes from './user/routes/login.route.js';
 import SignUpRoutes from './user/routes/signUp.route.js';
+import reservationRoutes from './user/routes/reservationRoutes.js';
 
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './user/routes/rooms.route.js';
@@ -38,6 +39,7 @@ app.use('/services', servceRoutes);
 app.use('/rooms', RoomsRoutes);
 app.use('/login', LoginRoutes);
 app.use('/signup', SignUpRoutes);
+app.use('/reservations', reservationRoutes);
 
 
 // Start server
@@ -51,6 +53,7 @@ app.listen(PORT, () => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  console.log("pene");
   res.status(500).send('Something broke!');
 });
 

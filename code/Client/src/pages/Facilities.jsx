@@ -58,7 +58,6 @@ const Facilities = () => {
             {services.map(service => (
                     <CardsFacilities key={service.imageUrl} title={service.title} image={service.imageUrl} setServices = {setServices} services = {services}/>
                 ))}
-              {admin === true ? <UploadServiceForm/> : null}
 
         </div>
 
