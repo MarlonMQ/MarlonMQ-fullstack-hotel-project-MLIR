@@ -77,7 +77,7 @@ function LoginPage()  {
 
         <div className="hidden sm:block sm:w-1/2 justify-center items-center">
           <img
-            src={'src/assets/images/fachada.jpg'}
+            src={'src/assets/hotelPictures/Hotel-image08.jpg'}
             alt="Imagen"
             className="w-full h-full object-cover"
           />

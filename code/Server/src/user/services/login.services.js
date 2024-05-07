@@ -1,6 +1,7 @@
 import DbConnection from "../../config/dbconnection.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import CryptoJS from 'crypto-js';
 
 dotenv.config();
 
@@ -10,14 +11,23 @@ class LoginServices {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
       .input('email', email)
-      .input('password', password)
-      .query('SELECT * FROM password WHERE email = @email AND password = @password');
+      .query('SELECT password FROM password WHERE email = @email');
     await DbConnection.getInstance().closeConnection();
+  
     if (result.recordset.length === 0) {
+      return null; // El usuario no existe
+    }
+  
+    const encryptedPasswordFromDB = result.recordset[0].password;
+    const decryptedPasswordFromUser = await LoginServices.decrypt(encryptedPasswordFromDB, process.env.SECRET_KEY);
+  
+    if (decryptedPasswordFromUser === password) {
+      return result.recordset;
+    } else {
       return null;
     }
-    return result.recordset;
   }
+
 
   static async generateAccessToken(user) {
     try {
