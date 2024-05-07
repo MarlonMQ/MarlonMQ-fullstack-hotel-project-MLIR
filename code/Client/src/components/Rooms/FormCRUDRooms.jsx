@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import axios from 'axios';
 import { DeleteConfirmation } from '../Services/FacilitiesUtils';
 import FormRooms from "./FormRooms";
-
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 function FormCRUDRooms() {
 
@@ -11,9 +11,12 @@ function FormCRUDRooms() {
     // Guarda el que voy a borrar
     const [roomToDelete, setRoomToDelete] = useState(null);
 
+    const { token } = useContext(AuthContext);
+
 
     useEffect(() => {
         const fetchServices = () => {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             axios.get('http://localhost:4000/rooms/getDataRooms')
                 .then(response => {
                     setRooms(response.data);
@@ -32,12 +35,12 @@ function FormCRUDRooms() {
 
 
     const initiateDeleteRoom = (service) => {
-        console.log(service);
         setRoomToDelete(service);
         setShowConfirmation(true);
     };
 
     const deleteRoom = () => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.delete(`http://localhost:4000/rooms/?url=${roomToDelete.image_url}`)
             .then(() => {
                 setRooms(rooms.filter(s => s.id_room !== roomToDelete.id_room));

@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { UploadServiceController } from '../controllers/UploadServiceController.js';
 import '../../app.js';
 import upload from '../../multer.config.js';
+import checkToken from '../../utils/checkToken.js';
 
 class ServiceRoutes {
     constructor() {
@@ -17,7 +18,7 @@ class ServiceRoutes {
 
     setupRoutes() {
         // Ruta para cargar un servicio
-        this.router.post('/', upload.single('image'), (req, res) => {
+        this.router.post('/', checkToken,upload.single('image'), (req, res) => {
             UploadServiceController.uploadService(req, res);
         });
 
@@ -27,17 +28,17 @@ class ServiceRoutes {
         });
 
         // Ruta para obtener un servicio específico por ID
-        this.router.get('/:id', (req, res) => {
+        this.router.get('/:id',(req, res) => {
             UploadServiceController.getServiceById(req, res);
         });
 
         // Ruta para actualizar un servicio específico
-        this.router.put('/:id', (req, res) => {
+        this.router.put('/:id',checkToken,  (req, res) => {
             UploadServiceController.updateService(req, res);
         });
 
         // Ruta para eliminar un servicio específico
-        this.router.delete('/', (req, res) => {
+        this.router.delete('/',checkToken,  (req, res) => {
             UploadServiceController.deleteService(req, res);
         });
     }

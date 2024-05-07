@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import Axios from '../services/Axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
@@ -39,16 +39,13 @@ function SignUpPage() {
     }),
     onSubmit: async (values, {setErrors}) => {
       // Lógica para enviar el formulario
-      console.log('Formulario enviado:', values);
       try {
-        const response = await axios.post('http://localhost:4000/signup', values);
+        const response = await Axios.post('/signup', values);
         if (response.status === 200) {
-          console.log('Usuario registrado exitosamente', response.status);
           window.location.href = '/';
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          console.log('acá');
           setview(0); // Mostrar el primer FormBox si hay un error (correo o contraseña equivocadas
           setErrors({ email: 'El correo ya está registrado' });
         } else {

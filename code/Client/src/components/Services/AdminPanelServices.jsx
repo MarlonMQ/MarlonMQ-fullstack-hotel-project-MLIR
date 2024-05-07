@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { DeleteConfirmation } from './FacilitiesUtils';
 import FoamFacilities from './FoamFacilities';
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
+
 function AdminServicesPanel() {
     const [services, setServices] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
+
+    const { token } = useContext(AuthContext);
 
     useEffect(() => {
         fetchServices();
     }, []);
 
     const fetchServices = () => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.get('http://localhost:4000/services/all')
             .then(response => {
                 setServices(response.data);
@@ -27,6 +32,7 @@ function AdminServicesPanel() {
     };
 
     const deleteService = () => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.delete(`http://localhost:4000/services/?url=${serviceToDelete.imageUrl}`)
             .then(() => {
                 setServices(services.filter(s => s.ServiceId !== serviceToDelete.ServiceId));

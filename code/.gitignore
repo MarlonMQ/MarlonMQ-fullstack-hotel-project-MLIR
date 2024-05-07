@@ -1,5 +1,5 @@
 # Archivos temporales o generados
-node_modules/
+node_modules
 /dist
 
 # Archivos y carpetas específicos de IDEs

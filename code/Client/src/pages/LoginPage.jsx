@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { AuthContext } from '../components/loginComponents/AuthContext';
-import GrayBox from '../components/registerComponents/GrayBox';
+import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
+import GrayBox from '../components/registerComponents/GrayBox.jsx';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 import Axios from '../services/Axios.js';
 
@@ -25,7 +24,9 @@ function LoginPage()  {
         const response = await Axios.post('/login', values);
         if (response.status === 200) {
           const token = response.data.token;
-          login(token);
+          const rol = response.data.rol;
+          login(token,rol);
+          Axios.setToken(token);
           window.location.href = '/';
         }
       } catch (error) {

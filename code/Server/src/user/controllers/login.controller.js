@@ -2,7 +2,6 @@ import LoginServices from "../services/login.services.js";
 
 class LoginController {
   static async login(req, res) {
-    console.log('POST /login');
     try {
       const { email, password } = req.body;
       const user = await LoginServices.login(email, password);

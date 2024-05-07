@@ -9,14 +9,23 @@ const AuthProvider = ({ children }) => {
     return localToken && typeof localToken === 'string' && localToken !== 'undefined' ? JSON.parse(localToken) : null;
   });
 
-  const login = (receivedToken) => {
+  const [rol, setRol] = useState(() => {
+    const localRol = window.localStorage.getItem('rol');
+    return localRol && typeof localRol === 'string' && localRol !== 'undefined' ? JSON.parse(localRol) : null;
+  });
+
+  const login = (receivedToken,rol) => {
     setToken(receivedToken);
+    setRol(rol);
     window.localStorage.setItem('authToken', JSON.stringify(receivedToken));
+    window.localStorage.setItem('rol', JSON.stringify(rol));
   };
 
   const logout = () => {
     setToken(null);
+    setRol(null);
     window.localStorage.removeItem('authToken');
+    window.localStorage.removeItem('rol');
   };
 
   useEffect(() => {
@@ -27,7 +36,7 @@ const AuthProvider = ({ children }) => {
   }, [token, logout]); // Este efecto se ejecutará cada vez que el token o la función logout cambien
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, rol, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { alertClass } from './FacilitiesUtils';
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 const UploadServiceForm = () => {
     /* estado y valores iniciales  */
   const [imagePreview, setImagePreview] = useState(null);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false)
+
+  const { token } = useContext(AuthContext);
 
 
   const formik = useFormik({
@@ -34,13 +37,12 @@ const UploadServiceForm = () => {
       formData.append('image', values.image);
 
         try {
-            console.log("axios post");
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             const response = await axios.post('http://localhost:4000/services/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('Servicio subido con éxito:', response.data);
             alert('Servicio subido con éxito');
             
         } catch (error) {

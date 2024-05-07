@@ -1,6 +1,7 @@
 import { Router } from "express";
 import RoomsController from "../controllers/rooms.controller.js";
 import upload from "../../multer.config.js";
+import checkToken from '../../utils/checkToken.js';
 
 class RoomsRoutes {
 
@@ -12,25 +13,20 @@ class RoomsRoutes {
     }
 
 
-
-
     getDataRoomsRoute() {
-        console.log("getDataRoomRoute() method called");
         this.router.get('/getDataRooms', (req, res) => {
             RoomsController.getDataRooms(req, res);
         });
     }
 
     uploadRoomRoute() {
-        console.log("uploadRoomRoute() method called");
-        this.router.post('/', upload.single('image'), (req, res) => {
+        this.router.post('/', checkToken,upload.single('image'), (req, res) => {
             RoomsController.uploadRoom(req, res);
         });
     }
 
     deleteRoom() {
-        console.log("deleteRoom() method called");
-        this.router.delete('/', (req, res) => {
+        this.router.delete('/', checkToken,(req, res) => {
             RoomsController.deleteRoom(req, res);
         });
     }

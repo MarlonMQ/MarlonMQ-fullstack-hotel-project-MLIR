@@ -5,7 +5,6 @@ dotenv.config();
 
 class SignupController {
   static async signup(req, res) {
-    console.log('POST /signup');
     try {
       const { email, password, name, lastName, phone, birthDate, rol} = req.body;
 
@@ -16,7 +15,7 @@ class SignupController {
         return;
       } else {
         const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
-        console.log(result)
+
         if (result === undefined) {
           const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);
           await SignupServices.signupPassword(email, encryptedPassword);

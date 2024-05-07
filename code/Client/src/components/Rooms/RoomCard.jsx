@@ -4,7 +4,7 @@ export const RoomCard = ({data}) => {
     // console.log("data en room card", data);
     const {room_type, price_per_night, quantity_available, id_room, image_url} = data;
 
-    console.log("----------image url----------", data.image_url);
+    
 
   return (
     <>

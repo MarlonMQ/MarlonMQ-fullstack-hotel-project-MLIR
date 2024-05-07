@@ -28,7 +28,6 @@ class DbConnection {
   static getInstance() {
     if (!DbConnection.instance) {
       DbConnection.instance = new DbConnection();
-      console.log('New instance created');
     }
     return DbConnection.instance;
   }
@@ -37,7 +36,6 @@ class DbConnection {
     try {
       if (this.pool) {
         await this.pool.close();
-        console.log('Previous connection closed');
       }
       this.pool = await sql.connect(bdConfig);
       return this.pool;

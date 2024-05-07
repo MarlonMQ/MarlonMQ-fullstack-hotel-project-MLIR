@@ -1,11 +1,11 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import ReservationTable from './ReservationTable';
+import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 function ReservationForm() {
 
-
+    const {token} = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -67,6 +67,7 @@ function ReservationForm() {
         if (validateForm()) {
             // Datos del formulario están correctos, enviar la petición POST
             try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.post('http://localhost:4000/reservations/', {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
@@ -74,9 +75,8 @@ function ReservationForm() {
                     checkIn: formData.checkIn,
                     checkOut: formData.checkOut
                 });
-                console.log('Respuesta del servidor:', response.data);
+                
                 alert('Reserva creada con éxito!');
-                console.log('Formulario enviado:', formData);
                 
 
                 // Aquí podrías redirigir al usuario o limpiar el formulario
