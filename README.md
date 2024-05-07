@@ -13,6 +13,7 @@ Esta es una página web para un hotel, desarrollada como parte de un proyecto fu
     - [Base de Datos](./BD/base_de_datos.md)
     - [Prototipo de baja fidelidad](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
     - [Prototipo de baja fidelidad: enlace web](https://www.figma.com/file/OFNy7myUIhZMrpd3iX6IKa/Low-Fidelity-Prototype?type=design&node-id=0-1&mode=design)
+    - [Prototipo de alta fidelidad: enlace web](https://www.figma.com/file/hjViTUlKTKIMrYMe83SLJ5/Fullstack-Project%3A-Hazbin-Hotel?type=design&node-id=0-1&mode=design&t=Y2T9fhSSNfyS9fqc-0)
     - [Manual de Usuario](#manual-de-usuario)
     - [Autores](#autores)
 
