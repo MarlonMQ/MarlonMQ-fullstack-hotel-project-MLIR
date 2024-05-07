@@ -5,11 +5,11 @@ import { DeleteConfirmation } from './FacilitiesUtils';
 export default function CardsFacilities({ image, title }) {
   const admin = true;
   const [showConfirmation, setShowConfirmation] = useState(false);
-
+  
   const deleteService = (imageUrl) => {
     axios.delete(`http://localhost:4000/services/?url=${imageUrl}`)
       .then(response => {
-        // Actualizar el estado de servicios para reflejar la eliminación
+        //! Actualizar el estado de servicios para reflejar la eliminación
         setServices(services.filter(service => service.imageUrl !== imageUrl));
       })
       .catch(error => {

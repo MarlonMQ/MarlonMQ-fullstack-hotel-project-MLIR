@@ -26,24 +26,43 @@ const UploadServiceForm = () => {
         .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2056 * 2056))
         .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
     }),
+
     // envio al back //
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('title', values.title);
       formData.append('image', values.image);
 
-      try {
-          const response = await axios.post('http://localhost:4000/services/', formData, {
-              headers: {
-                  'Content-Type': 'multipart/form-data'
-              }
-          });
-          setShowSuccessAlert(true);
-      } catch (error) {
-          setShowErrorAlert(true);
-      }
-  },
-});
+        try {
+            console.log("axios post");
+            const response = await axios.post('http://localhost:4000/services/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Servicio subido con éxito:', response.data);
+            alert('Servicio subido con éxito');
+            
+        } catch (error) {
+            console.error('Error al subir el servicio:', error);
+            if (error.response) {
+                // La solicitud fue hecha y el servidor respondió con un estado de error
+                console.log('Datos del error:', error.response.data);
+                console.log('Estado del error:', error.response.status);
+                console.log('Cabeceras del error:', error.response.headers);
+                alert(`Error al subir el servicio: ${error.response.data.message || 'Error no especificado'}`);
+            } else if (error.request) {
+                // La solicitud fue hecha pero no se recibió respuesta
+                console.log('Error request:', error.request);
+                alert('Error al subir el servicio: No se recibió respuesta del servidor');
+            } else {
+                // Algo falló al hacer la solicitud
+                console.log('Error message:', error.message);
+                alert(`Error al subir el servicio: ${error.message}`);
+            }
+        }  
+      },
+    });
 
 //recibir imagen input //
   const handleImageChange = (event) => {
@@ -83,8 +102,10 @@ const UploadServiceForm = () => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
-        </div>
 
+        </div>
+        
+        {/* Campo 02 */}
         <div>
           <label htmlFor="image" className="text-sm font-medium text-gray-700">Imagen del Servicio</label>
           <input 

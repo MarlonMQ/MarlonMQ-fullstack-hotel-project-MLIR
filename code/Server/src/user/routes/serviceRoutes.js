@@ -1,32 +1,23 @@
 import { Router } from 'express';
-import multer from 'multer';
+
 import { UploadServiceController } from '../controllers/UploadServiceController.js';
+import '../../app.js';
+import upload from '../../multer.config.js';
 
 class ServiceRoutes {
     constructor() {
         this.router = Router();
-        this.configureMulter();
         this.setupRoutes();
     }
 
     //configuracion multer para el bucket
-    configureMulter() {
-        const storage = multer.diskStorage({
-            destination: (req, file, cb) => {
-                cb(null, 'uploads/');  // Asegúrate de que el directorio uploads existe en tu servidor
-            },
-            filename: (req, file, cb) => {
-                const fileExtension = file.originalname.split('.').pop();
-                const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}.${fileExtension}`;
-                cb(null, uniqueSuffix);
-            }
-        });
-        this.upload = multer({ storage: storage });
-    }
+    
+
+
 
     setupRoutes() {
         // Ruta para cargar un servicio
-        this.router.post('/', this.upload.single('image'), (req, res) => {
+        this.router.post('/', upload.single('image'), (req, res) => {
             UploadServiceController.uploadService(req, res);
         });
 

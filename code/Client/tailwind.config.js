@@ -1,8 +1,9 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}"
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
+
   theme: {
     extend: {
       fontFamily: {  
@@ -14,11 +15,8 @@ module.exports = {
         'secondary': '#001F54',
         'third': '#034078',
         'fourth': '#7dd3fc',
-
-
       },
     },
   },
-  plugins: [],
 }
 

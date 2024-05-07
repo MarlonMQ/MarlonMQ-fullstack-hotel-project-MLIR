@@ -4,7 +4,7 @@
 
 @layer utilities {
     .primary-title {  
-      @apply text-4xl;
+      @apply text-6xl;
       @apply font-black;
       @apply tracking-widest;
       font-family: 'Roboto', serif;
@@ -21,19 +21,19 @@
       @apply tracking-wide;
       font-family: 'Roboto', serif;
     }
-    .primary-text {  
+
+    .primary-text {
+      @apply text-base;
       @apply italic;
       @apply tracking-wide;
       font-family: 'Roboto', serif;
     }
     .secondary-text {  
-      @apply text-nowrap;
       @apply italic;
       @apply tracking-wider;
       font-family: 'Roboto', serif;
     }
     .testimony-text {  
-      @apply text-nowrap;
       @apply text-2xl;  
       @apply font-semibold;
       font-family: 'Parisienne', serif;

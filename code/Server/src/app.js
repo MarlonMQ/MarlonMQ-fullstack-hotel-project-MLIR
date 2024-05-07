@@ -6,10 +6,13 @@ import LoginRoutes from './user/routes/login.route.js';
 import SignUpRoutes from './user/routes/signUp.route.js';
 
 import { fileURLToPath } from 'url';
+import RoomsRoutes from './user/routes/rooms.route.js';
 
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = "C:\\Usuarios\\Marvin Lisandro\\Escritorio\\P.I\\fullstack-hotel-project-mlir\\code\\Server\\src"
+console.log("Dir name",__dirname);
 // Create express app
 const app = express();
 
@@ -24,11 +27,15 @@ const corsOptions = {
 }
 
 
+
 app.use(cors(corsOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
 app.use('/services', servceRoutes);
+app.use('/rooms', RoomsRoutes);
 app.use('/login', LoginRoutes);
 app.use('/signup', SignUpRoutes);
 
