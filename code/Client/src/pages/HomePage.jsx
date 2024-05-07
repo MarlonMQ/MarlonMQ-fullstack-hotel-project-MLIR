@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../index.css';
 
 import { CarouselComponent } from '../components/Carousel';
@@ -16,6 +16,7 @@ const images = {
   "../src/assets/hotelPictures/Hotel-image07.jpg"
   ],
 }
+import { AuthContext } from '../components/loginComponents/AuthContext'
 
 function HomePage() {
 

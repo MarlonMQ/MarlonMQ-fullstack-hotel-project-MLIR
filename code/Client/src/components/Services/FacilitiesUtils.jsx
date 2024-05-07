@@ -11,7 +11,11 @@ export const alertClass = (type) => {
   };
   
   
+<<<<<<< HEAD
 export function DeleteConfirmation({ show, onClose, onConfirm }) {
+=======
+  export function DeleteConfirmation({ show, onClose, onConfirm }) {
+>>>>>>> 50b720c785d864051cd777f26992ad1ba7112d0b
     if (!show) return null;
   
     return (

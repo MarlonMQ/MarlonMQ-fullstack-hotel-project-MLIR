@@ -2,6 +2,10 @@
 import sql from 'mssql';
 import DbConnection from '../../config/dbconnection.js';
 import { deleteImageFromBucket } from '../services/bucketManager.js'; 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 export class UploadServiceController {
     // aqui se guarda la info en la base de datos

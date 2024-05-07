@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import UserRoutes from './user/routes/user.route.js';
 import servceRoutes from './user/routes/serviceRoutes.js';
 import path from 'path';
+import LoginRoutes from './user/routes/login.route.js';
+import SignUpRoutes from './user/routes/signUp.route.js';
+
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './user/routes/rooms.route.js';
 
@@ -32,9 +34,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 console.log("unido: ", path.join(__dirname, 'uploads'));
 // rutas
-app.use('/users', UserRoutes);
 app.use('/services', servceRoutes);
 app.use('/rooms', RoomsRoutes);
+app.use('/login', LoginRoutes);
+app.use('/signup', SignUpRoutes);
 
 
 // Start server

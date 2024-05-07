@@ -1,7 +1,7 @@
 import React from 'react';
-import CardsFacilities from '../components/Services/CardsFacilities';
+import CardsFacilities from '../components/Services/Services/CardsFacilities';
 import '../index.css';
-import UploadServiceForm from '../components/Services/FoamFacilities';
+import FormServicios from '../components/Services/FoamFacilities';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
@@ -22,6 +22,7 @@ const images = {
 
 
 const Facilities = () => {
+    const admin = true;
     const [services, setServices] = useState([]);
     
         useEffect(() => {
@@ -35,10 +36,10 @@ const Facilities = () => {
                     });
             };
     
-            fetchServices(); // Fetch immediately on component mount
-            const interval = setInterval(fetchServices, 10000); // Refresh every 10 seconds
+            fetchServices(); // fetch inicial
+            const interval = setInterval(fetchServices, 10000); // refresca cada   10 segundos
     
-            return () => clearInterval(interval); // Clean up interval on component unmount
+            return () => clearInterval(interval); // limpia el intervalo
         }, []);
     return (
     <>
@@ -46,7 +47,7 @@ const Facilities = () => {
         <CarouselComponent images = {images}/>
 
         <div className='min-h-screen flex flex-col items-center mt-12'>
-            <h1 className='primary-title text-black text-center'>FACILITIES</h1>
+            <h1 className='primary-title text-black text-center mt-10'>FACILITIES</h1>
             <p className='mt-8 mb-8 px-2 primary-text max-w-4xl text-center'> 
                 We want your stay at our lush hotel to be truly unforgettable.  That is why we give special attention to all of your needs so 
                 that we can ensure an experience quite uniquw. Luxury hotels offers the perfect setting with stunning views for leisure
@@ -55,7 +56,7 @@ const Facilities = () => {
             {services.map(service => (
                     <CardsFacilities key={service.imageUrl} title={service.title} image={service.imageUrl} setServices = {setServices} services = {services}/>
                 ))}
-            <UploadServiceForm/>
+              {admin === true ? <UploadServiceForm/> : null}
 
         </div>
 
