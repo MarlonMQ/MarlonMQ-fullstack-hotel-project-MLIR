@@ -66,8 +66,8 @@ static async getReservations(req, res) {
         try {
             db = await DbConnection.getInstance().getConnection();
             const result = await db.request()
-                .input('Email', sql.VarChar, id) // Cambiar a tipo adecuado si id es el correo
-                .query('DELETE FROM RESERVAS WHERE email = @Email');
+                .input('id_reserva', sql.VarChar, id) // Cambiar a tipo adecuado si id es el correo
+                .query('DELETE FROM RESERVAS WHERE id_reserva = @id_reserva');
     
             if (result.rowsAffected[0] > 0) {
                 res.json({ message: 'Reserva eliminada con éxito.' });

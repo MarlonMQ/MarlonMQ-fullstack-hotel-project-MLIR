@@ -10,7 +10,6 @@ function ReservationTable() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reservationToDelete, setReservationToDelete] = useState(null);
 
-  // Función para obtener las reservaciones desde el servidor
   const fetchReservations = () => {
     axios.get('http://localhost:4000/reservations')
       .then(response => {
@@ -22,16 +21,12 @@ function ReservationTable() {
       });
   };
 
-  // Efecto para cargar las reservaciones inicialmente y configurar el temporizador
   useEffect(() => {
     fetchReservations();
-    const intervalId = setInterval(fetchReservations, 2000); // Actualiza cada 30 segundos
-
-    // Limpiar el intervalo al desmontar el componente
+    const intervalId = setInterval(fetchReservations, 2000);
     return () => clearInterval(intervalId);
   }, []);
 
-  // Efecto para manejar el filtrado de reservaciones
   useEffect(() => {
     const filtered = searchEmail.trim() === '' ? reservations : reservations.filter((reservation) =>
       reservation.email.toLowerCase().includes(searchEmail.toLowerCase())
@@ -39,24 +34,21 @@ function ReservationTable() {
     setFilteredReservations(filtered);
   }, [searchEmail, reservations]);
 
-  // Función para manejar cambios en la búsqueda por email
   const handleSearchInputChange = (e) => {
     setSearchEmail(e.target.value);
   };
 
-  // Función para iniciar la eliminación de una reserva
   const initiateDeleteReservation = (reservation) => {
     setReservationToDelete(reservation);
     setShowConfirmation(true);
   };
 
-  // Función para eliminar una reserva
   const deleteReservation = () => {
-    if (reservationToDelete && reservationToDelete.email) {
-      axios.delete(`http://localhost:4000/reservations/${reservationToDelete.email}`)
+    if (reservationToDelete && reservationToDelete.id_reserva) {
+      axios.delete(`http://localhost:4000/reservations/${reservationToDelete.id_reserva}`)
         .then(response => {
           console.log('Reserva eliminada:', response.data);
-          fetchReservations();  // Recargar las reservaciones después de eliminar
+          fetchReservations();
           setShowConfirmation(false);
           setReservationToDelete(null);
         })
@@ -64,7 +56,7 @@ function ReservationTable() {
           console.error('Error al eliminar la reserva:', error);
         });
     } else {
-      console.error('No reservation selected or email is missing');
+      console.error('No reservation selected or reservation ID is missing');
     }
   };
 
@@ -78,7 +70,7 @@ function ReservationTable() {
           onChange={handleSearchInputChange}
           className="w-full p-2 border rounded mr-2"
         />
-        <button onClick={() => fetchReservations()} className="bg-blue-500 text-white px-4 py-2 rounded">Refrescar</button>
+        <button onClick={fetchReservations} className="bg-blue-500 text-white px-4 py-2 rounded">Refrescar</button>
       </div>
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">

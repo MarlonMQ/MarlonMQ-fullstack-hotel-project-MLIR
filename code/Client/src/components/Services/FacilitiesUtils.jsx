@@ -11,7 +11,7 @@ export const alertClass = (type) => {
   };
   
   
-  export function DeleteConfirmation({ show, onClose, onConfirm }) {
+export function DeleteConfirmation({ show, onClose, onConfirm }) {
     if (!show) return null;
   
     return (
