@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { DeleteConfirmation } from '../Services/FacilitiesUtils';
+import { DeleteConfirmation } from '../utils/Alert.jsx';
 import moment from 'moment';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
@@ -48,9 +48,9 @@ function ReservationTable() {
   };
 
   const deleteReservation = () => {
-    if (reservationToDelete && reservationToDelete.id_reserva) {
+    if (reservationToDelete && reservationToDelete.id_reserve) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.delete(`http://localhost:4000/reservations/${reservationToDelete.id_reserva}`)
+      axios.delete(`http://localhost:4000/reservations/${reservationToDelete.id_reserve}`)
         .then(response => {
           fetchReservations();
           setShowConfirmation(false);
@@ -66,6 +66,7 @@ function ReservationTable() {
 
   return (
     <div className="mt-4 overflow-x-auto relative shadow-md sm:rounded-lg">
+       <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Listado de Reservaciones </h2>
       <div className="flex items-center mb-4">
         <input
           type="text"
@@ -74,7 +75,7 @@ function ReservationTable() {
           onChange={handleSearchInputChange}
           className="w-full p-2 border rounded mr-2"
         />
-        <button onClick={fetchReservations} className="bg-blue-500 text-white px-4 py-2 rounded">Refrescar</button>
+        <button onClick={fetchReservations} className="bg-fourth text-white px-4 py-2 rounded">Refrescar</button>
       </div>
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -87,7 +88,7 @@ function ReservationTable() {
         </thead>
         <tbody>
           {filteredReservations.map((reservation, index) => (
-            <tr key={index} className="bg-white border-b">
+            <tr key={index} className="bg-white border ">
               <td className="py-4 px-6">{reservation.email}</td>
               <td className="py-4 px-6">{moment(reservation.fecha_inicio).format('YYYY-MM-DD')}</td>
               <td className="py-4 px-6">{moment(reservation.fecha_fin).format('YYYY-MM-DD')}</td>

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { alertClass } from './FacilitiesUtils';
+import { alertClass } from '../utils/Alert.jsx';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 const UploadServiceForm = () => {
@@ -80,7 +80,7 @@ const UploadServiceForm = () => {
   };
 
   return (
-    <div className=" bg-white p-8 border-t   mt-12 mb-12 max-h-auto ">
+    <div className=" bg-white p-8 border-t mt-12 mb-12 max-h-auto ">
       {showSuccessAlert && (
           <div className={alertClass('success')}>
             Servicio subido con éxito
@@ -91,7 +91,6 @@ const UploadServiceForm = () => {
               Error al subir el servicio
            </div>
             )}
-        <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Servicio</h2>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="title" className="text-sm font-medium text-gray-700">Título del Servicio</label>
@@ -118,7 +117,7 @@ const UploadServiceForm = () => {
             accept="image/*" 
             aria-label="Seleccionar imagen" 
             title="Seleccionar archivo"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-fourth hover:file:bg-violet-100"
+            className="mt-1 block w-full px-3 py-2 border rounded-lg border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-fourth hover:file:bg-violet-100"
           />
           {formik.errors.image && <div className="text-red-500 text-xs italic">{formik.errors.image}</div>}
           {imagePreview && <img src={imagePreview} alt="Preview" className="mt-4 w-full h-auto rounded-md"/>}

@@ -1,25 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import axios from 'axios';
-import { DeleteConfirmation } from './FacilitiesUtils';
+import { DeleteConfirmation } from '../utils/Alert.jsx';
 
 export default function CardsFacilities({ image, title }) {
-  const admin = true;
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const { token } = useContext(AuthContext);
-  
-  const deleteService = (imageUrl) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    axios.delete(`http://localhost:4000/services/?url=${imageUrl}`)
-      .then(response => {
-        //! Actualizar el estado de servicios para reflejar la eliminación
-        setServices(services.filter(service => service.imageUrl !== imageUrl));
-      })
-      .catch(error => {
-        console.error('Error deleting service', error);
-      });
-  };
 
   return (
     <div className="relative flex flex-col items-center mb-10">

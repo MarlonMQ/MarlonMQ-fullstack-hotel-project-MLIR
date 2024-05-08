@@ -42,7 +42,7 @@ function SignUpPage() {
       try {
         const response = await Axios.post('/signup', values);
         if (response.status === 200) {
-          window.location.href = '/';
+          window.location.href = '/login';
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {

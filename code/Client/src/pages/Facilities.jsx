@@ -1,26 +1,9 @@
 import React from 'react';
 
 import '../index.css';
-import FormServicios from '../components/Services/FoamFacilities';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Footer } from '../components/Footer';
-import NavBar from '../components/NavBar';
-import { CarouselComponent } from '../components/Carousel';
 import CardsFacilities from '../components/Services/CardsFacilities';
-import UploadServiceForm from '../components/Services/FoamFacilities';
-
-// Las imagenes deberian ser distintas para cada page, al menos las desktop.
-const images = {
-    desktopImages: ["../src/assets/hotelPictures/Hotel-image01.jpg", 
-    "../src/assets/hotelPictures/Hotel-image02.jpg",
-    "../src/assets/hotelPictures/Hotel-image03.jpg"
-    ],
-    mobileImages: ["../src/assets/hotelPictures/Hotel-image04.jpg", 
-    "../src/assets/hotelPictures/Hotel-image06.jpg",
-    "../src/assets/hotelPictures/Hotel-image07.jpg"
-    ],
-}
 
 
 const Facilities = () => {
@@ -45,8 +28,7 @@ const Facilities = () => {
         }, []);
     return (
     <>
-        <NavBar/>
-        <CarouselComponent images = {images}/>
+
 
         <div className='min-h-screen flex flex-col items-center mt-12'>
             <h1 className='primary-title text-black text-center mt-10'>FACILITIES</h1>
@@ -61,7 +43,6 @@ const Facilities = () => {
 
         </div>
 
-        <Footer/>
     </>
 
     );

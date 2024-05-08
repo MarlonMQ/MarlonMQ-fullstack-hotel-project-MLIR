@@ -48,7 +48,7 @@ function LoginPage()  {
           </div>
 
           <GrayBox
-          title="Sign In"
+          title="Log In"
           buttonText="Iniciar Sesión"
           hrefLink="/SignUp"
           hrefText="¿No tienes una cuenta? Regístrate"

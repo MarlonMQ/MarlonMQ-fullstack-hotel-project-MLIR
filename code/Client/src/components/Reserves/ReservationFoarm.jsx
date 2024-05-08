@@ -98,7 +98,9 @@ function ReservationForm() {
     };
 
     return (
-        <div className='px-4 py-5 bg-white shadow-lg rounded-lg max-w-2xl mx-auto'>
+        <div className=' px-12'>
+        <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
+        <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Reserva</h2>
             <form onSubmit={handleSubmit} className="flex flex-wrap -mx-2">
                 <div className="px-2 w-full sm:w-1/2">
                     <label className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
@@ -159,12 +161,13 @@ function ReservationForm() {
                     {errors.checkOut && <p className="text-red-500 text-xs italic">{errors.checkOut}</p>}
                 </div>
                 <div className="px-2 w-full">
-                    <button type="submit" className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <button type="submit" className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
                         Reservar
                     </button>
                 </div>
             </form>
             <ReservationTable />
+        </div>
         </div>
     );
 }

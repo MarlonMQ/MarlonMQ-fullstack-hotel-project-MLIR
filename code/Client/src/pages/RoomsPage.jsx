@@ -1,24 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { RoomCard } from '../components/Rooms/RoomCard';
-import NavBar from '../components/NavBar';
-import { CarouselComponent } from '../components/Carousel';
-import { Footer } from '../components/Footer';
 
 
-// Las imagenes deberian ser distintas para cada page, al menos las desktop.
-const images = {
-    desktopImages: [
-        "../src/assets/hotelPictures/Hotel-image01.jpg",
-        "../src/assets/hotelPictures/Hotel-image02.jpg",
-        "../src/assets/hotelPictures/Hotel-image03.jpg"
-    ],
-    mobileImages: [
-        "../src/assets/hotelPictures/Hotel-image04.jpg", 
-        "../src/assets/hotelPictures/Hotel-image06.jpg",
-        "../src/assets/hotelPictures/Hotel-image07.jpg"
-    ],
-}
 const RoomsPage = () => {    
 
 
@@ -42,11 +26,8 @@ const RoomsPage = () => {
 
         return () => clearInterval(interval); // Clean up interval on component unmount
     }, []);
-    // console.log("Data rooms........................", dataRooms);
   return (
     <>
-        <NavBar/>
-        <CarouselComponent images = {images}/>
 
         <h1 className='secondary-title text-center mt-12'>ROOM TYPES</h1>
 
@@ -58,8 +39,6 @@ const RoomsPage = () => {
             }
         </div>
 
-        {/* <FormCRUDRooms/> */}
-        <Footer/>
     </>
   )
 }

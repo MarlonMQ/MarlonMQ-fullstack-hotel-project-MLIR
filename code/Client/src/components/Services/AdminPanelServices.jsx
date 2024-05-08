@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
-import { DeleteConfirmation } from './FacilitiesUtils';
+import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FoamFacilities from './FoamFacilities';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
@@ -12,7 +12,12 @@ function AdminServicesPanel() {
     const { token } = useContext(AuthContext);
 
     useEffect(() => {
-        fetchServices();
+        const interval = setInterval(() => {
+            fetchServices();
+        }, 2000); // Fetches every 60 seconds
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(interval);
     }, []);
 
     const fetchServices = () => {
@@ -44,7 +49,8 @@ function AdminServicesPanel() {
     };
 
     return (
-        <div className="container mx-auto mt-10 border-l border-r border-gray-300">
+        <div className='px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
+            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Servicio</h2>
             <FoamFacilities />
             <table className="min-w-full leading-normal">
                 <thead>

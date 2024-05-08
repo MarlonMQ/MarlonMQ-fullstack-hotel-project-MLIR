@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useContext } from "react";
 import axios from 'axios';
-import { DeleteConfirmation } from '../Services/FacilitiesUtils';
+import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FormRooms from "./FormRooms";
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
@@ -51,7 +51,8 @@ function FormCRUDRooms() {
             });
     };
     return (
-        <div className="container mx-auto mt-10 border-l border-r border-gray-300">
+        <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
+            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir  Habitacion</h2>
             <FormRooms />
             <table className="min-w-full leading-normal">
                 <thead>

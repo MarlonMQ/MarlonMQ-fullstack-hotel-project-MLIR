@@ -1,8 +1,7 @@
-import React, { useEffect, useState,useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 
 const FormRooms = () => {
@@ -11,35 +10,42 @@ const FormRooms = () => {
     /* estado y valores iniciales  */
   const [imagePreview, setImagePreview] = useState(null);
 
-  const { token } = useContext(AuthContext);
-
 
   const formik = useFormik({
     initialValues: {
       type: '',
-      price: 0,
-      availables: 0,
-      capacity: 0,
+      price: 1,
+      availables: 1,
+      capacity: 1,
       description: '',
       image: null,
     },
   
       /* Parte de validacion  */
     validationSchema: Yup.object({
-        type: Yup.string()
-            .required('El tipo es obligatorio'),
-        price: Yup.number()
-            .required('El precio es obligatorio'),
-        availables: Yup.number()
-            .required('La cantidad disponible es obligatoria'),
-        image: Yup.mixed()
-            .required('Una imagen es necesaria')
-            .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2080 * 2080))
-            .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
+      type: Yup.string()
+          .required('El tipo es obligatorio')
+          .test("no-numbers", "No se pueden introducir números", value => isNaN(value)),
+      price: Yup.number()
+          .required('El precio es obligatorio')
+          .min(1, 'No se permiten números menores o iguales a cero'),
+      availables: Yup.number()
+          .required('La cantidad disponible es obligatoria')
+          .min(1, 'No se permiten números menores o iguales a cero'),
+      capacity: Yup.number()
+          .required('La capacidad es obligatoria')
+          .min(1, 'No se permiten números menores o iguales a cero'),
+      description: Yup.string()
+          .required('La descripción es obligatoria'),
+      image: Yup.mixed()
+          .required('Una imagen es necesaria')
+          .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2080 * 2080))
+          .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
     }),
 
     // envio al back //
     onSubmit: async (values) => {
+        console.log("Info recibida: ", values);
 
         const formData = new FormData();
         formData.append('type', values.type);
@@ -51,12 +57,13 @@ const FormRooms = () => {
 
 
         try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            console.log("axios post");
             const response = await axios.post('http://localhost:4000/rooms/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log('room subido con éxito:', response.data);
             alert('room subido con éxito');
 
             
@@ -109,7 +116,7 @@ const FormRooms = () => {
             value={formik.values.type}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
-          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+          {formik.errors.type && <div className="text-red-500 text-xs italic">{formik.errors.type}</div>}
 
         </div>
         
@@ -124,7 +131,7 @@ const FormRooms = () => {
             value={formik.values.availables}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
-          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+          {formik.errors.availables && <div className="text-red-500 text-xs italic">{formik.errors.availables}</div>}
 
         </div>
 
@@ -139,7 +146,7 @@ const FormRooms = () => {
             value={formik.values.price}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
-          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+          {formik.errors.price && <div className="text-red-500 text-xs italic">{formik.errors.price}</div>}
 
         </div>
 
@@ -154,7 +161,7 @@ const FormRooms = () => {
             value={formik.values.capacity}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
-          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+          {formik.errors.capacity && <div className="text-red-500 text-xs italic">{formik.errors.capacity}</div>}
 
         </div>
 
@@ -169,7 +176,7 @@ const FormRooms = () => {
             value={formik.values.description}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
-          {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+          {formik.errors.description && <div className="text-red-500 text-xs italic">{formik.errors.description}</div>}
 
         </div>
 

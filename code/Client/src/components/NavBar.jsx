@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom';
+import { AuthContext } from './loginComponents/AuthContext.jsx';
+
 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Facilities', href: '#', current: false },
-  { name: 'Rooms', href: '#', current: false },
-  { name: 'Contact-us', href: '#', current: false },
+  { name: 'Facilities', href: '/facilities', current: false },
+  { name: 'Rooms', href: '/rooms', current: false },
 ]
 
 function classNames(...classes) {
@@ -16,6 +17,7 @@ function classNames(...classes) {
 }
 
 function NavBar() {
+    const { rol } = useContext(AuthContext);
 
   return (
     <Disclosure as="nav" className="bg-transparent absolute z-10 w-full">
@@ -45,13 +47,15 @@ function NavBar() {
                 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-between">
 
-                <div className="flex flex-shrink-0 items-center">
+              <div className="flex flex-shrink-0 items-center">
+                <Link to="/">
                   <img
                     className="h-16 w-auto rounded-full"
                     src="../src/assets/logo/hazbin-logo.jpg"
-                    alt="Your Company"
+                    alt="HAZBIN HOTEL"
                   />
-                </div>
+                </Link>
+              </div>
                 {/* Hidden = Display: none.*/}
                 {/* Esta hidden siempre, pero si es mayor que sm entonces pasa a block y si se ve*/}
 
@@ -134,6 +138,18 @@ function NavBar() {
                           </a>
                         )}
                       </Menu.Item>
+                      {rol === 'admin' && (
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="/dashboard"  // Asegúrate de que el enlace sea correcto
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          >
+                            Dashboard
+                          </a>
+                        )}
+                      </Menu.Item>
+                    )}
                     </Menu.Items>
                   </Transition>
                 </Menu>
@@ -146,23 +162,22 @@ function NavBar() {
 
           {/* De smalls screens para arriba estara escondido */}
           <Disclosure.Panel className="sm:hidden bg-secondary rounded-lg"> 
-            <div className="space-y-1 px-2 pb-3 pt-2">
-
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-
+            <div className="hidden sm:ml-6 sm:block sm:my-auto">
+              <div className="flex space-x-4">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={classNames(
+                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'rounded-md px-3 py-2 text-sm font-medium',
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           </Disclosure.Panel>
         </>
