@@ -10,11 +10,11 @@ class RoomsController {
     static async getDataRooms(req, res) {
         try {
             const quantity_available = await RoomsServices.getDataRooms();
-            res.status(200);
-            res.json(quantity_available);
+            res.status(200).send({
+                message: 'Data fetched successfully'
+            });
         } catch (error) {
-            res.status(500);
-            res.send(error.message);
+            res.status(500).send(error.message);
         }
     }
 
@@ -28,13 +28,12 @@ class RoomsController {
 
             await RoomsServices.uploadRoom(type, price, availables, capacity, description, imageUrl);
             
-            res.status(200);
-            res.send('Room uploaded successfully');
+            res.status(201).send({
+                message: 'Room uploaded successfully'
+            });
 
         } catch (error) {
-            console.error('Error al guardar en la base de datos', error);
-            res.status(500);
-            res.send('Error al guardar la información del room');
+            res.status(500).send(error.message);
         }
     }
     
@@ -54,10 +53,11 @@ class RoomsController {
             // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
             deleteImageFromBucket(imageUrl, baseDir);
 
-            res.status(200).send('Service deleted successfully');
+            res.status(204).send({
+                message: 'Room deleted successfully'
+            });
         } catch (error) {
-            console.error('Error deleting service', error);
-            res.status(500).send('Internal server error');
+            res.status(500).send(error.message);
         }
     }
 }

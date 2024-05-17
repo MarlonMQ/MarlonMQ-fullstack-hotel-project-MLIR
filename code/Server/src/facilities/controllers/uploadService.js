@@ -21,10 +21,11 @@ export class UploadServiceController {
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
             
             const result = await ServiceServices.uploadService(title, imageUrl);
-            res.status(201).json({ message: 'Service uploaded successfully', title, imageUrl });
+            res.status(201).send({
+                message: 'Service uploaded successfully',
+            });
         } catch (error) {
-            console.error('Error al guardar en la base de datos', error);
-            res.status(500).send('Error al guardar la información del servicio');
+            res.status(500).send(error.message);
         }
     }
 
@@ -32,10 +33,9 @@ export class UploadServiceController {
     static async listServices(req, res) {
         try {
             const result = await ServiceServices.listServices();
-            res.json(result); 
+            res.status(200).send(result);
         } catch (error) {
-            console.error('Failed to fetch services:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send(error.message);
         }
     }
 
@@ -54,10 +54,11 @@ export class UploadServiceController {
             // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
             deleteImageFromBucket(imageUrl, baseDir);
 
-            res.status(200).send('Service deleted successfully');
+            res.status(204).send({
+                message: 'Service deleted successfully',
+            });
         } catch (error) {
-            console.error('Error deleting service', error);
-            res.status(500).send('Internal server error');
+            res.status(500).send(error.message);
         }
     }
 }

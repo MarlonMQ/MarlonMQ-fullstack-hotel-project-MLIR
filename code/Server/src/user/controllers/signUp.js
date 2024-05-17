@@ -11,8 +11,10 @@ class SignupController {
       const user = await SignupServices.findUser(email);
 
       if (user.length > 0) {
-        res.status(400).json({ message: 'User already exists' });
-        return;
+        res.status(400).send({
+          message: 'User already exists'
+        });
+        
       } else {
         const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
 
@@ -20,11 +22,13 @@ class SignupController {
           const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);
           await SignupServices.signupPassword(email, encryptedPassword);
   
-          res.status(200).json({ message: 'User registered successfully' });
+          res.status(201).send({
+            message: 'User registered successfully'
+          });
         }
       }
     } catch (error) {
-      res.status(500);
+      res.status(500).send(error.message);
     }
   }
 }
