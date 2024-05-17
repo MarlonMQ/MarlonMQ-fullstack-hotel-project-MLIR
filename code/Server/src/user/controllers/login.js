@@ -1,4 +1,4 @@
-import LoginServices from "../services/login.services.js";
+import LoginServices from "../services/login.js";
 
 class LoginController {
   static async login(req, res) {

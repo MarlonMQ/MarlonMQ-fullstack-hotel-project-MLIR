@@ -1,4 +1,4 @@
-import SignupServices from "../services/signUp.services.js";
+import SignupServices from "../services/signUp.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -24,7 +24,7 @@ class SignupController {
         }
       }
     } catch (error) {
-      res.status(401);
+      res.status(500);
     }
   }
 }

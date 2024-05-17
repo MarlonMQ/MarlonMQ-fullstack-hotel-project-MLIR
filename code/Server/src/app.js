@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import serviceRoutes from './facilities/routes/serviceRoutes.js';
+import serviceRoutes from './facilities/routes/service.js';
 import path from 'path';
-import LoginRoutes from './user/routes/login.route.js';
-import SignUpRoutes from './user/routes/signUp.route.js';
-import reservationRoutes from './reserves/routes/reservationRoutes.js';
+import LoginRoutes from './user/routes/login.js';
+import SignUpRoutes from './user/routes/signUp.js';
+import reservationRoutes from './reserves/routes/reservation.js';
 
 import { fileURLToPath } from 'url';
-import RoomsRoutes from './rooms/routes/rooms.route.js';
+import RoomsRoutes from './rooms/routes/rooms.js';
 
 
 

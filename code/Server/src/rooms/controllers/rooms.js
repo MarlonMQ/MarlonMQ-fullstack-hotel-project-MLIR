@@ -1,6 +1,6 @@
 import DbConnection from "../../config/dbconnection.js";
 import { deleteImageFromBucket } from "../../utils/bucketManager.js";
-import RoomsServices from "../services/rooms.services.js";
+import RoomsServices from "../services/rooms.js";
 import sql from 'mssql';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,7 +10,7 @@ class RoomsController {
     static async getDataRooms(req, res) {
         try {
             const quantity_available = await RoomsServices.getDataRooms();
-
+            res.status(200);
             res.json(quantity_available);
         } catch (error) {
             res.status(500);
@@ -20,27 +20,21 @@ class RoomsController {
 
     static async uploadRoom(req, res) {
         
-        let db = null;
         try {
-            db = await DbConnection.getInstance().getConnection();
             const { type, price, availables, capacity, description } = req.body;
             
 
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
 
-            await db.request()
-                .input('room_type', sql.VarChar(), type)
-                .input('price_per_night', sql.Int(), price)
-                .input('quantity_available', sql.Int(), availables)
-                .input('capacity', sql.Int(), capacity)
-                .input('description', sql.VarChar(), description)
-                .input('Image_url', sql.VarChar(500), imageUrl)
-                .query('INSERT INTO room (room_type, price_per_night, quantity_available, capacity, description, image_url) VALUES (@room_type, @price_per_night, @quantity_available, @capacity, @description, @Image_url)');
+            await RoomsServices.uploadRoom(type, price, availables, capacity, description, imageUrl);
+            
+            res.status(200);
+            res.send('Room uploaded successfully');
 
-            res.json({ message: 'Room subido con éxito', type, price, availables, imageUrl });
         } catch (error) {
             console.error('Error al guardar en la base de datos', error);
-            res.status(500).send('Error al guardar la información del room');
+            res.status(500);
+            res.send('Error al guardar la información del room');
         }
     }
     
@@ -54,12 +48,9 @@ class RoomsController {
 
         const baseDir = path.join(__dirname, '../../');
 
-        let db = null;
+        
         try {
-            db = await DbConnection.getInstance().getConnection();
-            // Eliminar el servicio de la base de datos
-            await db.query(`DELETE FROM room WHERE image_url = '${imageUrl}'`);
-
+            await RoomsServices.deleteRoom(imageUrl);
             // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)
             deleteImageFromBucket(imageUrl, baseDir);
 
@@ -67,10 +58,6 @@ class RoomsController {
         } catch (error) {
             console.error('Error deleting service', error);
             res.status(500).send('Internal server error');
-        } finally {
-            if (db) {
-                db.close();
-            }
         }
     }
 }

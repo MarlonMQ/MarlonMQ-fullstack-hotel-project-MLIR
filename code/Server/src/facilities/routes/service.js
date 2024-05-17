@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { UploadServiceController } from '../controllers/UploadServiceController.js';
+import { UploadServiceController } from '../controllers/uploadService.js';
 import '../../app.js';
 import upload from '../../multer.config.js';
 import checkToken from '../../utils/checkToken.js';

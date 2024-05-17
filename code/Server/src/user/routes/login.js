@@ -1,5 +1,5 @@
 import { Router } from "express";
-import LoginController from "../controllers/login.controller.js";
+import LoginController from "../controllers/login.js";
 
 class LoginRoutes {
   constructor() {

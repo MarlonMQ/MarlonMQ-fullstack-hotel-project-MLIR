@@ -1,7 +1,7 @@
 // signup.routes.js
 
 import { Router } from 'express';
-import SignupController from '../controllers/signUp.controller.js';
+import SignupController from '../controllers/signUp.js';
 
 class SignupRoutes {
   constructor() {

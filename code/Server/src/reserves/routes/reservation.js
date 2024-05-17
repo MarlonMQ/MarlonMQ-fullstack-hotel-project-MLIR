@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ReservationsController } from '../controllers/ReservationsController.js';
+import { ReservationsController } from '../controllers/reservation.js';
 import checkToken from '../../utils/checkToken.js';
 
 class ReservationRoutes {
