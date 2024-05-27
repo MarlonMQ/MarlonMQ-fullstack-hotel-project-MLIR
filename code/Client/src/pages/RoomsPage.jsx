@@ -12,7 +12,7 @@ const RoomsPage = () => {
 
     useEffect(() => {
         const fetchServices = () => {
-            axios.get('http://localhost:4000/rooms/getDataRooms')
+            axios.get('http://localhost:4000/rooms')
                 .then(response => {
                     setDataRooms(response.data);
                 })

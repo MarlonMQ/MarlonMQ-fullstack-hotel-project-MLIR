@@ -21,7 +21,7 @@ function ReservationTable() {
         setFilteredReservations(response.data);
       })
       .catch(error => {
-        console.error('Error al obtener las reservaciones:', error);
+        console.error('Error fetching reservations:', error);
       });
   };
 
@@ -57,7 +57,7 @@ function ReservationTable() {
           setReservationToDelete(null);
         })
         .catch(error => {
-          console.error('Error al eliminar la reserva:', error);
+          console.error('Error deleting reservation:', error);
         });
     } else {
       console.error('No reservation selected or reservation ID is missing');
@@ -66,24 +66,24 @@ function ReservationTable() {
 
   return (
     <div className="mt-4 overflow-x-auto relative shadow-md sm:rounded-lg">
-       <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Listado de Reservaciones </h2>
+       <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Reservation List</h2>
       <div className="flex items-center mb-4">
         <input
           type="text"
-          placeholder="Buscar por correo electrónico"
+          placeholder="Search by email"
           value={searchEmail}
           onChange={handleSearchInputChange}
           className="w-full p-2 border rounded mr-2"
         />
-        <button onClick={fetchReservations} className="bg-fourth text-white px-4 py-2 rounded">Refrescar</button>
+        <button onClick={fetchReservations} className="bg-fourth text-white px-4 py-2 rounded">Refresh</button>
       </div>
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
-            <th scope="col" className="py-3 px-6">Email del cliente</th>
-            <th scope="col" className="py-3 px-6">Fecha de inicio</th>
-            <th scope="col" className="py-3 px-6">Fecha de fin</th>
-            <th scope="col" className="py-3 px-6">Acciones</th>
+            <th scope="col" className="py-3 px-6">Client Email</th>
+            <th scope="col" className="py-3 px-6">Start Date</th>
+            <th scope="col" className="py-3 px-6">End Date</th>
+            <th scope="col" className="py-3 px-6">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -96,7 +96,7 @@ function ReservationTable() {
                 <button
                   onClick={() => initiateDeleteReservation(reservation)}
                   className="text-red-500 hover:text-red-700">
-                  Eliminar
+                  Delete
                 </button>
               </td>
             </tr>

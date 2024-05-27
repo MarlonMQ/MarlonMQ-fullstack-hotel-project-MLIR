@@ -11,15 +11,15 @@ const GrayBox = ({ title, buttonText, hrefLink, hrefText, onButtonClick, childre
         {/* Form */}
         {children}
       </div>    
-        {/* Botón al final */}
+        {/* Button at the end */}
         <FormButton onClick={onButtonClick}>{buttonText}</FormButton>
 
-        {/* Términos y condiciones */}
+        {/* Terms and conditions */}
         <div className="text-center pt-3">
-          <p className="mb-2 text-xs text-gray-500">Al continuar, aceptas la Política de privacidad y los Términos de uso</p>
+          <p className="mb-2 text-xs text-gray-500">By continuing, you accept the Privacy Policy and Terms of Use</p>
         </div>
 
-        {/* Opción para ir a otra página */}
+        {/* Option to go to another page */}
         <Link to={hrefLink} className="text-center text-blue-500 hover:underline">{hrefText}</Link>
     </div>
   );

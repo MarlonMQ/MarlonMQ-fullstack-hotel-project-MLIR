@@ -6,13 +6,12 @@ import { alertClass } from '../utils/Alert.jsx';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 const UploadServiceForm = () => {
-    /* estado y valores iniciales  */
+  /* state and initial values */
   const [imagePreview, setImagePreview] = useState(null);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false)
 
   const { token } = useContext(AuthContext);
-
 
   const formik = useFormik({
     initialValues: {
@@ -20,53 +19,52 @@ const UploadServiceForm = () => {
       image: null,
     },
   
-      /* Parte de validacion  */
+    /* Validation part */
     validationSchema: Yup.object({
       title: Yup.string()
-        .required('El título es obligatorio'),
+        .required('Title is required'),
       image: Yup.mixed()
-        .required('Una imagen es necesaria')
-        .test("fileSize", "El archivo es muy grande", value => !value || (value && value.size <= 2056 * 2056))
-        .test("fileFormat", "Formato no soportado", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
+        .required('An image is required')
+        .test("fileSize", "The file is too large", value => !value || (value && value.size <= 2056 * 2056))
+        .test("fileFormat", "Unsupported format", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
     }),
 
-    // envio al back //
+    // send to backend //
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('title', values.title);
       formData.append('image', values.image);
 
-        try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            const response = await axios.post('http://localhost:4000/services/', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            alert('Servicio subido con éxito');
-            
-        } catch (error) {
-            console.error('Error al subir el servicio:', error);
-            if (error.response) {
-                // La solicitud fue hecha y el servidor respondió con un estado de error
-                console.log('Datos del error:', error.response.data);
-                console.log('Estado del error:', error.response.status);
-                console.log('Cabeceras del error:', error.response.headers);
-                alert(`Error al subir el servicio: ${error.response.data.message || 'Error no especificado'}`);
-            } else if (error.request) {
-                // La solicitud fue hecha pero no se recibió respuesta
-                console.log('Error request:', error.request);
-                alert('Error al subir el servicio: No se recibió respuesta del servidor');
-            } else {
-                // Algo falló al hacer la solicitud
-                console.log('Error message:', error.message);
-                alert(`Error al subir el servicio: ${error.message}`);
-            }
-        }  
-      },
-    });
+      try {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const response = await axios.post('http://localhost:4000/services/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        alert('Service uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading service:', error);
+        if (error.response) {
+          // The request was made and the server responded with an error status
+          console.log('Error data:', error.response.data);
+          console.log('Error status:', error.response.status);
+          console.log('Error headers:', error.response.headers);
+          alert(`Error uploading service: ${error.response.data.message || 'Unspecified error'}`);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log('Request error:', error.request);
+          alert('Error uploading service: No response received from the server');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error message:', error.message);
+          alert(`Error uploading service: ${error.message}`);
+        }
+      }  
+    },
+  });
 
-//recibir imagen input //
+  // receive image input //
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
     formik.setFieldValue("image", file);
@@ -82,18 +80,18 @@ const UploadServiceForm = () => {
   return (
     <div className=" bg-white p-8 border-t mt-12 mb-12 max-h-auto ">
       {showSuccessAlert && (
-          <div className={alertClass('success')}>
-            Servicio subido con éxito
-          </div>
-          )}
-          {showErrorAlert && (
-            <div className={alertClass('error')}>
-              Error al subir el servicio
-           </div>
-            )}
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
+        <div className={alertClass('success')}>
+          Service uploaded successfully
+        </div>
+      )}
+      {showErrorAlert && (
+        <div className={alertClass('error')}>
+          Error uploading service
+        </div>
+      )}
+      <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="text-sm font-medium text-gray-700">Título del Servicio</label>
+          <label htmlFor="title" className="text-sm font-medium text-gray-700">Service Title</label>
           <input
             id="title"
             name="title"
@@ -103,20 +101,19 @@ const UploadServiceForm = () => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
-
         </div>
         
-        {/* Campo 02 */}
+        {/* Field 02 */}
         <div>
-          <label htmlFor="image" className="text-sm font-medium text-gray-700">Imagen del Servicio</label>
+          <label htmlFor="image" className="text-sm font-medium text-gray-700">Service Image</label>
           <input 
             id="image"
             name="image"
             type="file"
             onChange={handleImageChange}
             accept="image/*" 
-            aria-label="Seleccionar imagen" 
-            title="Seleccionar archivo"
+            aria-label="Select image" 
+            title="Select file"
             className="mt-1 block w-full px-3 py-2 border rounded-lg border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-fourth hover:file:bg-violet-100"
           />
           {formik.errors.image && <div className="text-red-500 text-xs italic">{formik.errors.image}</div>}
@@ -124,7 +121,7 @@ const UploadServiceForm = () => {
         </div>
 
         <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-fourth hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          Subir Servicio
+          Upload Service
         </button>
       </form>
     </div>

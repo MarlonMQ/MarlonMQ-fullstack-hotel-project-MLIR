@@ -15,7 +15,7 @@ export const CarouselComponent = ({images}) => {
                 return (
                   <div key={index}>
                     <div className='hidden sm:block'>
-                      <img className='brightness-50' src={`${path}`} alt="hotel image" />
+                      <img className='brightness-50 h-screen w-screen' src={`${path}`} alt="hotel image" />
                     </div>
 
                     <div className="block sm:hidden">

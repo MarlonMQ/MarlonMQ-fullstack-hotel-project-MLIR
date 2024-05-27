@@ -50,7 +50,7 @@ function AdminServicesPanel() {
 
     return (
         <div className='px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Servicio</h2>
+            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Upload Service</h2>
             <FoamFacilities />
             <table className="min-w-full leading-normal">
                 <thead>

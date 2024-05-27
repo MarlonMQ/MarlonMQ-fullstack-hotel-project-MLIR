@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const RoomCard = ({data}) => {
-    // console.log("data en room card", data);
+    // console.log("data in room card", data);
     const {room_type, price_per_night, quantity_available, id_room, image_url} = data;
 
     
@@ -10,7 +10,7 @@ export const RoomCard = ({data}) => {
     <>
         <div className='rounded-md border-2 border-secondary'>
             <div className='rounded-md border-2'>
-                <img src={data.image_url} alt="Descripción de la imagen"/>
+                <img src={data.image_url} alt="Image description"/>
 
             </div>
             <div className='bg-primary py-2 text-white text-center Roboto'>
@@ -29,7 +29,7 @@ export const RoomCard = ({data}) => {
 
             </div>
 
-            <p className="primary-text text-secondary text-center">Availables: {`${quantity_available}`}</p>
+            <p className="primary-text text-secondary text-center">Available: {`${quantity_available}`}</p>
         </div>
 
     </>

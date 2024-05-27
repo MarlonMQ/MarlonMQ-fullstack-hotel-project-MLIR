@@ -8,7 +8,7 @@ import Axios from '../services/Axios.js';
 
 function LoginPage()  {
 
-  const { login } = useContext(AuthContext); // Obtén la función login del contexto de autenticación
+  const { login } = useContext(AuthContext); // Get the login function from the authentication context
 
   const formik = useFormik({
     initialValues: {
@@ -16,8 +16,8 @@ function LoginPage()  {
       password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Correo electrónico inválido').required('Campo requerido'),
-      password: Yup.string().required('Contraseña requerida'),
+      email: Yup.string().email('Invalid email').required('Required field'),
+      password: Yup.string().required('Password required'),
     }),
     onSubmit: async (values, { setErrors }) => {
       try {
@@ -31,7 +31,7 @@ function LoginPage()  {
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          setErrors({ password: 'Correo o contraseña equivocadas.' });
+          setErrors({ password: 'Incorrect email or password.' });
         } else {
           console.error(error);
         }
@@ -49,13 +49,13 @@ function LoginPage()  {
 
           <GrayBox
           title="Log In"
-          buttonText="Iniciar Sesión"
+          buttonText="Log In"
           hrefLink="/SignUp"
-          hrefText="¿No tienes una cuenta? Regístrate"
+          hrefText="Don't have an account? Sign Up"
           onButtonClick={formik.handleSubmit}
           >
             <FormBox
-              title="Correo Electrónico"
+              title="Email"
               name="email"
               type="email"
               value={formik.values.email}
@@ -64,7 +64,7 @@ function LoginPage()  {
               error={formik.touched.email && formik.errors.email}
             />
             <FormBox
-              title="Contraseña"
+              title="Password"
               name="password"
               type="password"
               value={formik.values.password}
@@ -79,7 +79,7 @@ function LoginPage()  {
         <div className="hidden sm:block sm:w-1/2 justify-center items-center">
           <img
             src={'src/assets/hotelPictures/Hotel-image08.jpg'}
-            alt="Imagen"
+            alt="Image"
             className="w-full h-full object-cover"
           />
         </div>

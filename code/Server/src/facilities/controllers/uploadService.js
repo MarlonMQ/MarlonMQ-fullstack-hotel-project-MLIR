@@ -1,6 +1,3 @@
-//uploadServiceController.js
-import sql from 'mssql';
-import DbConnection from '../../config/dbconnection.js';
 import { deleteImageFromBucket } from '../../utils/bucketManager.js'; 
 import ServiceServices from '../services/service.js';
 import dotenv from 'dotenv';

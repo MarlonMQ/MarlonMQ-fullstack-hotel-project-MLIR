@@ -5,19 +5,19 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
 import { AuthContext } from './loginComponents/AuthContext.jsx';
 
-
 const navigation = [
-  { name: 'Facilities', href: '/facilities', current: false },
-  { name: 'Rooms', href: '/rooms', current: false },
+  { name: 'Home', href: '/', current: window.location.pathname === '/' },
+  { name: 'Facilities', href: '/facilities', current: window.location.pathname === '/facilities' },
+  { name: 'Rooms', href: '/rooms', current: window.location.pathname === '/rooms' },
 ]
 
 function classNames(...classes) {
-  // Si el campo del array es false, elminalo del arreglo y junta los demas
+  // If the array element is false, remove it from the array and join the rest
   return classes.filter(Boolean).join(' ')
 }
 
 function NavBar() {
-    const { rol } = useContext(AuthContext);
+  const {rol} = useContext(AuthContext);
 
   return (
     <Disclosure as="nav" className="bg-transparent absolute z-10 w-full">
@@ -30,7 +30,7 @@ function NavBar() {
 
             <div className="relative flex h-20 sm:h-28 items-center justify-between">
 
-                {/* Boton para desplegar info del disclosure */}
+                {/* Button to toggle disclosure info */}
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 
                     {/* Mobile menu button*/}
@@ -57,7 +57,7 @@ function NavBar() {
                 </Link>
               </div>
                 {/* Hidden = Display: none.*/}
-                {/* Esta hidden siempre, pero si es mayor que sm entonces pasa a block y si se ve*/}
+                {/* Always hidden, but if it's larger than sm, then display as block and visible */}
 
                 <div className="hidden sm:ml-6 sm:block sm:my-auto">
 
@@ -138,18 +138,21 @@ function NavBar() {
                           </a>
                         )}
                       </Menu.Item>
-                      {rol === 'admin' && (
+
+
+                      {/* {rol === 'admin' && (
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/dashboard"  // Asegúrate de que el enlace sea correcto
+                            href="/dashboard"  // Make sure the link is correct
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Dashboard
                           </a>
                         )}
                       </Menu.Item>
-                    )}
+                    )} */}
+                    
                     </Menu.Items>
                   </Transition>
                 </Menu>
@@ -160,24 +163,25 @@ function NavBar() {
 
 
 
-          {/* De smalls screens para arriba estara escondido */}
-          <Disclosure.Panel className="sm:hidden bg-secondary rounded-lg"> 
-            <div className="hidden sm:ml-6 sm:block sm:my-auto">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
+          {/* Hidden for small screens and above */}
+          <Disclosure.Panel className="sm:hidden bg-secondary bg-opacity-70 rounded-lg"> 
+            <div className="space-y-1 px-2 pb-3 pt-2">
+
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className={classNames(
+                    item.current ? 'bg-gray-900 text-white bg-opacity-60' : 'text-gray-300 hover:bg-gray-700 bg-opacity-60 hover:text-white',
+                    'block rounded-md px-3 py-2 text-base font-medium'
+                  )}
+                  aria-current={item.current ? 'page' : undefined}
+                >
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+
             </div>
           </Disclosure.Panel>
         </>

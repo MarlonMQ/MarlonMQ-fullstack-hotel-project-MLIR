@@ -28,33 +28,33 @@ function ReservationForm() {
         let errors = {};
 
         if (!formData.firstName.trim()) {
-            errors.firstName = 'El nombre es obligatorio.';
+            errors.firstName = 'First name is required.';
             formIsValid = false;
         }
 
         if (!formData.lastName.trim()) {
-            errors.lastName = 'El apellido es obligatorio.';
+            errors.lastName = 'Last name is required.';
             formIsValid = false;
         }
 
         if (!formData.email) {
-            errors.email = 'El correo electrónico es obligatorio.';
+            errors.email = 'Email is required.';
             formIsValid = false;
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            errors.email = 'Correo electrónico no válido.';
+            errors.email = 'Invalid email format.';
             formIsValid = false;
         }
 
         if (!formData.checkIn) {
-            errors.checkIn = 'La fecha de entrada es obligatoria.';
+            errors.checkIn = 'Check-in date is required.';
             formIsValid = false;
         }
 
         if (!formData.checkOut) {
-            errors.checkOut = 'La fecha de salida es obligatoria.';
+            errors.checkOut = 'Check-out date is required.';
             formIsValid = false;
         } else if (new Date(formData.checkIn) >= new Date(formData.checkOut)) {
-            errors.checkOut = 'La fecha de salida debe ser después de la fecha de entrada.';
+            errors.checkOut = 'Check-out date must be after check-in date.';
             formIsValid = false;
         }
 
@@ -65,7 +65,7 @@ function ReservationForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // Datos del formulario están correctos, enviar la petición POST
+            // Form data is valid, send the POST request
             try {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.post('http://localhost:4000/reservations/', {
@@ -76,10 +76,10 @@ function ReservationForm() {
                     checkOut: formData.checkOut
                 });
                 
-                alert('Reserva creada con éxito!');
+                alert('Reservation created successfully!');
                 
 
-                // Aquí podrías redirigir al usuario o limpiar el formulario
+                // You can redirect the user or clear the form here
                 setFormData({
                     firstName: '',
                     lastName: '',
@@ -88,26 +88,26 @@ function ReservationForm() {
                     checkOut: ''
                 });
             } catch (error) {
-                console.error('Error al enviar la reserva:', error);
-                alert('Error al crear la reserva. Por favor, inténtalo de nuevo.');
+                console.error('Error sending reservation:', error);
+                alert('Error creating reservation. Please try again.');
             }
         } else {
-            console.log('Errores en el formulario:', errors);
-            alert('Por favor, corrige los errores en el formulario.');
+            console.log('Form errors:', errors);
+            alert('Please correct the errors in the form.');
         }
     };
 
     return (
         <div className=' px-12'>
         <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-        <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir Reserva</h2>
+        <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Make a Reservation</h2>
             <form onSubmit={handleSubmit} className="flex flex-wrap -mx-2">
                 <div className="px-2 w-full sm:w-1/2">
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">First Name</label>
                     <input
                         type="text"
                         name="firstName"
-                        placeholder="Escribe tu nombre"
+                        placeholder="Enter your first name"
                         value={formData.firstName}
                         onChange={handleChange}
                         className={`block w-full p-3 border ${errors.firstName ? 'border-red-500' : 'border-gray-300'} rounded`}
@@ -115,11 +115,11 @@ function ReservationForm() {
                     {errors.firstName && <p className="text-red-500 text-xs italic">{errors.firstName}</p>}
                 </div>
                 <div className="px-2 w-full sm:w-1/2">
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Apellido</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
                     <input
                         type="text"
                         name="lastName"
-                        placeholder="Escribe tu apellido"
+                        placeholder="Enter your last name"
                         value={formData.lastName}
                         onChange={handleChange}
                         className={`block w-full p-3 border ${errors.lastName ? 'border-red-500' : 'border-gray-300'} rounded`}
@@ -131,7 +131,7 @@ function ReservationForm() {
                     <input
                         type="email"
                         name="email"
-                        placeholder="Ejemplo: tuemail@dominio.com"
+                        placeholder="Example: youremail@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         className={`block w-full p-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded`}
@@ -139,7 +139,7 @@ function ReservationForm() {
                     {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
                 </div>
                 <div className="px-2 w-full sm:w-1/2">
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Fecha de Entrada</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">Check-in Date</label>
                     <input
                         type="date"
                         name="checkIn"
@@ -150,7 +150,7 @@ function ReservationForm() {
                     {errors.checkIn && <p className="text-red-500 text-xs italic">{errors.checkIn}</p>}
                 </div>
                 <div className="px-2 w-full sm:w-1/2">
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Fecha de Salida</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">Check-out Date</label>
                     <input
                         type="date"
                         name="checkOut"
@@ -162,7 +162,7 @@ function ReservationForm() {
                 </div>
                 <div className="px-2 w-full">
                     <button type="submit" className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
-                        Reservar
+                        Reserve
                     </button>
                 </div>
             </form>

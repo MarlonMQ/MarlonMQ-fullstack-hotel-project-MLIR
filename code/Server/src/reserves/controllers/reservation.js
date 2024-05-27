@@ -1,4 +1,3 @@
-import sql from 'mssql';
 import ReservesServices from '../services/reservation.js';
 import dotenv from 'dotenv';
 
@@ -13,9 +12,9 @@ export class ReservationsController {
 
         try {
             await ReservesServices.createReservation(email, lastName, checkIn, checkOut);
-            res.json({ message: 'Reserva creada con éxito.' });
+            res.json({ message: 'Reservation created successfully.' });
             res.status(201).send({
-                message: 'Reserva creada con éxito.'
+                message: 'Reservation created successfully.'
             })
         } catch (error) {
             res.status(500).send(error.message);
@@ -51,11 +50,11 @@ export class ReservationsController {
             const result = await ReservesServices.deleteReservation(id);
             if (result.rowsAffected[0] > 0) {
                 res.status(204).send({
-                    message: 'Reserva eliminada con éxito.'
+                    message: 'Reservation deleted successfully.'
                 });
             } else {
                 res.status(404).send({
-                    message: 'Reserva no encontrada.'
+                    message: 'Reservation not found.'
                 });
             }
         } catch (error) {

@@ -1,7 +1,5 @@
-import DbConnection from "../../config/dbconnection.js";
 import { deleteImageFromBucket } from "../../utils/bucketManager.js";
 import RoomsServices from "../services/rooms.js";
-import sql from 'mssql';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -9,10 +7,8 @@ class RoomsController {
 
     static async getDataRooms(req, res) {
         try {
-            const quantity_available = await RoomsServices.getDataRooms();
-            res.status(200).send({
-                message: 'Data fetched successfully'
-            });
+            const result = await RoomsServices.getDataRooms();
+            res.status(200).send(result);
         } catch (error) {
             res.status(500).send(error.message);
         }
@@ -63,8 +59,3 @@ class RoomsController {
 }
 
 export default RoomsController;
-
-
-
-
-

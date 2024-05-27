@@ -5,15 +5,15 @@ import AdminPanelServices from '../components/Services/AdminPanelServices';
 import FormCRUDRooms from '../components/Rooms/FormCRUDRooms';
 
 function DashboardLayout() {
-    // Estado para controlar qué componente mostrar
+    // State to control which component to display
     const [activeComponent, setActiveComponent] = useState('reserves');
 
     return (
         <div className="flex">
-            {/* Pasar setActiveComponent a Sidebar para poder cambiar el estado */}
+            {/* Pass setActiveComponent to Sidebar to be able to change the state */}
             <Sidebar setActiveComponent={setActiveComponent} />
             <div className="flex-grow p-5">
-                {/* Renderizado condicional basado en el estado activeComponent */}
+                {/* Conditional rendering based on the activeComponent state */}
                 {activeComponent === 'reserves' && <ReservesAdmin />}
                 {activeComponent === 'services' && <AdminPanelServices />}
                 {activeComponent === 'rooms' && <FormCRUDRooms />}

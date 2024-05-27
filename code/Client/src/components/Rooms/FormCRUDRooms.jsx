@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FormRooms from "./FormRooms";
@@ -8,34 +8,34 @@ function FormCRUDRooms() {
 
     const [rooms, setRooms] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    // Guarda el que voy a borrar
+    // Stores the room to be deleted
     const [roomToDelete, setRoomToDelete] = useState(null);
 
     const { token } = useContext(AuthContext);
 
 
     useEffect(() => {
-        const fetchServices = () => {
+        const fetchRooms = () => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            axios.get('http://localhost:4000/rooms/getDataRooms')
+            axios.get('http://localhost:4000/rooms')
                 .then(response => {
                     setRooms(response.data);
                 })
                 .catch(error => {
-                    console.error('Error fetching services', error);
+                    console.error('Error fetching rooms', error);
                 });
         };
 
-        fetchServices(); // Fetch immediately on component mount
-        const interval = setInterval(fetchServices, 10000); // Refresh every 10 seconds
+        fetchRooms(); // Fetch immediately on component mount
+        const interval = setInterval(fetchRooms, 10000); // Refresh every 10 seconds
 
         return () => clearInterval(interval); // Clean up interval on component unmount
     }, []);
 
 
 
-    const initiateDeleteRoom = (service) => {
-        setRoomToDelete(service);
+    const initiateDeleteRoom = (room) => {
+        setRoomToDelete(room);
         setShowConfirmation(true);
     };
 
@@ -43,16 +43,16 @@ function FormCRUDRooms() {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.delete(`http://localhost:4000/rooms/?url=${roomToDelete.image_url}`)
             .then(() => {
-                setRooms(rooms.filter(s => s.id_room !== roomToDelete.id_room));
+                setRooms(rooms.filter(r => r.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
             })
             .catch(error => {
-                console.error('Error deleting service', error);
+                console.error('Error deleting room', error);
             });
     };
     return (
         <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Subir  Habitacion</h2>
+            <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Upload Room</h2>
             <FormRooms />
             <table className="min-w-full leading-normal">
                 <thead>

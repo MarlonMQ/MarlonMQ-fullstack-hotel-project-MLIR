@@ -6,9 +6,9 @@ function Sidebar({ setActiveComponent }) {
         <div className="w-64  text-white p-5 shadow-lg bg-primary ">
             <h1 className="text-xl font-semibold mb-5">Dashboard</h1>
             <ul>
-                <li onClick={() => setActiveComponent('reserves')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Reservas</li>
-                <li onClick={() => setActiveComponent('services')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Servicios</li>
-                <li onClick={() => setActiveComponent('rooms')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Habitaciones</li>
+                <li onClick={() => setActiveComponent('reserves')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Reserves</li>
+                <li onClick={() => setActiveComponent('services')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Services</li>
+                <li onClick={() => setActiveComponent('rooms')} className="block py-2 hover:bg-gray-100 hover:text-black cursor-pointer">Rooms</li>
             </ul>
         </div>
     );

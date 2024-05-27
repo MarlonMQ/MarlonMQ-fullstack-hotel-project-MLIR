@@ -14,7 +14,7 @@ class RoomsRoutes {
 
 
     getDataRoomsRoute() {
-        this.router.get('/getDataRooms', (req, res) => {
+        this.router.get('/', (req, res) => {
             RoomsController.getDataRooms(req, res);
         });
     }
