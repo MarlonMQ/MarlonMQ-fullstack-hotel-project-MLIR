@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import ReservationTable from './ReservationTable';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 function ReservationForm() {
 
@@ -76,7 +77,7 @@ function ReservationForm() {
                     checkOut: formData.checkOut
                 });
                 
-                alert('Reservation created successfully!');
+                toast.success('Reservation created successfully!');
                 
 
                 // You can redirect the user or clear the form here
@@ -89,11 +90,11 @@ function ReservationForm() {
                 });
             } catch (error) {
                 console.error('Error sending reservation:', error);
-                alert('Error creating reservation. Please try again.');
+                toast.error('Error creating reservation');
             }
         } else {
             console.log('Form errors:', errors);
-            alert('Please correct the errors in the form.');
+            toast.error('Please correct the errors in the form.');
         }
     };
 

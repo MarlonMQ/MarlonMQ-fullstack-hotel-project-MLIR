@@ -1,7 +1,5 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from '../loginComponents/AuthContext.jsx';
-import axios from 'axios';
-import { DeleteConfirmation } from '../utils/Alert.jsx';
+
 
 export default function CardsFacilities({ image, title }) {
 

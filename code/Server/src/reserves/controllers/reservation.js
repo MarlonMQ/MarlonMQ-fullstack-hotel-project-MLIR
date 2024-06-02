@@ -12,7 +12,6 @@ export class ReservationsController {
 
         try {
             await ReservesServices.createReservation(email, lastName, checkIn, checkOut);
-            res.json({ message: 'Reservation created successfully.' });
             res.status(201).send({
                 message: 'Reservation created successfully.'
             })

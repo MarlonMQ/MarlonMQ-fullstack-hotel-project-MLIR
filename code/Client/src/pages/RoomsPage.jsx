@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { RoomCard } from '../components/Rooms/RoomCard';
-
+import { toast } from 'react-toastify';
 
 const RoomsPage = () => {    
 
@@ -17,6 +17,7 @@ const RoomsPage = () => {
                     setDataRooms(response.data);
                 })
                 .catch(error => {
+                    toast.error('Error fetching services');
                     console.error('Error fetching services', error);
                 });
         };

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import moment from 'moment';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 function ReservationTable() {
   const [reservations, setReservations] = useState([]);
@@ -21,6 +22,7 @@ function ReservationTable() {
         setFilteredReservations(response.data);
       })
       .catch(error => {
+        toast.error('Error fetching reservations');
         console.error('Error fetching reservations:', error);
       });
   };
@@ -55,8 +57,10 @@ function ReservationTable() {
           fetchReservations();
           setShowConfirmation(false);
           setReservationToDelete(null);
+          toast.success('Reservation deleted successfully');
         })
         .catch(error => {
+          toast.error('Error deleting reservation');
           console.error('Error deleting reservation:', error);
         });
     } else {

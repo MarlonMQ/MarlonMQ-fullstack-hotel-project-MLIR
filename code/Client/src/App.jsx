@@ -1,9 +1,13 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuthProvider from './components/loginComponents/AuthContext.jsx';
 import NavBar from './components/NavBar.jsx';
-import { CarouselComponent } from './components/Carousel.jsx'
-import {Footer} from './components/Footer.jsx';
+import { CarouselComponent } from './components/Carousel.jsx';
+import { Footer } from './components/Footer.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -11,6 +15,7 @@ import SignUpPage from './pages/SignUpPage';
 import Facilities from './pages/Facilities';
 import RoomsPage from './pages/RoomsPage';
 import DashboardLayout from './LayOut/DashboardLayout.jsx';
+import ProtectedRoute from './components/loginComponents/ProtectedRoute.jsx';
 
 function App() {
   const images = {
@@ -29,6 +34,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        
         <NavBar />
         <CarouselComponent images={images} />
         <Routes>
@@ -37,12 +43,21 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<RoomsPage />} />
-          <Route path="dashBoard" element={<DashboardLayout />} />  
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardLayout />} />
+          </Route>
         </Routes>
         <Footer />
+        <ToastContainer 
+          position="bottom-right"
+          hideProgressBar
+          newestOnTop
+          theme="colored"
+        />
       </AuthProvider>
     </Router>
   );
 }
 
 export default App;
+

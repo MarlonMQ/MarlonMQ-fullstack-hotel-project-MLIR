@@ -5,6 +5,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
 import { AuthContext } from './loginComponents/AuthContext.jsx';
 
+
 const navigation = [
   { name: 'Home', href: '/', current: window.location.pathname === '/' },
   { name: 'Facilities', href: '/facilities', current: window.location.pathname === '/facilities' },
@@ -17,7 +18,7 @@ function classNames(...classes) {
 }
 
 function NavBar() {
-  const {rol} = useContext(AuthContext);
+  const {token, rol, logout} = useContext(AuthContext);
 
   return (
     <Disclosure as="nav" className="bg-transparent absolute z-10 w-full">
@@ -75,6 +76,18 @@ function NavBar() {
                         {item.name}
                       </a>
                     ))}
+
+                    {rol === 'admin' && (
+                      <a
+                        href="/dashboard"  // Make sure the link is correct
+                        className={classNames(
+                          'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium',
+                        )}
+                      >
+                        Dashboard
+                      </a>
+                    )} 
                   </div>
 
                 </div>
@@ -108,16 +121,8 @@ function NavBar() {
                         leaveTo="transform opacity-0 scale-95"
                     >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
+                      
+
                       <Menu.Item>
                         {({ active }) => (
                           <a
@@ -128,30 +133,36 @@ function NavBar() {
                           </a>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
 
 
-                      {/* {rol === 'admin' && (
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/dashboard"  // Make sure the link is correct
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Dashboard
-                          </a>
-                        )}
-                      </Menu.Item>
-                    )} */}
+                      {token === null ? (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <Link
+                              to="/login"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Sign in
+                            </Link>
+                          )}
+                        </Menu.Item>
+
+
+
+                      ) : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              onClick={logout}
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Sign out
+                            </a>
+                          )}
+                        </Menu.Item>
+                      )}
+                      
                     
                     </Menu.Items>
                   </Transition>
@@ -181,6 +192,19 @@ function NavBar() {
                   {item.name}
                 </Disclosure.Button>
               ))}
+
+              {rol === 'admin' && (
+                <Disclosure.Button
+                  as="a"
+                  href="/dashboard"
+                  className={classNames(
+                    'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'block rounded-md px-3 py-2 text-base font-medium'
+                  )}
+                >
+                  Dashboard
+                </Disclosure.Button>
+              )}
 
             </div>
           </Disclosure.Panel>

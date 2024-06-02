@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { alertClass } from '../utils/Alert.jsx';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 const UploadServiceForm = () => {
   /* state and initial values */
@@ -42,7 +43,7 @@ const UploadServiceForm = () => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        alert('Service uploaded successfully');
+        toast.success('Service uploaded successfully');
       } catch (error) {
         console.error('Error uploading service:', error);
         if (error.response) {
@@ -50,15 +51,15 @@ const UploadServiceForm = () => {
           console.log('Error data:', error.response.data);
           console.log('Error status:', error.response.status);
           console.log('Error headers:', error.response.headers);
-          alert(`Error uploading service: ${error.response.data.message || 'Unspecified error'}`);
+          toast.error('Error uploading service');
         } else if (error.request) {
           // The request was made but no response was received
           console.log('Request error:', error.request);
-          alert('Error uploading service: No response received from the server');
+          toast.error('Error uploading service');
         } else {
           // Something happened in setting up the request that triggered an Error
           console.log('Error message:', error.message);
-          alert(`Error uploading service: ${error.message}`);
+          toast.error('Error uploading service');
         }
       }  
     },

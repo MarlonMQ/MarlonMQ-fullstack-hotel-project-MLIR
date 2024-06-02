@@ -5,10 +5,13 @@ import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
 import GrayBox from '../components/registerComponents/GrayBox.jsx';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 import Axios from '../services/Axios.js';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function LoginPage()  {
 
   const { login } = useContext(AuthContext); // Get the login function from the authentication context
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -27,7 +30,7 @@ function LoginPage()  {
           const rol = response.data.rol;
           login(token,rol);
           Axios.setToken(token);
-          window.location.href = '/';
+          navigate('/'); // Navega a la página principal
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

@@ -5,11 +5,14 @@ import * as Yup from 'yup';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function SignUpPage() {
   const [view, setview] = useState(0); // State to control the visibility of the first FormBox
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +45,8 @@ function SignUpPage() {
       try {
         const response = await Axios.post('/signup', values);
         if (response.status === 200) {
-          window.location.href = '/login';
+          toast.success('You have successfully registered');
+          navigate('/login');
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {

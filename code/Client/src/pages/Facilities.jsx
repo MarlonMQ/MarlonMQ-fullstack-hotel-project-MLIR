@@ -4,7 +4,7 @@ import '../index.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CardsFacilities from '../components/Services/CardsFacilities';
-
+import { toast } from 'react-toastify';
 
 const Facilities = () => {
     const admin = true;
@@ -17,6 +17,7 @@ const Facilities = () => {
                     setServices(response.data);
                 })
                 .catch(error => {
+                    toast.error('Error fetching services');
                     console.error('Error fetching services', error);
                 });
         };

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FoamFacilities from './FoamFacilities';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 function AdminServicesPanel() {
     const [services, setServices] = useState([]);
@@ -25,8 +26,10 @@ function AdminServicesPanel() {
         axios.get('http://localhost:4000/services/all')
             .then(response => {
                 setServices(response.data);
+
             })
             .catch(error => {
+                toast.error('Error fetching services');
                 console.error('Error fetching services', error);
             });
     };
@@ -42,8 +45,10 @@ function AdminServicesPanel() {
             .then(() => {
                 setServices(services.filter(s => s.ServiceId !== serviceToDelete.ServiceId));
                 setShowConfirmation(false);
+                toast.success('Service deleted successfully');
             })
             .catch(error => {
+                toast.error('Error deleting service');
                 console.error('Error deleting service', error);
             });
     };
