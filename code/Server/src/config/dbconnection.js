@@ -8,6 +8,8 @@ const bdConfig = {
   password: process.env.DB_PASSWORD,
   server: process.env.DB_SERVER,
   database: process.env.DB_DATABASE,
+  port: parseInt(process.env.DB_PORT, 10), 
+  key: process.env.SECRET_KEY,
   options: {
     encrypt: false,
     trustServerCertificate: true,

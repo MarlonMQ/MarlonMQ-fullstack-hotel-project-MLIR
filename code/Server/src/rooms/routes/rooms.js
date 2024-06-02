@@ -10,7 +10,8 @@ class RoomsRoutes {
         this.getDataRoomsRoute();
         this.uploadRoomRoute();
         this.deleteRoom();
-    } 
+        this.updateRoomRoute();
+    }
 
 
     getDataRoomsRoute() {
@@ -20,8 +21,14 @@ class RoomsRoutes {
     }
 
     uploadRoomRoute() {
-        this.router.post('/', checkToken,upload.single('image'), (req, res) => {
+        this.router.post('/', checkToken, upload.single('image'), (req, res) => {
             RoomsController.uploadRoom(req, res);
+        });
+    }
+
+    updateRoomRoute() {
+        this.router.patch('/', checkToken, upload.single('image'), (req, res) => {
+            RoomsController.updateRoom(req, res);
         });
     }
 
@@ -40,9 +47,3 @@ class RoomsRoutes {
 
 // export default new ServiceRoutes().getRouter();
 export default new RoomsRoutes().getRouter();
-
-
-
-
-
-

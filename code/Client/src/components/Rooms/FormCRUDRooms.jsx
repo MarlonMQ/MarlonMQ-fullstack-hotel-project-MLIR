@@ -3,7 +3,6 @@ import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FormRooms from "./FormRooms";
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
-import { toast } from 'react-toastify';
 
 function FormCRUDRooms() {
 
@@ -12,8 +11,33 @@ function FormCRUDRooms() {
     // Stores the room to be deleted
     const [roomToDelete, setRoomToDelete] = useState(null);
 
-    const { token } = useContext(AuthContext);
+    const [valuesToRoomForm, setValuesToRoomForm] = useState({
+        id: null,
+        type: '',
+        price: 1,
+        availables: 1,
+        capacity: 1,
+        description: '',
+        image: null,
+        updateMode: 0
+    });
 
+    const { token } = useContext(AuthContext);
+    
+
+    const initiateUpdateRoom = (room) => {
+        setValuesToRoomForm({
+            id: room.id_room,
+            type: room.room_type,
+            price: room.price_per_night,
+            availables: room.quantity_available,
+            capacity: room.capacity,
+            description: room.description,
+            image: room.image_url,
+            updateMode: 1
+        });
+    };
+    
 
     useEffect(() => {
         const fetchRooms = () => {
@@ -23,7 +47,6 @@ function FormCRUDRooms() {
                     setRooms(response.data);
                 })
                 .catch(error => {
-                    toast.error('Error fetching rooms');
                     console.error('Error fetching rooms', error);
                 });
         };
@@ -41,25 +64,27 @@ function FormCRUDRooms() {
         setShowConfirmation(true);
     };
 
+
+    
     const deleteRoom = () => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.delete(`http://localhost:4000/rooms/?url=${roomToDelete.image_url}`)
             .then(() => {
                 setRooms(rooms.filter(r => r.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
-                toast.success('Room deleted successfully');
             })
             .catch(error => {
-                toast.error('Error deleting room');
                 console.error('Error deleting room', error);
             });
     };
+
+
     return (
         <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
             <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Upload Room</h2>
-            <FormRooms />
+            <FormRooms valuesForm = {valuesToRoomForm} setValuesToRoomForm = {setValuesToRoomForm}/>
             <table className="min-w-full leading-normal">
-                <thead> 
+                <thead>
                     <tr>
                         <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Type
@@ -89,11 +114,20 @@ function FormCRUDRooms() {
                                     <img src={room.image_url} alt={room.type} className="w-10 h-10 rounded"/>
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <button
-                                        onClick={() => initiateDeleteRoom(room)}
-                                        className="text-red-500 hover:text-red-700">
-                                        Delete
-                                    </button>
+                                    <div className="flex space-x-5">
+                                        <button
+                                            onClick={() => initiateUpdateRoom(room)}
+                                            className="text-blue-500 hover:text-blue-700">
+                                            Update
+                                        </button>
+                                        <button
+                                            onClick={() => initiateDeleteRoom(room)}
+                                            className="text-red-500 hover:text-red-700">
+                                            Delete
+                                        </button>
+                                        
+                                    </div>
+
                                 </td>
                             </tr>
                             )
