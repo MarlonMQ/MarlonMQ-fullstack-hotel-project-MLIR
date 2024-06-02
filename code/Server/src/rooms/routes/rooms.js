@@ -10,7 +10,7 @@ class RoomsRoutes {
         this.getDataRoomsRoute();
         this.uploadRoomRoute();
         this.deleteRoom();
-    }
+    } 
 
 
     getDataRoomsRoute() {

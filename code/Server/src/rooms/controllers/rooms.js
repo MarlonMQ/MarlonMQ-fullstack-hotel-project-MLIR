@@ -42,8 +42,6 @@ class RoomsController {
         const __dirname = path.dirname(__filename);
 
         const baseDir = path.join(__dirname, '../../');
-
-        
         try {
             await RoomsServices.deleteRoom(imageUrl);
             // Eliminar la imagen del bucket de almacenamiento (pseudocódigo)

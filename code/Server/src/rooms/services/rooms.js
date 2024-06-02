@@ -25,7 +25,7 @@ class RoomsServices {
         return result.recordset;
     }
 
-    static async deleteRoom(imageUrl) {
+    static async deleteRoom(imageUrl) { 
         const pool = await DbConnection.getInstance().getConnection();
         const result = await pool.request()
             .query(`DELETE FROM room WHERE image_url = '${imageUrl}'`);

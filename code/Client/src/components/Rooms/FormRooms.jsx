@@ -10,7 +10,7 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
   const [imagePreview, setImagePreview] = useState(null);
   
   const formik = useFormik({
-  initialValues: valuesForm,
+  initialValues: valuesForm, 
   
     /* Validation part */
   validationSchema: Yup.object({
@@ -65,7 +65,7 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
         const response = await axios.patch(`http://localhost:4000/rooms/?url=${valuesForm.image}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
-          }
+          } 
         });
         console.log('Room updated successfully:', response.data);
         // Vuelve a estar en modo de upload

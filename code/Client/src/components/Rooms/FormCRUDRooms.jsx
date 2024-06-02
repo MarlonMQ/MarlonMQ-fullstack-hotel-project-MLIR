@@ -59,7 +59,7 @@ function FormCRUDRooms() {
             <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Upload Room</h2>
             <FormRooms />
             <table className="min-w-full leading-normal">
-                <thead>
+                <thead> 
                     <tr>
                         <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Type

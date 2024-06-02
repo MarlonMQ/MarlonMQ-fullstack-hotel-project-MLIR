@@ -6,7 +6,7 @@ export const RoomCard = ({data}) => {
 
     
 
-  return (
+  return ( 
     <>
         <div className='rounded-md border-2 border-secondary'>
             <div className='rounded-md border-2'>
