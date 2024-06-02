@@ -5,6 +5,9 @@ import AuthProvider from './components/loginComponents/AuthContext.jsx';
 import NavBar from './components/NavBar.jsx';
 import { CarouselComponent } from './components/Carousel.jsx';
 import { Footer } from './components/Footer.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -31,6 +34,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        
         <NavBar />
         <CarouselComponent images={images} />
         <Routes>
@@ -44,6 +48,12 @@ function App() {
           </Route>
         </Routes>
         <Footer />
+        <ToastContainer 
+          position="bottom-right"
+          hideProgressBar
+          newestOnTop
+          theme="colored"
+        />
       </AuthProvider>
     </Router>
   );

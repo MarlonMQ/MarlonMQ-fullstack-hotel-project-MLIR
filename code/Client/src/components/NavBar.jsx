@@ -5,6 +5,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
 import { AuthContext } from './loginComponents/AuthContext.jsx';
 
+
 const navigation = [
   { name: 'Home', href: '/', current: window.location.pathname === '/' },
   { name: 'Facilities', href: '/facilities', current: window.location.pathname === '/facilities' },

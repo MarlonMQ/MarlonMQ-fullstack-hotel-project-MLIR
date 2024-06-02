@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const FormRooms = () => {
@@ -57,14 +58,13 @@ const FormRooms = () => {
 
 
     try {
-      console.log("axios post");
       const response = await axios.post('http://localhost:4000/rooms/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       console.log('Room uploaded successfully:', response.data);
-      alert('Room uploaded successfully');
+      toast.success('Room uploaded successfully');
 
       
     } catch (error) {
@@ -74,11 +74,11 @@ const FormRooms = () => {
         console.log('Error data:', error.response.data);
         console.log('Error status:', error.response.status);
         console.log('Error headers:', error.response.headers);
-        alert(`Error uploading room: ${error.response.data.message || 'Unspecified error'}`);
+        toast.error(`Error uploading room: ${error.response.data.message}`);
       } else if (error.request) {
         // The request was made but no response was received
         console.log('Request error:', error.request);
-        alert('Error uploading room: No response received from the server');
+        toast.error('Error uploading room: No response received from the server');
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error message:', error.message);

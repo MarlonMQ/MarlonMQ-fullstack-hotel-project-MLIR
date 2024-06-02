@@ -1,5 +1,6 @@
 // AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
 
@@ -19,6 +20,7 @@ const AuthProvider = ({ children }) => {
     setRol(rol);
     window.localStorage.setItem('authToken', JSON.stringify(receivedToken));
     window.localStorage.setItem('rol', JSON.stringify(rol));
+    toast.success('You have successfully logged in');
   };
 
   const logout = () => {
@@ -26,6 +28,7 @@ const AuthProvider = ({ children }) => {
     setRol(null);
     window.localStorage.removeItem('authToken');
     window.localStorage.removeItem('rol');
+    toast.info('You have been logged out');
   };
 
   useEffect(() => {

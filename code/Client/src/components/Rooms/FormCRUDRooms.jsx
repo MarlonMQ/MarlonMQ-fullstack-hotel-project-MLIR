@@ -3,6 +3,7 @@ import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FormRooms from "./FormRooms";
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 function FormCRUDRooms() {
 
@@ -22,6 +23,7 @@ function FormCRUDRooms() {
                     setRooms(response.data);
                 })
                 .catch(error => {
+                    toast.error('Error fetching rooms');
                     console.error('Error fetching rooms', error);
                 });
         };
@@ -45,8 +47,10 @@ function FormCRUDRooms() {
             .then(() => {
                 setRooms(rooms.filter(r => r.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
+                toast.success('Room deleted successfully');
             })
             .catch(error => {
+                toast.error('Error deleting room');
                 console.error('Error deleting room', error);
             });
     };
