@@ -4,12 +4,10 @@ import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
 
 function HomePage() {
 
-  const { token, logout } = useContext(AuthContext);
+  const { rol, logout } = useContext(AuthContext);
 
   return (
     <>
-      {/* It is necessary to have the same number of mobile images as desktop images */}
-      <button onClick={logout}>Logout</button>
     </>
   )
 }
