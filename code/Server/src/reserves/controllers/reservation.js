@@ -8,6 +8,7 @@ export class ReservationsController {
 
     // Metodo para ingresar una reserva
     static async createReservation(req, res) {
+        console.log("create reserve controller llamado");
         const { email, lastName, checkIn, checkOut } = req.body; // Asegúrate de que estos datos se envíen desde el cliente
 
         try {

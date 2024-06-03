@@ -1,13 +1,35 @@
+import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { AuthContext } from '../components/loginComponents/AuthContext';
+import { v4 as uuidv4 } from 'uuid';
+// import Axios from '../services/Axios';
+
+const setReserve = async (formData) => {
+    // const response = await Axios.post(`http://localhost:4000/reservations/`, formData);
+    const response = axios.post('http://localhost:4000/reservations/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    return response.data;
+}
 
 export const SelectDateReserve = () => {
     const [minFinishDate, setMinFinishDate] = useState('');
     const navigate = useNavigate();
+    const { token } = useContext(AuthContext);
+    console.log(token);
+
+    const email = window.localStorage.getItem('email');
+    console.log("email: ", email);
     const formik = useFormik({
         initialValues: {
+            id_reserve: null,
+            email: '',
+            lastName: 'default',
             startDate: '',
             finishDate: ''
         },
@@ -16,10 +38,46 @@ export const SelectDateReserve = () => {
             finishDate: Yup.string().required('Required finish date'),
         }),
         onSubmit: async (values) => {
-            const { startDate, finishDate } = values;
-            console.log('Start Date:', startDate);
-            console.log('Finish Date:', finishDate);
-            // Puedes manejar la lógica de envío aquí, por ejemplo, enviar los valores a un servidor.
+
+            console.log("Onsubmit llamado: ", values);
+
+            const formData = new FormData();
+            values.email = email;
+            values.id_reserve = uuidv4();
+            formData.append('email', values.email),
+
+            formData.append('checkIn', values.startDate);
+            formData.append('checkOut', values.finishDate);
+            
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                const response = await axios.post('http://localhost:4000/reservations/', formData, {
+                    headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                });
+                navigate("/rooms/myreservations");
+                console.log(response);
+
+            } catch (error) {
+                console.error('Error setting reserve room:', error);
+                if (error.response) {
+                    // The request was made and the server responded with an error status
+                    console.log('Error data:', error.response.data);
+                    console.log('Error status:', error.response.status);
+                    console.log('Error headers:', error.response.headers);
+                    alert(`Error uploading room: ${error.response.data.message || 'Unspecified error'}`);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log('Request error:', error.request);
+                    alert('Error uploading room: No response received from the server');
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error message:', error.message);
+                    alert(`Error to do reserve: ${error.message}`);
+                }
+            }
+
         }
     });
 
@@ -66,11 +124,11 @@ export const SelectDateReserve = () => {
                     )}
                 </div>
             </div>
-            <button 
-                type="submit" 
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => (navigate("/rooms/myreservations"))}
-            >
+                <button 
+                    type="submit" 
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    // onClick={() => (navigate("/rooms/myreservations"))}
+                >
                 Reserve
             </button>
         </form>
