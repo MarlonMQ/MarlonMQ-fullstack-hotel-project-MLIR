@@ -1,15 +1,18 @@
 import DbConnection from "../../config/dbconnection.js";
 import sql from "mssql"; // Asegúrate de importar el módulo sql
+import { v4 as uuidv4 } from 'uuid';
 
 
 class ServiceServices {
 
     static async uploadService(title, imageUrl) {
         const pool = await DbConnection.getInstance().getConnection();
+        let id_service = uuidv4();
         const result = await pool.request()
+            .input('id_service', sql.UniqueIdentifier, id_service)
             .input('title', sql.NVarChar(255), title)
             .input('imageUrl', sql.NVarChar(500), imageUrl)
-            .query('INSERT INTO service (title, imageUrl) VALUES (@title, @imageUrl)');
+            .query('INSERT INTO service (id_service,title, imageUrl) VALUES (@id_service, @title, @imageUrl)');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result;
     }

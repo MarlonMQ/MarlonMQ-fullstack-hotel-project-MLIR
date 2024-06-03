@@ -1,17 +1,20 @@
 import DbConnection from "../../config/dbconnection.js";
 import sql from "mssql"; // Asegúrate de importar el módulo sql
+import { v4 as uuidv4 } from 'uuid';
 
 
 class ReservesServices {
 
     static async createReservation(email, lastName, checkIn, checkOut) {
         const pool = await DbConnection.getInstance().getConnection();
+        let id_reserve = uuidv4();
         const result = await pool.request()
+            .input('id_reserve', sql.UniqueIdentifier, id_reserve)
             .input('Email', sql.VarChar(), email)
             .input('apellido', sql.VarChar(), lastName)
             .input('fecha_inico', sql.Date, checkIn)
             .input('fecha_fin', sql.Date, checkOut)
-            .query('INSERT INTO reserve (email, last_name, arrival_date, departure_date) VALUES (@Email, @apellido, @fecha_inico, @fecha_fin)');
+            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin)');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
