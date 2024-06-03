@@ -26,6 +26,7 @@ function FormCRUDRooms() {
     
 
     const initiateUpdateRoom = (room) => {
+        console.log("id de la room a actualizar:",room.id_room);
         setValuesToRoomForm({
             id: room.id_room,
             type: room.room_type,

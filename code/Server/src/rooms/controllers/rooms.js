@@ -14,15 +14,26 @@ class RoomsController {
         }
     }
 
+    static async getDataRoom(req, res) {
+        const { id } = req.params;
+        try {
+            const room = await RoomsServices.getDataRoom(id);
+            console.log(room);
+            res.status(200).send(room);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+
     static async uploadRoom(req, res) {
         
         try {
-            const { type, price, availables, capacity, description } = req.body;
+            const {id, type, price, availables, capacity, description } = req.body;
             
 
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
 
-            await RoomsServices.uploadRoom(type, price, availables, capacity, description, imageUrl);
+            await RoomsServices.uploadRoom(id, type, price, availables, capacity, description, imageUrl);
             
             res.status(201).send({
                 message: 'Room uploaded successfully'

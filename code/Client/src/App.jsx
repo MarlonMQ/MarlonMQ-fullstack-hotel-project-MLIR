@@ -16,6 +16,7 @@ import Facilities from './pages/Facilities';
 import RoomsPage from './pages/RoomsPage';
 import DashboardLayout from './LayOut/DashboardLayout.jsx';
 import ProtectedRoute from './components/loginComponents/ProtectedRoute.jsx';
+import MoreInfoRoomPage from './pages/MoreInfoRoomPage.jsx';
 
 function App() {
   const images = {
@@ -43,6 +44,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/rooms/moreInfo/:id" element={<MoreInfoRoomPage/>} ></Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardLayout />} />
           </Route>

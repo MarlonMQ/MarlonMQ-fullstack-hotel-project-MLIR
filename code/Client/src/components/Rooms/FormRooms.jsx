@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
@@ -39,7 +40,7 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
     console.log("Onsubmit llamado: ", values);
 
     const formData = new FormData();
-    formData.append('id', values.id);
+
     formData.append('type', values.type);
     formData.append('price', values.price);
     formData.append('availables', values.availables);
@@ -50,7 +51,8 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
 
     try {
       if (valuesForm.updateMode == 0) {
-
+        values.id = uuidv4();
+        formData.append('id', values.id);
         console.log("uploading");
         const response = await axios.post('http://localhost:4000/rooms/', formData, {
           headers: {
@@ -62,6 +64,8 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
 
       } else {
         console.log("updating");
+        values.id = valuesForm.id;
+        formData.append('id', values.id);
         const response = await axios.patch(`http://localhost:4000/rooms/?url=${valuesForm.image}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -231,7 +235,7 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
       {
         formik.errors.image && 
         <div className="text-red-500 text-xs italic">{formik.errors.image} </div>
-      }
+      } 
       {imagePreview && <img src={imagePreview} alt="Preview" className="mt-4 w-full h-auto rounded-md"/>}
     </div>
     {

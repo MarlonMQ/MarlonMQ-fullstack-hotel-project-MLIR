@@ -11,12 +11,20 @@ class RoomsRoutes {
         this.uploadRoomRoute();
         this.deleteRoom();
         this.updateRoomRoute();
+        this.getDataRoomRoute();
     }
 
 
     getDataRoomsRoute() {
         this.router.get('/', (req, res) => {
             RoomsController.getDataRooms(req, res);
+        });
+    }
+
+    getDataRoomRoute() {
+        console.log("En routes");
+        this.router.get('/moreInfo/:id', (req, res) => {
+            RoomsController.getDataRoom(req, res);
         });
     }
 
