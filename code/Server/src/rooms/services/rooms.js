@@ -13,7 +13,7 @@ class RoomsServices {
     static async getDataRoom(id) {
         const pool = await DbConnection.getInstance().getConnection();
         const result = await pool.request()
-        .input("id", sql.Int(), id)
+        .input("id", sql.UniqueIdentifier, id)
         .query('SELECT quantity_available, id_room, room_type, price_per_night, capacity, description, image_url FROM room WHERE id_room = @id');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset; // Record set devuelve un arreglo con un json por cada registro

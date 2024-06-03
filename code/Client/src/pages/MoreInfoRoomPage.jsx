@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Axios from '../services/Axios';
 
 const getRoom = async (id) => {
@@ -35,18 +35,34 @@ const MoreInfoRoomPage = () => {
 
     return (
         <>
-            <div className='roomInfo'>
-                <img src={image_url} alt="room image"  />
-                <p> {description} </p>
-                <button>Reserve</button>
+            <div className="flex flex-col items-center w-8/12 mx-auto my-5">
+                <img 
+                    src={image_url} 
+                    alt="room image" 
+                    className="mb-4 rounded-lg"
+                />
+
+                <h1 
+                    className="text-3xl font-bold mb-4"
+                >
+                    {room_type}
+                </h1>
+                <p 
+                    className="text-center primary-text"
+                >
+                    {description}
+                </p>
+
+                <Link
+                    className="mt-4 px-4 py-2 bg-third text-white rounded-lg"
+                    to={`/rooms/SelectDateReserve`}
+                    onClick={() => (console.log("hola mundo"))}
+                >
+                    Choose a date
+                </Link>
+
             </div>
 
-
-            {/* {
-                roomData.map( (room) => {
-                    return 
-                } )
-            } */}
         </>
     );
 }

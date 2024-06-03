@@ -26,6 +26,7 @@ export const RoomCard = ({data}) => {
                     <Link
                         className='primary-text text-secondary'
                         to={`/rooms/moreInfo/${id_room}`}
+                        
                     > 
                         View Room Details
                     </Link>

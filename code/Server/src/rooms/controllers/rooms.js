@@ -15,10 +15,11 @@ class RoomsController {
     }
 
     static async getDataRoom(req, res) {
-        const { id } = req.params;
+        const id  = req.params.id;
+        // console.log("id es: ", id);
         try {
             const room = await RoomsServices.getDataRoom(id);
-            console.log(room);
+
             res.status(200).send(room);
         } catch (error) {
             res.status(500).send(error.message);

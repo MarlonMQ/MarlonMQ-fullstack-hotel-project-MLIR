@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
     return localRol && typeof localRol === 'string' && localRol !== 'undefined' ? JSON.parse(localRol) : null;
   });
 
-  const login = (receivedToken,rol) => {
+  const login = (receivedToken, rol) => {
     setToken(receivedToken);
     setRol(rol);
     window.localStorage.setItem('authToken', JSON.stringify(receivedToken));

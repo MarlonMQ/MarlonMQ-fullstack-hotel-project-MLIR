@@ -10,6 +10,7 @@ const navigation = [
   { name: 'Home', href: '/', current: window.location.pathname === '/' },
   { name: 'Facilities', href: '/facilities', current: window.location.pathname === '/facilities' },
   { name: 'Rooms', href: '/rooms', current: window.location.pathname === '/rooms' },
+  { name: 'My Reservations', href: '/rooms/myreservations', current: window.location.pathname === '/rooms/myreservations' },
 ]
 
 function classNames(...classes) {
