@@ -5,14 +5,12 @@ import * as Yup from 'yup';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import PopUp  from '../components/PopUp';
 
 function SignUpPage() {
   const [view, setview] = useState(0); // State to control the visibility of the first FormBox
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -34,7 +32,18 @@ function SignUpPage() {
       confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required field'),
       name: Yup.string().required('Required field'),
       lastName: Yup.string().required('Required field'),
-      birthDate: Yup.string().required('Required field'),
+      birthDate: Yup.date()
+      .required('Required field')
+      .test('is-of-age', 'You must be at least 18 years old', function(value) {
+        const today = new Date();
+        const birthDate = new Date(value);
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          return age > 18;
+        }
+        return age >= 18;
+      }),
       phone: Yup.string().required('Required field'),
       country: Yup.string().required('Required field'),
       region: Yup.string().required('Required field'),
@@ -44,9 +53,8 @@ function SignUpPage() {
       // Logic to submit the form
       try {
         const response = await Axios.post('/signup', values);
-        if (response.status === 200) {
-          toast.success('You have successfully registered');
-          navigate('/login');
+        if (response.status === 201) {
+          window.location.href = '/login';
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
@@ -87,6 +95,14 @@ function SignUpPage() {
 
   return (
     <div className="flex flex-col sm:flex-row h-screen">
+      <PopUp
+        information="Are you sure you want to delete the account?"
+        firstButtonText="Cancel"
+        secondButtonText='Delete'
+        ButtonColor={'bg-red-800'}
+        ButtonHover={'bg-red-400'}
+
+      />
       <div className="w-full mb-20 sm:w-1/2 bg-white p-8 flex flex-col justify-center items-center">
         <div className="text-center">
           <h1 className='primary-title text-black px-12 py-12'>HAZBIN HOTEL</h1>
