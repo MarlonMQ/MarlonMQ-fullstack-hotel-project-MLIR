@@ -1,5 +1,6 @@
 import DbConnection from "../../config/dbconnection.js";
 import sql from "mssql"; // Asegúrate de importar el módulo sql
+import { v4 as uuidv4 } from 'uuid';
 
 
 class RoomsServices {
@@ -30,7 +31,23 @@ class RoomsServices {
             .input('description', sql.VarChar(), description)
             .input('Image_url', sql.VarChar(500), imageUrl)
             .query('INSERT INTO room (id_room, room_type, price_per_night, quantity_available, capacity, description, image_url) VALUES (@id_room, @room_type, @price_per_night, @quantity_available, @capacity, @description, @Image_url)');
-        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+
+            const status = "available";
+            const id_room_type = id;
+            const details = "Habitacion xxx, yyy";
+            // Bucle para insertar filas en 'room_number'
+            for (let num_room = 0; num_room < availables; num_room++) {
+                let roomId = uuidv4();
+                await pool.request()
+                    .input('id', sql.UniqueIdentifier, roomId)
+                    .input('num_room', sql.Int(), num_room)
+                    .input('status', sql.VarChar(), status)
+                    .input('id_room_type', sql.UniqueIdentifier, id_room_type)
+                    .input('details', sql.VarChar(), details)
+                    .query('INSERT INTO room_number (id, num_room, status, id_room_type, details) VALUES (@id, @num_room, @status, @id_room_type, @details)');
+            }
+        
+            await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
     
