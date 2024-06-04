@@ -58,5 +58,21 @@ export class UploadServiceController {
             res.status(500).send(error.message);
         }
     }
+
+    static async updateService(req, res) {
+        console.log("llegue aqui");
+        const { id } = req.params;
+        const { title } = req.body;
+
+        try {
+            const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+            const result = await ServiceServices.updateService(id, title, imageUrl);
+            res.status(200).send({
+                message: 'Service updated successfully',
+            });
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
 }
   

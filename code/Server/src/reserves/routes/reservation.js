@@ -23,6 +23,16 @@ class ReservationRoutes {
             ReservationsController.deleteReservation(req, res);
         });
 
+        this.router.put('/:id',checkToken,  (req, res) => {
+            ReservationsController.updateReservation(req, res);
+        });
+        this.router.put('/:id/changestatus',checkToken,  (req, res) => {
+            ReservationsController.updateReservationStatus(req, res);
+        });
+
+
+
+
     }
 
 

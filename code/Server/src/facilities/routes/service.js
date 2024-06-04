@@ -33,7 +33,7 @@ class ServiceRoutes {
         });
 
         // Ruta para actualizar un servicio específico
-        this.router.put('/:id',checkToken,  (req, res) => {
+        this.router.put('/:id', checkToken,upload.single('image'),  (req, res) => {
             UploadServiceController.updateService(req, res);
         });
 
