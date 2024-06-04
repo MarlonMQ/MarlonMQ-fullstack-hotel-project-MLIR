@@ -5,7 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { AuthContext } from '../components/loginComponents/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
-import Axios from '../services/Axios';
+
+import { toast } from 'react-toastify';
 
 
 export const SelectDateReserve = () => {
@@ -44,14 +45,13 @@ export const SelectDateReserve = () => {
                 checkOut: values.checkOut,
                 id_room: values.id_room
             };
-            console.log("Data a enviar desde select date page: ", formData);
+
             try {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.post('http://localhost:4000/reservations/', formData);
                 navigate("/rooms/myreservations");
                 console.log(response);
-                // FE0E5A8A-7E3B-4D73-94E1-C8CDAE67B007
-                // FE0E5A8A-7E3B-4D73-94E1-C8CDAE67B007
+                toast.success('Reservation pay pending successfully');
             } catch (error) {
                 console.error('Error setting reserve room:', error);
                 if (error.response) {
@@ -59,15 +59,18 @@ export const SelectDateReserve = () => {
                     console.log('Error data:', error.response.data);
                     console.log('Error status:', error.response.status);
                     console.log('Error headers:', error.response.headers);
-                    alert(`Error setting reserve  room: ${error.response.data.message || 'Unspecified error'}`);
+                    //alert(`Error setting reserve  room: ${error.response.data.message || 'Unspecified error'}`);
+                    toast.error('Error setting reserve (response)')
                 } else if (error.request) {
                     // The request was made but no response was received
                     console.log('Request error:', error.request);
-                    alert('Error setting reserve : No response received from the server');
+                    //alert('Error setting reserve : No response received from the server');
+                    toast.error('Error setting reserve (request)')
                 } else {
                     // Something happened in setting up the request that triggered an Error
                     console.log('Error message:', error.message);
-                    alert(`Error to do reserve: ${error.message}`);
+                    //alert(`Error to do reserve: ${error.message}`);
+                    toast.error('Error setting reserve')
                 }
             }
 

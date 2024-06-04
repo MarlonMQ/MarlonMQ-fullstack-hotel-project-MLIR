@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'react-toastify';
 
 
 const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
@@ -60,7 +61,10 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
           }
         });
         console.log('Room uploaded successfully:', response.data);
-        alert('Room uploaded successfully');
+        toast.success('Room uploaded successfully');
+        // alert('Room uploaded successfully');
+        // toast.error('Error deleting service'); toast.success('Service deleted successfully');
+
 
       } else {
         console.log("updating");
@@ -84,7 +88,9 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
           updateMode: 0
         });
         setImagePreview("");
-        alert('Room updated successfully');
+        // alert('Room updated successfully');
+        toast.success('Room updated successfully');
+        
       }
 
 
@@ -96,15 +102,23 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
         console.log('Error data:', error.response.data);
         console.log('Error status:', error.response.status);
         console.log('Error headers:', error.response.headers);
-        alert(`Error uploading room: ${error.response.data.message || 'Unspecified error'}`);
+        // alert(`Error uploading room: ${error.response.data.message || 'Unspecified error'}`);
+        toast.success('Error updating or uploading room');
+        
       } else if (error.request) {
         // The request was made but no response was received
         console.log('Request error:', error.request);
-        alert('Error uploading room: No response received from the server');
+        // alert('Error uploading room: No response received from the server');
+        toast.success('Error updating or uploading room');
+
+        
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error message:', error.message);
-        alert(`Error uploading room: ${error.message}`);
+        // alert(`Error uploading room: ${error.message}`);
+        toast.success('Error updating or uploading room');
+
+        
       }
     }  
     },

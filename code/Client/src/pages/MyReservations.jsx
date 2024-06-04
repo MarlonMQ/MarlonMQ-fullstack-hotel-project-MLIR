@@ -8,7 +8,6 @@ const getInfoAboutReservations = async (token, email) => {
     const response = await Axios.get(`/reservations/myreservations/${email}`);
     return response.data;
 }
-
 const MyReservations = () => {
     const email = window.localStorage.getItem('email').replace(/"/g, "");
     const [dataReservations, setDataReservations] = useState([]);
