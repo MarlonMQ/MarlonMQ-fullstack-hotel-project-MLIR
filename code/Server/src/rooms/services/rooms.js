@@ -52,13 +52,24 @@ class RoomsServices {
         return result.recordset;
     }
 
-    static async deleteRoom(imageUrl) {
+    static async deleteRoom(image_url) {
+        console.log("img url desde delete room services: ", image_url);
         const pool = await DbConnection.getInstance().getConnection();
+    
+        // Primero elimina los registros de 'reserve' que referencian la habitación
+        await pool.request()
+            .input('image_url', sql.VarChar(500), image_url)
+            .query('DELETE FROM reserve WHERE id_room IN (SELECT id_room FROM room WHERE image_url = @image_url)');
+    
+        // Luego elimina la habitación
         const result = await pool.request()
-            .query(`DELETE FROM room WHERE image_url = '${imageUrl}'`);
+            .input('image_url', sql.VarChar(500), image_url)
+            .query('DELETE FROM room WHERE image_url = @image_url');
+    
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
+    
 
 }
 

@@ -66,11 +66,12 @@ function FormCRUDRooms() {
     };
 
 
-    
+    //http://localhost:4000/uploads/1717468909093-335698951.jpg
     const deleteRoom = () => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         axios.delete(`http://localhost:4000/rooms/?url=${roomToDelete.image_url}`)
             .then(() => {
+                console.log("rooms desde form crud: ", rooms);
                 setRooms(rooms.filter(r => r.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
             })
