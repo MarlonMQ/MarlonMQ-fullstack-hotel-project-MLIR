@@ -8,11 +8,11 @@ export class ReservationsController {
 
     // Metodo para ingresar una reserva
     static async createReservation(req, res) {
-        console.log("create reserve controller llamado");
-        const { email, lastName, checkIn, checkOut } = req.body; // Asegúrate de que estos datos se envíen desde el cliente
+        const { id_room, email, lastName, checkIn, checkOut } = req.body; // Asegúrate de que estos datos se envíen desde el cliente
+        console.log("desde create controller: ", email, checkIn, checkOut, lastName, id_room);
 
         try {
-            await ReservesServices.createReservation(email, lastName, checkIn, checkOut);
+            await ReservesServices.createReservation(id_room, email, lastName, checkIn, checkOut);
             res.status(201).send({
                 message: 'Reservation created successfully.'
             })
@@ -42,6 +42,16 @@ export class ReservationsController {
         }
     }
 
+    static async getReservationByEmail(req, res) {
+        const email = req.params.email;
+        console.log("email en by email: ", email);
+        try {
+            const result = await ReservesServices.getReservationByEmail(email);
+            res.status(200).send(result);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
 
     // Método para actualizar una reserva existente
     static async deleteReservation(req, res) {

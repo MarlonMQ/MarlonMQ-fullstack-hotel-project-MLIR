@@ -46,8 +46,8 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<RoomsPage />} />
-          <Route path="/rooms/moreInfo/:id" element={<MoreInfoRoomPage/>} ></Route>
-          <Route path="/rooms/SelectDateReserve" element={<SelectDateReserve/>} ></Route>
+          <Route path="/rooms/moreInfo/:room_id" element={<MoreInfoRoomPage/>} ></Route>
+          <Route path="/rooms/SelectDateReserve/:room_id" element={<SelectDateReserve/>} ></Route>
           
           <Route path="/rooms/myreservations" element={<MyReservations/>} ></Route>
           {/* <Route path="/rooms/myreservations/:id" element={<MyReservations/>} ></Route> */}
