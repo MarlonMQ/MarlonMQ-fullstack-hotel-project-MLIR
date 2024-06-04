@@ -1,24 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FoamFacilities from './FoamFacilities';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import { toast } from 'react-toastify';
+import EditServiceForm from './EditServiceForm'; // Import the new component
 
 function AdminServicesPanel() {
     const [services, setServices] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
+    const [serviceToEdit, setServiceToEdit] = useState(null); // Para manejar la edición
 
     const { token } = useContext(AuthContext);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            fetchServices();
-        }, 2000); // Fetches every 60 seconds
-
-        // Cleanup the interval on component unmount
-        return () => clearInterval(interval);
+        fetchServices();
     }, []);
 
     const fetchServices = () => {
@@ -26,7 +23,7 @@ function AdminServicesPanel() {
         axios.get('http://localhost:4000/services/all')
             .then(response => {
                 setServices(response.data);
-
+                console.log("fetch datos", response.data)
             })
             .catch(error => {
                 toast.error('Error fetching services');
@@ -35,6 +32,7 @@ function AdminServicesPanel() {
     };
 
     const initiateDeleteService = (service) => {
+        console.log("service id al tocar ", service.id)
         setServiceToDelete(service);
         setShowConfirmation(true);
     };
@@ -51,6 +49,16 @@ function AdminServicesPanel() {
                 toast.error('Error deleting service');
                 console.error('Error deleting service', error);
             });
+    };
+
+    const initiateEditService = (service) => {
+        setServiceToEdit(service);
+        console.log("service id al tocar ", service.id_service)
+    };
+
+    const handleEditSave = () => {
+        setServiceToEdit();
+        fetchServices();
     };
 
     return (
@@ -76,7 +84,7 @@ function AdminServicesPanel() {
                 </thead>
                 <tbody>
                     {services.map(service => (
-                        <tr key={service.ServiceId}>
+                        <tr key={service.id_service}>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 {service.title}
                             </td>
@@ -88,8 +96,13 @@ function AdminServicesPanel() {
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <button
+                                    onClick={() => initiateEditService(service)}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-700">
+                                    Edit
+                                </button>
+                                <button
                                     onClick={() => initiateDeleteService(service)}
-                                    className="text-red-500 hover:text-red-700">
+                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
                                     Delete
                                 </button>
                             </td>
@@ -97,6 +110,16 @@ function AdminServicesPanel() {
                     ))}
                 </tbody>
             </table>
+
+            {serviceToEdit && (
+                <EditServiceForm
+                    service={serviceToEdit}
+                    onSave={handleEditSave}
+                    onCancel={() => setServiceToEdit(null)}
+                    token={token}
+                />
+            )}
+
             {showConfirmation && (
                 <DeleteConfirmation
                     show={showConfirmation}
