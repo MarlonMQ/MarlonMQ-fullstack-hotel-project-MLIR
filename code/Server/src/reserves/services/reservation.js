@@ -8,6 +8,7 @@ class ReservesServices {
     static async createReservation(id_room, email, lastName, checkIn, checkOut) {
         console.log("Desde reservation service: " , id_room, email, checkIn, checkOut);
         const pool = await DbConnection.getInstance().getConnection();
+
         let id_reserve = uuidv4();
         const result = await pool.request()
             .input('id_reserve', sql.UniqueIdentifier, id_reserve)
@@ -17,6 +18,13 @@ class ReservesServices {
             .input('fecha_inico', sql.Date, checkIn)
             .input('fecha_fin', sql.Date, checkOut)
             .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, id_room) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @id_room)');
+
+
+
+        await pool.request()
+        .input('id_room', sql.UniqueIdentifier, id_room)
+        .query('UPDATE room SET quantity_available = quantity_available - 1 WHERE id_room = @id_room;')
+        
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
