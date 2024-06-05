@@ -4,7 +4,7 @@ import { DeleteConfirmation } from '../utils/Alert.jsx';
 import moment from 'moment';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import { toast } from 'react-toastify';
-import EditReservationForm from './EditReservationForm.jsx'; // Import the new component
+import EditReservationForm from './EditReservationForm.jsx';
 
 function ReservationTable() {
   const [reservations, setReservations] = useState([]);
@@ -13,28 +13,28 @@ function ReservationTable() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reservationToDelete, setReservationToDelete] = useState(null);
   const [reservationToEdit, setReservationToEdit] = useState(null);
-  const [selectedReservation, setSelectedReservation] = useState(null); // Para manejar el menú de estado
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
   const { token } = useContext(AuthContext);
 
   const fetchReservations = () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     axios.get('http://localhost:4000/reservations')
-      .then(response => {
-        console.log('Reservations from server:', response.data); // Log for debugging
-        const formattedReservations = response.data.map(reservation => ({
-          ...reservation,
-          arrival_date: moment(reservation.arrival_date).format('YYYY-MM-DD'),
-          departure_date: moment(reservation.departure_date).format('YYYY-MM-DD')
-        }));
-        setReservations(formattedReservations);
-        setFilteredReservations(formattedReservations);
-      })
-      .catch(error => {
-        toast.error('Error fetching reservations');
-        console.error('Error fetching reservations:', error);
-      });
-  };
+        .then(response => {
+            const formattedReservations = response.data.map(reservation => ({
+                ...reservation,
+                arrival_date: moment(reservation.arrival_date).format('YYYY-MM-DD'),
+                departure_date: moment(reservation.departure_date).format('YYYY-MM-DD'),
+                room_type: reservation.room_type
+            }));
+            setReservations(formattedReservations);
+            setFilteredReservations(formattedReservations);
+        })
+        .catch(error => {
+            toast.error('Error fetching reservations');
+            console.error('Error fetching reservations:', error);
+        });
+};
 
   useEffect(() => {
     fetchReservations();
@@ -80,7 +80,6 @@ function ReservationTable() {
   };
 
   const handleEditSave = (updatedReservation) => {
-    console.log("Sending to backend: ", updatedReservation); // Log for debugging
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     axios.put(`http://localhost:4000/reservations/${updatedReservation.id_reserve}`, updatedReservation)
       .then(response => {
@@ -90,7 +89,6 @@ function ReservationTable() {
       })
       .catch(error => {
         toast.error('Error updating reservation');
-        console.error('Error updating reservation:', error);
       });
   };
 
@@ -103,7 +101,6 @@ function ReservationTable() {
       })
       .catch(error => {
         toast.error('Error updating reservation status');
-        console.error('Error updating reservation status:', error);
       });
   };
 
@@ -113,7 +110,7 @@ function ReservationTable() {
 
   return (
     <div className="mt-4 overflow-x-auto relative shadow-md sm:rounded-lg">
-      <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Reservation List</h2>
+      <h2 className="text-2xl font-semibold text-fourth text-center mb-8">Reservation List</h2>
       <div className="flex items-center mb-4">
         <input
           type="text"
@@ -124,12 +121,13 @@ function ReservationTable() {
         />
         <button onClick={fetchReservations} className="bg-fourth text-white px-4 py-2 rounded">Refresh</button>
       </div>
-      <table className="w-full text-sm text-left text-gray-500">
+      <table className="w-full secundary-text text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
             <th scope="col" className="py-3 px-6">Client Email</th>
             <th scope="col" className="py-3 px-6">Start Date</th>
             <th scope="col" className="py-3 px-6">End Date</th>
+            <th scope="col" className="py-3 px-6">Room Type</th>
             <th scope="col" className="py-3 px-6">Status</th>
             <th scope="col" className="py-3 px-6">Actions</th>
           </tr>
@@ -140,6 +138,7 @@ function ReservationTable() {
               <td className="py-4 px-6">{reservation.email}</td>
               <td className="py-4 px-6">{reservation.arrival_date}</td>
               <td className="py-4 px-6">{reservation.departure_date}</td>
+              <td className="py-4 px-6">{reservation.room_type}</td>
               <td className="py-4 px-6">
                 <span className={`px-2 py-1 rounded ${reservation.stat === 'Cancelled' ? 'bg-red-500 text-white' : reservation.stat === 'Paid' ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black'}`}>
                   {reservation.stat}
@@ -152,9 +151,9 @@ function ReservationTable() {
                 </button>
                 {selectedReservation === reservation.id_reserve && (
                   <div className="absolute bg-white shadow-md rounded mt-2">
-                    <button className="block px-4 py-2 text-sm text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Outstanding')}>Outstanding</button>
-                    <button className="block px-4 py-2 text-sm text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Paid')}>Paid</button>
-                    <button className="block px-4 py-2 text-sm text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Cancelled')}>Cancelled</button>
+                    <button className="block px-4 py-2 secundary-text text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Outstanding')}>Outstanding</button>
+                    <button className="block px-4 py-2 secundary-text text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Paid')}>Paid</button>
+                    <button className="block px-4 py-2 secundary-text text-black hover:bg-gray-200" onClick={() => handleStatusChange(reservation, 'Cancelled')}>Cancelled</button>
                   </div>
                 )}
               </td>

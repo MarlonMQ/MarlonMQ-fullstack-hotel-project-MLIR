@@ -1,4 +1,4 @@
-import  { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import ReservationTable from './ReservationTable';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
@@ -13,14 +13,30 @@ function ReservationForm() {
     email: '',
     checkIn: '',
     checkOut: '',
-    status: 'outstanding'
+    status: 'Outstanding',
+    id_room: '',
   });
   const [errors, setErrors] = useState({});
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      const response = await axios.get('http://localhost:4000/rooms');
+      setRooms(response.data);
+    } catch (error) {
+      toast.error('Error fetching rooms');
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -59,6 +75,11 @@ function ReservationForm() {
       formIsValid = false;
     }
 
+    if (!formData.id_room) {
+      errors.id_room = 'Room is required.';
+      formIsValid = false;
+    }
+
     setErrors(errors);
     return formIsValid;
   };
@@ -80,14 +101,13 @@ function ReservationForm() {
           email: '',
           checkIn: '',
           checkOut: '',
-          status: ''
+          status: 'Outstanding',
+          id_room: '',
         });
       } catch (error) {
-        console.error('Error sending reservation:', error);
         toast.error('Error creating reservation');
       }
     } else {
-      console.log('Form errors:', errors);
       toast.error('Please correct the errors in the form.');
     }
   };
@@ -95,10 +115,10 @@ function ReservationForm() {
   return (
     <div className=' px-12'>
       <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-        <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Make a Reservation</h2>
+        <h2 className="text-2xl font-semibold text-fourth text-center mb-6 mt-4">Make a Reservation</h2>
         <form onSubmit={handleSubmit} className="flex flex-wrap -mx-2">
           <div className="px-2 w-full sm:w-1/2">
-            <label className="block mb-2 text-sm font-medium text-gray-900">First Name</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">First Name</label>
             <input
               type="text"
               name="firstName"
@@ -110,7 +130,7 @@ function ReservationForm() {
             {errors.firstName && <p className="text-red-500 text-xs italic">{errors.firstName}</p>}
           </div>
           <div className="px-2 w-full sm:w-1/2">
-            <label className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">Last Name</label>
             <input
               type="text"
               name="lastName"
@@ -122,7 +142,7 @@ function ReservationForm() {
             {errors.lastName && <p className="text-red-500 text-xs italic">{errors.lastName}</p>}
           </div>
           <div className="px-2 w-full">
-            <label className="block mb-2 text-sm font-medium text-gray-900">Email</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">Email</label>
             <input
               type="email"
               name="email"
@@ -134,7 +154,7 @@ function ReservationForm() {
             {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
           </div>
           <div className="px-2 w-full sm:w-1/2">
-            <label className="block mb-2 text-sm font-medium text-gray-900">Check-in Date</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">Check-in Date</label>
             <input
               type="date"
               name="checkIn"
@@ -145,7 +165,7 @@ function ReservationForm() {
             {errors.checkIn && <p className="text-red-500 text-xs italic">{errors.checkIn}</p>}
           </div>
           <div className="px-2 w-full sm:w-1/2">
-            <label className="block mb-2 text-sm font-medium text-gray-900">Check-out Date</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900 ">Check-out Date</label>
             <input
               type="date"
               name="checkOut"
@@ -156,7 +176,23 @@ function ReservationForm() {
             {errors.checkOut && <p className="text-red-500 text-xs italic">{errors.checkOut}</p>}
           </div>
           <div className="px-2 w-full">
-            <label className="block mb-2 text-sm font-medium text-gray-900">Status</label>
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">Room type</label>
+            <select
+              name="id_room"
+              value={formData.id_room}
+              onChange={handleChange}
+              className={`block w-full p-3 border ${errors.id_room ? 'border-red-500' : 'border-gray-300'} rounded`}
+            >
+              {rooms.map((room) => (
+                <option key={room.id_room} value={room.id_room}>
+                  {room.room_type}
+                </option>
+              ))}
+            </select>
+            {errors.id_room && <p className="text-red-500 text-xs italic">{errors.id_room}</p>}
+          </div>
+          <div className="px-2 w-full">
+            <label className="block mb-4 mt-4 secondary-text font-medium text-gray-900">Status</label>
             <select
               name="status"
               value={formData.status}

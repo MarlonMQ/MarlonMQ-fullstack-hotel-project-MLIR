@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 class ReservesServices {
 
-    static async createReservation(email, lastName, checkIn, checkOut, stat) {
+    static async createReservation(email, lastName, checkIn, checkOut, stat, id_room) {
         const pool = await DbConnection.getInstance().getConnection();
         let id_reserve = uuidv4();
         const result = await pool.request()
@@ -15,17 +15,34 @@ class ReservesServices {
             .input('fecha_inico', sql.Date, checkIn)
             .input('fecha_fin', sql.Date, checkOut)
             .input('stat', sql.VarChar(), stat)
-            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat)');
+            .input('id_room', sql.UniqueIdentifier, id_room)
+            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room)');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
 
     static async getReservations() {
         const pool = await DbConnection.getInstance().getConnection();
-        const result = await pool.request().query('SELECT id_reserve, email, last_name, arrival_date, departure_date, stat FROM reserve');
-        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
-        return result.recordset;
+        try {
+            const result = await pool.request().query(`
+                SELECT 
+                    r.id_reserve, 
+                    r.email, 
+                    r.last_name, 
+                    r.arrival_date, 
+                    r.departure_date, 
+                    r.stat, 
+                    rm.room_type
+                FROM reserve r
+                JOIN room rm ON r.id_room = rm.id_room
+            `);
+            await DbConnection.getInstance().closeConnection();
+            return result.recordset;
+        } catch (error) {
+            throw error; // Rethrow the error to be caught in the controller
+        }
     }
+    
 
     static async getReservationById(id) {
         const pool = await DbConnection.getInstance().getConnection();
@@ -56,7 +73,6 @@ class ReservesServices {
         return result;
     }
         static async updateReservationStatus(id, status) {
-            console.log("Estado que llega al backend", id, status);
             const pool = await DbConnection.getInstance().getConnection();
             const result = await pool.request()
             .input('id_reserve', sql.UniqueIdentifier, id)
