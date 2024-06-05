@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
-import PopUp  from '../components/PopUp';
 
 function SignUpPage() {
   const [view, setview] = useState(0); // State to control the visibility of the first FormBox
