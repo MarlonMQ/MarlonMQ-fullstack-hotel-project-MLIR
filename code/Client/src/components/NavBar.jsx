@@ -9,8 +9,7 @@ import { AuthContext } from './loginComponents/AuthContext.jsx';
 const navigation = [
   { name: 'Home', href: '/', current: window.location.pathname === '/' },
   { name: 'Facilities', href: '/facilities', current: window.location.pathname === '/facilities' },
-  { name: 'Rooms', href: '/rooms', current: window.location.pathname === '/rooms' },
-  { name: 'My Reservations', href: '/rooms/myreservations', current: window.location.pathname === '/rooms/myreservations' },
+  { name: 'Rooms', href: '/rooms', current: window.location.pathname === '/rooms' }
 ]
 
 function classNames(...classes) {
@@ -88,7 +87,19 @@ function NavBar() {
                       >
                         Dashboard
                       </a>
-                    )} 
+                    )}
+
+                    {token !== null && (
+                      <Link
+                        to="/rooms/myreservations"
+                        className={classNames(
+                          'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium',
+                        )}
+                      >
+                        My Reservations
+                      </Link>
+                    )}
                   </div>
 
                 </div>

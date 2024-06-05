@@ -36,12 +36,14 @@ class SignupController {
             // Enviar correo de confirmación
             await SignupServices.sendSignupEmail(email, name);
 
-            res.status(201).send({
+            res.status(201);
+            res.send({
               message: 'User registered successfully'
             });
           } catch (emailError) {
             console.error('Failed to send email:', emailError);
-            res.status(500).send({
+            res.status(500);
+            res.send({
               message: 'User registered but failed to send confirmation email'
             });
           }

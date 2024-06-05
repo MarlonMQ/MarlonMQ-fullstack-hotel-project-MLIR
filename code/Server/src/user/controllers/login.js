@@ -7,13 +7,15 @@ class LoginController {
       const user = await LoginServices.login(email, password);
       if (!user) {
 
-        res.status(401).send('Invalid email or password');
+        res.status(404);
+        res.send('Invalid email or password');
         
       } else {
         const rol = await LoginServices.getRol(email);
         const accessToken = await LoginServices.generateAccessToken(user);
 
-        res.status(200).send({
+        res.status(200);
+        res.send({
             message: 'Login successful',
             rol: rol,
             token: accessToken
@@ -21,7 +23,8 @@ class LoginController {
         
       }
     } catch (error) {
-      res.status(500).send(error.message);
+      res.status(500);
+      res.send(error.message);
     }
   }
 }
