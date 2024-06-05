@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import Axios from '../../services/Axios';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -9,29 +9,27 @@ import AccountCountryRegionSelector from './AccountCountryRegionSelector.jsx';
 import RoleSelector from './AccountRolSelector.jsx';
 
 function AccountForm() {
+  const [country, setCountry] = useState('');
+  const [region, setRegion] = useState('');
+
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
-      confirmPassword: '',
       name: '',
       lastName: '',
       birthDate: '',
       phone: '',
       country: '',
       region: '',
-      address: '',
       rol: '',
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Invalid email').required('Required field'),
-      password: Yup.string().required('Required field'),
-      confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required field'),
       name: Yup.string().required('Required field'),
       lastName: Yup.string().required('Required field'),
       birthDate: Yup.date()
       .required('Required field')
-      .test('is-of-age', 'You must be at least 18 years old', function(value) {
+      .test('is-of-age', 'The user must be at least 18 years old', function(value) {
         const today = new Date();
         const birthDate = new Date(value);
         const age = today.getFullYear() - birthDate.getFullYear();
@@ -44,19 +42,20 @@ function AccountForm() {
       phone: Yup.string().required('Required field'),
       country: Yup.string().required('Required field'),
       region: Yup.string().required('Required field'),
-      address: Yup.string().required('Required field'),
       rol: Yup.string().required('Required field'),
     }),
-    onSubmit: async (values, { setErrors }) => {
+    onSubmit: async (values, { setErrors, resetForm }) => {
       // Logic to submit the form
+      console.log(values);
       try {
-        const response = await Axios.post('/signup', values);
+        const response = await Axios.post('/accounts', values);
         if (response.status === 201) {
           console.log('Account created successfully');
+          resetForm();
+          toast.success('Account created successfully');
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          setview(0); // Show the first FormBox if there is an error (wrong email or password)
           setErrors({ email: 'The email is already registered' });
         } else {
           console.error(error);
@@ -65,6 +64,10 @@ function AccountForm() {
       return 0;
     },
   });
+
+  const handleButtonClick = () => {
+    formik.handleSubmit();
+  };
 
   const selectCountry = (val) => {
     formik.handleChange('country')(val);
@@ -82,7 +85,7 @@ function AccountForm() {
     <div className=' px-12'>
         <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
           <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Create an Account</h2>
-          <form onSubmit className="flex flex-wrap -mx-2">
+          <form className="flex flex-wrap -mx-2">
                 <div className="px-2 w-full sm:w-1/2">
                     <AccountFormBox 
                         title="Name"
@@ -161,7 +164,7 @@ function AccountForm() {
                     />
                 </div>
                 <div className="px-2 w-full">
-                    <button type="submit" className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+                    <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
                         Create Account
                     </button>
                 </div>
