@@ -33,6 +33,18 @@ class ServiceServices {
         return result;
     }
 
+    static async updateService(id, title, imageUrl) {
+        console.log("datos", id, title, imageUrl);
+        const pool = await DbConnection.getInstance().getConnection();
+        const result = await pool.request()
+            .input('id_service', sql.UniqueIdentifier, id)
+            .input('title', sql.NVarChar(255), title)
+            .input('imageUrl', sql.NVarChar(500), imageUrl)
+            .query('UPDATE service SET title = @title, imageUrl = @imageUrl WHERE id_service = @id_service');
+        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+        return result;
+    }
+
 
 }
 
