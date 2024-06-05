@@ -5,6 +5,7 @@ import path from 'path';
 import LoginRoutes from './user/routes/login.js';
 import SignUpRoutes from './user/routes/signUp.js';
 import reservationRoutes from './reserves/routes/reservation.js';
+import AccountsRoutes from './accounts/routes/accounts.js';
 
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './rooms/routes/rooms.js';
@@ -38,7 +39,7 @@ app.use('/rooms', RoomsRoutes);
 app.use('/login', LoginRoutes);
 app.use('/signup', SignUpRoutes);
 app.use('/reservations', reservationRoutes);
-
+app.use('/accounts', AccountsRoutes);
 
 // Start server
 const PORT = process.env.PORT || 4000;

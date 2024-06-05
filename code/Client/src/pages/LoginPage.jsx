@@ -26,6 +26,9 @@ function LoginPage()  {
       try {
         const response = await Axios.post('/login', values);
         if (response.status === 200) {
+          //! cambio
+          window.localStorage.setItem('email', JSON.stringify(values.email));
+
           const token = response.data.token;
           const rol = response.data.rol;
           login(token,rol);

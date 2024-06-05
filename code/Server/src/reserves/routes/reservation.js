@@ -15,13 +15,27 @@ class ReservationRoutes {
             ReservationsController.createReservation(req, res);
 
         });
+
         this.router.get('/',checkToken,  (req, res) => {
             ReservationsController.getReservations(req, res);
+        });
+        this.router.get('/myreservations/:email', checkToken,  (req, res) => {
+            ReservationsController.getReservationByEmail(req, res);
         });
 
         this.router.delete('/:id',checkToken,  (req, res) => {
             ReservationsController.deleteReservation(req, res);
         });
+
+        this.router.put('/:id',checkToken,  (req, res) => {
+            ReservationsController.updateReservation(req, res);
+        });
+        this.router.put('/:id/changestatus',checkToken,  (req, res) => {
+            ReservationsController.updateReservationStatus(req, res);
+        });
+
+
+
 
     }
 

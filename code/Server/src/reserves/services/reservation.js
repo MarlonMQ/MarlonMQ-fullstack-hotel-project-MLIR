@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 class ReservesServices {
 
-    static async createReservation(email, lastName, checkIn, checkOut) {
+    static async createReservation(email, lastName, checkIn, checkOut, stat, id_room) {
         const pool = await DbConnection.getInstance().getConnection();
+
         let id_reserve = uuidv4();
         const result = await pool.request()
             .input('id_reserve', sql.UniqueIdentifier, id_reserve)
@@ -14,17 +15,35 @@ class ReservesServices {
             .input('apellido', sql.VarChar(), lastName)
             .input('fecha_inico', sql.Date, checkIn)
             .input('fecha_fin', sql.Date, checkOut)
-            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin)');
+            .input('stat', sql.VarChar(), stat)
+            .input('id_room', sql.UniqueIdentifier, id_room)
+            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room)');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset;
     }
 
     static async getReservations() {
         const pool = await DbConnection.getInstance().getConnection();
-        const result = await pool.request().query('SELECT id_reserve, email, last_name, arrival_date, departure_date FROM reserve');
-        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
-        return result.recordset;
+        try {
+            const result = await pool.request().query(`
+                SELECT 
+                    r.id_reserve, 
+                    r.email, 
+                    r.last_name, 
+                    r.arrival_date, 
+                    r.departure_date, 
+                    r.stat, 
+                    rm.room_type
+                FROM reserve r
+                JOIN room rm ON r.id_room = rm.id_room
+            `);
+            await DbConnection.getInstance().closeConnection();
+            return result.recordset;
+        } catch (error) {
+            throw error; // Rethrow the error to be caught in the controller
+        }
     }
+    
 
     static async getReservationById(id) {
         const pool = await DbConnection.getInstance().getConnection();
@@ -32,7 +51,22 @@ class ReservesServices {
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset[0];
     }
-
+    static async getReservationByEmail(email) {
+        console.log("email en reserves services ", "-", email.trim(), "-");
+        const pool = await DbConnection.getInstance().getConnection();
+        const result = await pool.request()
+        .input("email", sql.VarChar, email)
+        .query(`
+            SELECT id_reserve, email, arrival_date, departure_date, room_type, image_url
+            FROM reserve Res
+            LEFT JOIN room Roo
+            ON Res.id_room = Roo.id_room
+            WHERE Res.email = @email`
+        );
+        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+        console.log("recordset: ", result.recordset);
+        return result.recordset;
+    }
     static async deleteReservation(id) {
         const pool = await DbConnection.getInstance().getConnection();
         const result = await pool.request()
@@ -41,6 +75,28 @@ class ReservesServices {
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result;
     }
+
+    static async updateReservation(id, email, lastName, checkIn, checkOut) {
+        const pool = await DbConnection.getInstance().getConnection();
+        const result = await pool.request()
+            .input('id_reserve', sql.UniqueIdentifier, id)
+            .input('Email', sql.VarChar(), email)
+            .input('apellido', sql.VarChar(), lastName)
+            .input('fecha_inico', sql.Date, checkIn)
+            .input('fecha_fin', sql.Date, checkOut)
+            .query('UPDATE reserve SET email = @Email, last_name = @apellido, arrival_date = @fecha_inico, departure_date = @fecha_fin WHERE id_reserve = @id_reserve');
+        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+        return result;
+    }
+        static async updateReservationStatus(id, status) {
+            const pool = await DbConnection.getInstance().getConnection();
+            const result = await pool.request()
+            .input('id_reserve', sql.UniqueIdentifier, id)
+            .input('stat', sql.VarChar(), status)
+            .query('UPDATE reserve SET stat = @stat WHERE id_reserve = @id_reserve');
+            await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+            return result;
+        }
 
     
     
