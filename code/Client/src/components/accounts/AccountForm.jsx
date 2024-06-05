@@ -57,8 +57,10 @@ function AccountForm() {
       } catch (error) {
         if (error.response && error.response.status === 400) {
           setErrors({ email: 'The email is already registered' });
+          toast.error('The email is already registered');
         } else {
           console.error(error);
+          toast.error('An error occurred. Please try again later');
         }
       }
       return 0;
