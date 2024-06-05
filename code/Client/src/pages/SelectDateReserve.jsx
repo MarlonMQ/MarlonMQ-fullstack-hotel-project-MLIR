@@ -43,7 +43,8 @@ export const SelectDateReserve = () => {
                 lastName: 'default',
                 checkIn: values.checkIn,
                 checkOut: values.checkOut,
-                id_room: values.id_room
+                id_room: values.id_room,
+                status: "Outstanding"
             };
 
             try {

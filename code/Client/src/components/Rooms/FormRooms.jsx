@@ -103,20 +103,20 @@ const FormRooms = ({valuesForm, setValuesToRoomForm}) => {
         console.log('Error status:', error.response.status);
         console.log('Error headers:', error.response.headers);
         // alert(`Error uploading room: ${error.response.data.message || 'Unspecified error'}`);
-        toast.success('Error updating or uploading room');
+        toast.error('Error updating or uploading room');
         
       } else if (error.request) {
         // The request was made but no response was received
         console.log('Request error:', error.request);
         // alert('Error uploading room: No response received from the server');
-        toast.success('Error updating or uploading room');
+        toast.error('Error updating or uploading room');
 
         
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error message:', error.message);
         // alert(`Error uploading room: ${error.message}`);
-        toast.success('Error updating or uploading room');
+        toast.error('Error updating or uploading room');
 
         
       }

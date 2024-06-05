@@ -9,7 +9,7 @@ export class ReservationsController {
     // Metodo para ingresar una reserva
     static async createReservation(req, res) {
         const { email, lastName, checkIn, checkOut, status, id_room  } = req.body;
-
+        console.log("Create reservation controller: ", email, lastName, checkIn, checkOut, status, id_room);
         try {
             await ReservesServices.createReservation(email, lastName, checkIn, checkOut, status, id_room);
             res.status(201).send({

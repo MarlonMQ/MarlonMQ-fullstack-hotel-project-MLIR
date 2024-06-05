@@ -3,6 +3,7 @@ import axios from 'axios';
 import { DeleteConfirmation } from '../utils/Alert.jsx';
 import FormRooms from "./FormRooms";
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
+import { toast } from "react-toastify";
 
 function FormCRUDRooms() {
 
@@ -74,9 +75,12 @@ function FormCRUDRooms() {
                 console.log("rooms desde form crud: ", rooms);
                 setRooms(rooms.filter(r => r.id_room !== roomToDelete.id_room));
                 setShowConfirmation(false);
+                toast.success("Delete room succesfully");
             })
             .catch(error => {
                 console.error('Error deleting room', error);
+                toast.error("Error deleting room");
+
             });
     };
 
