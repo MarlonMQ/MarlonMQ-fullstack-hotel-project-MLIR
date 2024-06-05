@@ -55,7 +55,10 @@ class SignupServices {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Account Created Successfully',
-      text: `Hello ${name}, your account has been created successfully!`
+      text: `Hello ${name}, your account has been created successfully!
+      
+      Best regards,
+      Hazbin Hotel Team`
     };
 
     return transporter.sendMail(mailOptions);

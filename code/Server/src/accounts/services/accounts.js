@@ -63,7 +63,7 @@ class AccountsServices {
       Password: ${password}
 
       Best regards,
-      Your Company Name`
+      Hazbin Hotel Team`
     };
 
     
