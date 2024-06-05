@@ -29,7 +29,6 @@
       font-family: 'Roboto', serif;
     }
     .secondary-text {  
-      @apply italic;
       @apply tracking-wider;
       font-family: 'Roboto', serif;
     }

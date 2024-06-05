@@ -45,8 +45,6 @@ const EditReservationForm = ({ reservation, onSave, onCancel }) => {
       checkIn: editedStartDate,
       checkOut: editedEndDate,
     };
-
-    console.log("Updated Reservation: ", updatedReservation); // Log for debugging
     onSave(updatedReservation);
   };
 
