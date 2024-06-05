@@ -15,8 +15,12 @@ class ReservationRoutes {
             ReservationsController.createReservation(req, res);
 
         });
+
         this.router.get('/',checkToken,  (req, res) => {
             ReservationsController.getReservations(req, res);
+        });
+        this.router.get('/myreservations/:email', checkToken,  (req, res) => {
+            ReservationsController.getReservationByEmail(req, res);
         });
 
         this.router.delete('/:id',checkToken,  (req, res) => {

@@ -31,8 +31,7 @@ function ReservationTable() {
             setFilteredReservations(formattedReservations);
         })
         .catch(error => {
-            toast.error('Error fetching reservations');
-            console.error('Error fetching reservations:', error);
+            // toast.error('Error fetching reservations');
         });
 };
 
