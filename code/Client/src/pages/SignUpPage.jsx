@@ -95,14 +95,6 @@ function SignUpPage() {
 
   return (
     <div className="flex flex-col sm:flex-row h-screen">
-      {/* <PopUp
-        information="Are you sure you want to delete the account?"
-        firstButtonText="Cancel"
-        secondButtonText='Delete'
-        ButtonColor={'bg-red-800'}
-        ButtonHover={'bg-red-400'}
-
-      /> */}
       <div className="w-full mb-20 sm:w-1/2 bg-white p-8 flex flex-col justify-center items-center">
         <div className="text-center">
           <h1 className='primary-title text-black px-12 py-12'>HAZBIN HOTEL</h1>
