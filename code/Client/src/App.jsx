@@ -16,6 +16,9 @@ import Facilities from './pages/Facilities';
 import RoomsPage from './pages/RoomsPage';
 import DashboardLayout from './LayOut/DashboardLayout.jsx';
 import ProtectedRoute from './components/loginComponents/ProtectedRoute.jsx';
+import MoreInfoRoomPage from './pages/MoreInfoRoomPage.jsx';
+import MyReservations from './pages/MyReservations.jsx';
+import SelectDateReserve from './pages/SelectDateReserve.jsx';
 
 function App() {
   const images = {
@@ -43,6 +46,11 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/rooms/moreInfo/:room_id" element={<MoreInfoRoomPage/>} ></Route>
+          <Route path="/rooms/SelectDateReserve/:room_id" element={<SelectDateReserve/>} ></Route>
+          
+          <Route path="/rooms/myreservations" element={<MyReservations/>} ></Route>
+          {/* <Route path="/rooms/myreservations/:id" element={<MyReservations/>} ></Route> */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardLayout />} />
           </Route>

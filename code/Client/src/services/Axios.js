@@ -16,6 +16,7 @@ class AxiosService {
   }
 
   get(url, params) {
+    console.log("get axios");
     return this.instance.get(url, { params });
   }
 
