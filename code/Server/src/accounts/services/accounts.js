@@ -2,8 +2,9 @@ import DbConnection from "../../config/dbconnection.js";
 import sql from "mssql"; // Asegúrate de importar el módulo sql
 import CryptoJS from 'crypto-js';
 import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
-class SignupServices {
+class AccountsServices {
   
   static async signup(email, name, lastName, phone_number, birth_date, rol) {
     const pool = await DbConnection.getInstance().getConnection();
@@ -42,7 +43,7 @@ class SignupServices {
     return cipherText;
   }
 
-  static async sendSignupEmail(email, name) {
+  static async sendSignupEmail(email, name, password) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -57,12 +58,22 @@ class SignupServices {
       subject: 'Account Created Successfully',
       text: `Hello ${name}, your account has been created successfully!
       
+      Here are your login details:
+      Email: ${email}
+      Password: ${password}
+
       Best regards,
       Hazbin Hotel Team`
     };
 
+    
+
     return transporter.sendMail(mailOptions);
+  }
+
+  static async generatePassword(length = 12) {
+    return crypto.randomBytes(length).toString('base64').slice(0, length);
   }
 }
 
-export default SignupServices;
+export default AccountsServices;

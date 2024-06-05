@@ -1,31 +1,29 @@
-import SignupServices from "../services/signUp.js";
+import AccountsServices from "../services/accounts.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-class SignupController {
-  static async signup(req, res) {
+class AccountsController {
+  static async createAccount(req, res) {
     try {
-      const { email, password, name, lastName, phone, birthDate, rol } = req.body;
+      const { email, name, lastName, phone, birthDate, rol } = req.body;
 
-      const user = await SignupServices.findUser(email);
-
+      const user = await AccountsServices.findUser(email);
       if (user.length > 0) {
         res.status(400).send({
           message: 'User already exists'
         });
-
       } else {
-        const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
+        const result = await AccountsServices.signup(email, name, lastName, phone, birthDate, rol);
 
         if (result === undefined) {
-          const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);
-          await SignupServices.signupPassword(email, encryptedPassword);
-
+          const password = await AccountsServices.generatePassword();
+          const encryptedPassword = await AccountsServices.encrypt(password, process.env.SECRET_KEY);
+          await AccountsServices.signupPassword(email, encryptedPassword);
           // Enviar correo de confirmación
           try {
             // Enviar correo de confirmación
-            await SignupServices.sendSignupEmail(email, name);
+            await AccountsServices.sendSignupEmail(email, name, password);
 
             res.status(201).send({
               message: 'User registered successfully'
@@ -44,4 +42,4 @@ class SignupController {
   }
 }
 
-export default SignupController;
+export default AccountsController;
