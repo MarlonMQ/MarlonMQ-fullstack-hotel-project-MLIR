@@ -45,7 +45,7 @@ function LoginPage()  {
           navigate('/'); // Navega a la página principal
         }
       } catch (error) {
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 404) {
           setErrors({ password: 'Incorrect email or password.' });
         } else {
           console.error(error);

@@ -10,12 +10,21 @@ class SignupController {
 
       const user = await SignupServices.findUser(email);
 
-      if (user.length > 0) {
-        res.status(400).send({
+      if (user !== undefined) {
+        res.status(400);
+        res.send({
           message: 'User already exists'
         });
 
       } else {
+
+        if (!email || !password || !name || !lastName || !phone || !birthDate || !rol) {
+          res.status(400);
+          res.send({
+            message: 'User fields are empty'
+          });
+        }
+
         const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
 
         if (result === undefined) {
@@ -36,7 +45,8 @@ class SignupController {
         }
       }
     } catch (error) {
-      res.status(500).send(error.message);
+      res.status(500);
+      res.send(error.message);
     }
   }
 }
