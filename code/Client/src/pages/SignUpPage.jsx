@@ -5,8 +5,11 @@ import * as Yup from 'yup';
 import CountryRegionSelector from '../components/registerComponents/CountryRegionSelector';
 import GrayBox from '../components/registerComponents/GrayBox';
 import FormBox from '../components/registerComponents/FormBox';
+import { useNavigate } from 'react-router-dom';
 
 function SignUpPage() {
+  const navigate = useNavigate();
+
   const [view, setview] = useState(0); // State to control the visibility of the first FormBox
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
@@ -27,32 +30,62 @@ function SignUpPage() {
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Invalid email').required('Required field'),
-      password: Yup.string().required('Required field'),
+      password: Yup.string()
+        .min(5, 'Password must be at least 5 characters')
+        .max(20, 'Password cannot be longer than 20 characters')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[0-9]/, 'Password must contain at least one number')
+        .required('Required field'),
+      
       confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required field'),
-      name: Yup.string().required('Required field'),
-      lastName: Yup.string().required('Required field'),
+      
+      name: Yup.string()
+        .matches(/^[a-zA-Z]+$/, 'Invalid name')
+        .min(2, 'Invalid name')
+        .max(50, 'Invalid name')
+        .required('Required field'),
+      
+      lastName: Yup.string()
+        .matches(/^[a-zA-Z]+$/, 'Invalid Last Name')
+        .min(2, 'Invalid Last Name')
+        .max(50, 'Invalid Last Name')
+        .required('Required field'),
+      
       birthDate: Yup.date()
-      .required('Required field')
-      .test('is-of-age', 'You must be at least 18 years old', function(value) {
-        const today = new Date();
-        const birthDate = new Date(value);
-        const age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-          return age > 18;
-        }
-        return age >= 18;
-      }),
-      phone: Yup.string().required('Required field'),
+        .required('Required field')
+        .test('is-of-age', 'You must be at least 18 years old', function(value) {
+          const today = new Date();
+          const birthDate = new Date(value);
+          const age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            return age > 18;
+          }
+          return age >= 18;
+        }),
+      
+      phone: Yup.string()
+        .matches(/^[0-9]+$/, 'Phone number can only contain numbers')
+        .max(15, 'Phone number cannot be longer than 15 digits')
+        .required('Required field'),
+      
       country: Yup.string().required('Required field'),
+      
       region: Yup.string().required('Required field'),
-      address: Yup.string().required('Required field'),
+      
+      address: Yup.string()
+        .min(10, 'Address must be at least 10 characters')
+        .max(100, 'Address cannot be longer than 100 characters')
+        .required('Required field'),
     }),
+
     onSubmit: async (values, { setErrors }) => {
       // Logic to submit the form
       try {
         const response = await Axios.post('/signup', values);
         if (response.status === 201) {
+          window.localStorage.setItem('accountCreated', 'true');
           window.location.href = '/login';
         }
       } catch (error) {
@@ -102,7 +135,7 @@ function SignUpPage() {
         <GrayBox
           title="Sign Up"
           buttonText="Continue"
-          hrefLink="/SignIn"
+          hrefLink="/login"
           hrefText="Already have an account? Sign in"
           onButtonClick={handleButtonClick}
         >
@@ -117,6 +150,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.email && formik.errors.email}
+                tabIndex={1}
               />
               <FormBox
                 title="Password"
@@ -126,6 +160,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.password && formik.errors.password}
+                tabIndex={2}
               />
               <FormBox
                 title="Confirm Password"
@@ -135,6 +170,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                tabIndex={3}
               />
             </>
           )}
@@ -148,6 +184,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.name && formik.errors.name}
+                tabIndex={4}
               />
               <FormBox
                 title="Last Name"
@@ -157,6 +194,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.lastName && formik.errors.lastName}
+                tabIndex={5}
               />
               <FormBox
                 title="Birth Date"
@@ -166,6 +204,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.birthDate && formik.errors.birthDate}
+                tabIndex={6}
               />
               <FormBox
                 title="Phone"
@@ -175,6 +214,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.phone && formik.errors.phone}
+                tabIndex={7}
               />
             </>
           )}
@@ -187,6 +227,8 @@ function SignUpPage() {
                 selectRegion={selectRegion}
                 countryError={formik.touched.country && formik.errors.country}
                 regionError={formik.touched.region && formik.errors.region}
+                tabIndexCountry={8}
+                tabIndexRegion={9}
               />
               <FormBox
                 title="Address"
@@ -196,6 +238,7 @@ function SignUpPage() {
                 change={formik.handleChange}
                 blur={formik.handleBlur}
                 error={formik.touched.address && formik.errors.address}
+                tabIndex={10}
               />
             </>
           )}

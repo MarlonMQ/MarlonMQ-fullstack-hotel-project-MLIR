@@ -1,7 +1,7 @@
 import React from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
-const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, countryError, regionError }) => {
+const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, countryError, regionError, tabIndexCountry, tabIndexRegion }) => {
   return (
     <>
     <div className=" relative w-full mb-5 group">
@@ -10,6 +10,7 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
         value={country}
         onChange={selectCountry}
         defaultOptionLabel = "Select a country" 
+        tabIndexCountry={tabIndexCountry}
         />    
         {countryError && <p className="text-red-500 text-xs pt-2">{countryError}</p>}
     </div>
@@ -19,7 +20,9 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
         country={country}
         value={region}
         blankOptionLabel = "Select a region"
-        onChange={selectRegion} />
+        onChange={selectRegion}
+        tabIndexRegion={tabIndexRegion}
+        />
         {regionError && <p className="text-red-500 text-xs pt-2">{regionError}</p>}
     </div>
     </>

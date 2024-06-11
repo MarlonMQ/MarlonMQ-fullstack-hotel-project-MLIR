@@ -1,7 +1,7 @@
 import React from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
-const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRegion, countryError, regionError }) => {
+const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRegion, countryError, regionError, tabIndexCountry, tabIndexRegion }) => {
   return (
     <div className="flex flex-wrap">
       <div className="block mb-2 w-1/2 pr-2">
@@ -11,6 +11,7 @@ const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRe
         value={country}
         onChange={selectCountry}
         defaultOptionLabel = "Select a country" 
+        tabIndex={tabIndexCountry}
         />    
         {countryError && <p className="text-red-500 text-xs italic">{countryError}</p>}
       </div>
@@ -21,8 +22,11 @@ const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRe
           country={country}
           value={region}
           blankOptionLabel = "Select a region"
-          onChange={selectRegion} />
+          onChange={selectRegion} 
+          tabIndex={tabIndexRegion}
+          />
           {regionError && <p className="text-red-500 text-xs italic">{regionError}</p>}
+
       </div>
     </div>
   );

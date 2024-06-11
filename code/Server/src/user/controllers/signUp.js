@@ -22,16 +22,13 @@ class SignupController {
           const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);
           await SignupServices.signupPassword(email, encryptedPassword);
 
-          // Enviar correo de confirmación
-          try {
-            // Enviar correo de confirmación
-            await SignupServices.sendSignupEmail(email, name);
+          res.status(201).send({
+            message: 'User registered successfully'
+          });
 
-            res.status(201).send({
-              message: 'User registered successfully'
-            });
+          try {      
+            await SignupServices.sendSignupEmail(email, name);
           } catch (emailError) {
-            console.error('Failed to send email:', emailError);
             res.status(500).send({
               message: 'User registered but failed to send confirmation email'
             });

@@ -1,17 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
 import GrayBox from '../components/registerComponents/GrayBox.jsx';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 import Axios from '../services/Axios.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function LoginPage()  {
-
+  const location = useLocation();
   const { login } = useContext(AuthContext); // Get the login function from the authentication context
   const navigate = useNavigate();
+
+  // Mostrar el toast si la cuenta fue creada
+  useEffect(() => {
+    const accountCreated = window.localStorage.getItem('accountCreated');
+    if (accountCreated === 'true') {
+      toast.success('Cuenta creada con éxito');
+      window.localStorage.removeItem('accountCreated');
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: {
