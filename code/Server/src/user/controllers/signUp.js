@@ -10,14 +10,12 @@ class SignupController {
 
       const user = await SignupServices.findUser(email);
 
-      if (user !== undefined) {
+      if (user.length > 0) {
         res.status(400);
         res.send({
           message: 'User already exists'
         });
-
       } else {
-
         if (!email || !password || !name || !lastName || !phone || !birthDate || !rol) {
           res.status(400);
           res.send({
@@ -46,7 +44,6 @@ class SignupController {
       }
     } catch (error) {
       res.status(500);
-      res.send(error.message);
     }
   }
 }

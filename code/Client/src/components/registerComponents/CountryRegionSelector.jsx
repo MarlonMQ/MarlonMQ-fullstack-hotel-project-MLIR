@@ -10,7 +10,7 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
         value={country}
         onChange={selectCountry}
         defaultOptionLabel = "Select a country" 
-        tabIndexCountry={tabIndexCountry}
+        tabIndex={tabIndexCountry}
         />    
         {countryError && <p className="text-red-500 text-xs pt-2">{countryError}</p>}
     </div>
@@ -21,7 +21,7 @@ const CountryRegionSelector = ({ country, selectCountry, region, selectRegion, c
         value={region}
         blankOptionLabel = "Select a region"
         onChange={selectRegion}
-        tabIndexRegion={tabIndexRegion}
+        tabIndex={tabIndexRegion}
         />
         {regionError && <p className="text-red-500 text-xs pt-2">{regionError}</p>}
     </div>
