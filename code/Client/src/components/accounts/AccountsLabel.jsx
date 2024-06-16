@@ -1,12 +1,34 @@
-import React from 'react';
-import AccountForm from './AccountForm.jsx';
-import AccountTable from './AccountTable.jsx';
+import React, { useState } from 'react';
+import AccountForm from './AccountForm';
+import AccountTable from './AccountTable';
 
 function AccountsLabel() {
-  return (
+  const [user, setUser] = useState(null);
+  const [updatemode, setUpdatemode] = useState(false);
 
-      <AccountForm />
-      
+  const handleUserAddedOrUpdated = () => {
+    setUser(null);
+    setUpdatemode(false);
+  };
+
+  const handleUserUpdated = (updatedUser) => {
+    setUser(updatedUser);
+    setUpdatemode(true);
+  };
+
+  return (
+    <div className='bg-white shadow-lg rounded-lg p-4 border mx-auto space-y-5'> 
+      <AccountForm 
+        user={user} 
+        updatemode={updatemode} 
+        setUpdatemode={setUpdatemode} 
+        onUserAddedOrUpdated={handleUserAddedOrUpdated}
+      />
+      <AccountTable 
+        onUserUpdated={handleUserUpdated}
+        onUserDeleted={handleUserAddedOrUpdated}
+      />
+    </div>
   );
 }
 

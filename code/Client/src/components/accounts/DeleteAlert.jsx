@@ -1,17 +1,6 @@
-export const alertClass = (type) => {
-  switch (type) {
-    case 'success':
-    return 'bg-green-100 border-green-400 text-green-700 px-4 py-2 rounded-md text-center py-4 mb-4';
-    case 'error':
-    return 'bg-red-100 border-red-400 text-red-700 px-4 py-2 rounded-md text-center';
-    default:
-    return 'bg-blue-100 border-blue-400 text-blue-700 px-4 py-2 rounded-md text-center';
-  }
-  };
-  
-  
-export function DeleteAlert({ show, onClose, onConfirm }) {
-  if (!show) return null;
+import React from "react";
+
+function DeleteAlert({onClose, onConfirm }) {
   
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
@@ -35,3 +24,5 @@ export function DeleteAlert({ show, onClose, onConfirm }) {
     </div>
   );
 }
+
+export default DeleteAlert;

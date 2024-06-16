@@ -1,36 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Axios from '../../services/Axios';
-import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import AccountFormBox from './AccountFormBox.jsx';
 import AccountCountryRegionSelector from './AccountCountryRegionSelector.jsx';
 import RoleSelector from './AccountRolSelector.jsx';
-import {DeleteAlert} from './DeleteAlert.jsx';
 
-function AccountForm() {
+function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) {
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
-  const [users, setUsers] = useState([]);
-  const [updatemode, setUpdatemode] = useState(false);
-  const [showDeleteAlert, SetShowDeleteAlert] = useState(false);
-  const [usertoDelete, SetUserToDelete] = useState(null);
-
-  useEffect(() => {
-    // Función para obtener los usuarios
-    const fetchUsers = async () => {
-      try {
-        const response = await Axios.get('/accounts');
-        setUsers(response.data);
-      } catch (error) {
-        toast.error("Error fetching users");
-        console.error("Error fetching users", error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -84,68 +63,47 @@ function AccountForm() {
     }),
     onSubmit: async (values, { setErrors, resetForm }) => {
       try {
-        if (updatemode === true) {
-          console.log('Updating account');
+        if (updatemode) {
           const response = await Axios.put('/accounts', values);
           if (response.status === 200) {
-            console.log('Account updated successfully');
             toast.success('Account updated successfully');
           }
         } else {
           const response = await Axios.post('/accounts', values);
           if (response.status === 201) {
-            console.log('Account created successfully');
             toast.success('Account created successfully');
           }
         }
         resetForm();
+        onUserAddedOrUpdated();
       } catch (error) {
         if (error.response && error.response.status === 400) {
           setErrors({ email: 'The email is already registered' });
           toast.error('The email is already registered');
         } else {
-          console.error(error);
           toast.error('An error occurred. Please try again later');
         }
       }
       setUpdatemode(false);
-      return 0;
     },
   });
 
-  const handleUpdateUser = (user) => {
-    setUpdatemode(true);
-    formik.setValues({
-      email: user.email,
-      name: user.name,
-      lastName: user.last_name,
-      birthDate: user.birth_date,
-      phone: user.phone_number,
-      country: '',
-      region: '',
-      rol: user.rol,
-    });
-  };
-  
-  const deleleteUser = (user) => {
-    SetShowDeleteAlert(true);
-    SetUserToDelete(user);
-  }
-
-  const handleDeleteUser = async () =>{
-    try {
-      SetShowDeleteAlert(false);
-      const response = await Axios.delete(`/accounts/${usertoDelete.email}`);
-      if (response.status === 200) {
-        toast.success('User deleted successfully');
-        const updatedUsers = users.filter((user) => user.email !== usertoDelete.email);
-        setUsers(updatedUsers);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('An error occurred while deleting the user');
+  useEffect(() => {
+    if (user) {
+      formik.setValues({
+        email: user.email,
+        name: user.name,
+        lastName: user.last_name,
+        birthDate: user.birth_date,
+        phone: user.phone_number,
+        country: user.country,
+        region: user.region,
+        rol: user.rol,
+      });
+      setCountry(user.country);
+      setRegion(user.region);
     }
-  };
+  }, [user]);
 
   const handleButtonClick = () => {
     formik.handleSubmit();
@@ -154,7 +112,6 @@ function AccountForm() {
   const selectCountry = (val) => {
     formik.handleChange('country')(val);
     setCountry(val);
-    // Reset region when country changes
     setRegion('');
   };
 
@@ -163,11 +120,9 @@ function AccountForm() {
     setRegion(val);
   };
 
-
   return (
-    
-    <div className='px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-      <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Create an Account</h2>
+    <div>
+      <h2 className="text-2xl font-semibold text-fourth text-center mb-6">{updatemode ? 'Update Account' : 'Create an Account'}</h2>
       <form className="flex flex-wrap -mx-2">
         <div className="px-2 w-full sm:w-1/2">
           <AccountFormBox 
@@ -255,57 +210,19 @@ function AccountForm() {
           />
         </div>
         <div className="px-2 w-full">
-        {
-          (updatemode == false)
-          ?
-          <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
-            Create Account
-          </button>
-          :
-          <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-green-400 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
-            Update Account
-          </button>
-        }
+          {
+            (updatemode == false)
+            ?
+            <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+              Create Account
+            </button>
+            :
+            <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-green-400 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+              Update Account
+            </button>
+          }
         </div>
       </form>
-        <table className="w-full mt-5">
-          <thead>
-            <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Role
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={index}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.email}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'client' : user.rol}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex space-x-5">
-                    <button className="text-blue-500 hover:text-blue-700" onClick={() => handleUpdateUser(user)}>Update</button>
-                    <button className="text-red-500 hover:text-red-700" onClick={() => deleleteUser(user)}>Delete</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {showDeleteAlert && (
-          <DeleteAlert
-              show={showDeleteAlert}
-              onClose={() => SetShowDeleteAlert(false)}
-              onConfirm={handleDeleteUser}
-          />
-        )}
     </div>
   );
 }
