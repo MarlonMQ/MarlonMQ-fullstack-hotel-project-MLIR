@@ -1,9 +1,12 @@
 import React from 'react';
 
-const AccountFormBox = ({ title, name, type, error, value, change, blur, placeholder, tabIndex, readOnly}) => {
+const AccountFormBox = ({ title, name, type, error, value, change, blur, placeholder, tabIndex, readOnly, required}) => {
     return (
       <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900">{title}</label>
+        <label className="block mb-2 text-sm font-medium text-gray-900">
+          {title}
+          {required && <span className="text-red-500"> *</span>}
+        </label>
           <input
               value={value}
               onChange={change}

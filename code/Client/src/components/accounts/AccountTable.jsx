@@ -91,8 +91,7 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
           >
             <option value="all">All</option>
             <option value="user">Client</option>
-            <option value="admin">Admin</option>
-            <option value="otherRole">Other Role</option>
+            <option value="employee">Employee</option>
           </select>
         </div>
       </div>
