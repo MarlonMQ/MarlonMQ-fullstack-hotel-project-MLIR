@@ -1,19 +1,22 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from '../../services/Axios';
 import { toast } from 'react-toastify';
 import DeleteAlert from './DeleteAlert.jsx';
-import { AuthContext } from '../loginComponents/AuthContext.jsx';
 
 function AccountTable({ onUserUpdated, onUserDeleted }) {
   const [users, setUsers] = useState([]);
-  const [showDeleteAlert, SetShowDeleteAlert] = useState(false);
-  const [usertoDelete, setUserToDelete] = useState({});
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [userToDelete, setUserToDelete] = useState({});
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await Axios.get('/accounts');
         setUsers(response.data);
+        setFilteredUsers(response.data);
       } catch (error) {
         toast.error("Error fetching users");
       }
@@ -22,22 +25,38 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    filterUsers();
+  }, [roleFilter, searchTerm, users]);
+
+  const filterUsers = () => {
+    let filtered = users.filter((user) => {
+      if (roleFilter !== 'all' && user.rol !== roleFilter) {
+        return false;
+      }
+      const fullName = `${user.name} ${user.lastName}`.toLowerCase();
+      const email = user.email.toLowerCase();
+      return fullName.includes(searchTerm.toLowerCase()) || email.includes(searchTerm.toLowerCase());
+    });
+    setFilteredUsers(filtered);
+  };
+
   const handleUpdateUser = (user) => {
     onUserUpdated(user);
   };
 
   const handleDeleteUser = (user) => {
-    SetShowDeleteAlert(true);
+    setShowDeleteAlert(true);
     setUserToDelete(user);
   };
 
   const deleteUser = async () => {
     try {
-      SetShowDeleteAlert(false);
-      const response = await Axios.delete(`/accounts/${usertoDelete.email}`);
+      setShowDeleteAlert(false);
+      const response = await Axios.delete(`/accounts/${userToDelete.email}`);
       if (response.status === 200) {
         toast.success('User deleted successfully');
-        const updatedUsers = users.filter((u) => u.email !== usertoDelete.email);
+        const updatedUsers = users.filter((u) => u.email !== userToDelete.email);
         setUsers(updatedUsers);
         onUserDeleted();
       }
@@ -47,8 +66,37 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
   };
 
   return (
-    <div >
+    <div>
       <h2 className="text-2xl font-semibold text-fourth text-center mb-4">Accounts</h2>
+      
+      <div className="flex justify-between mb-4">
+        <div className=' w-2/6'>
+          <input 
+            type="text" 
+            id="search" 
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)} 
+            className="border p-2 rounded bg-gray-100 w-full"
+            placeholder="Search"
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="roleFilter" className="mr-2">Role:</label>
+          <select 
+            id="roleFilter"
+            value={roleFilter} 
+            onChange={(e) => setRoleFilter(e.target.value)} 
+            className="border p-2 rounded bg-gray-100"
+          >
+            <option value="all">All</option>
+            <option value="user">Client</option>
+            <option value="admin">Admin</option>
+            <option value="otherRole">Other Role</option>
+          </select>
+        </div>
+      </div>
+      
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
@@ -60,9 +108,9 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.email}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.lastName}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.email}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'client' : user.rol}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -76,9 +124,10 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
           </tbody>
         </table>
       </div>
+      
       {showDeleteAlert && (
         <DeleteAlert
-            onClose={() => SetShowDeleteAlert(false)}
+            onClose={() => setShowDeleteAlert(false)}
             onConfirm={deleteUser}
         />
       )}

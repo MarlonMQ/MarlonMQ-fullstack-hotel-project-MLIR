@@ -20,6 +20,7 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
       phone: '',
       country: '',
       region: '',
+      address: '',
       rol: 'user',
     },
     validationSchema: Yup.object().shape({
@@ -59,6 +60,11 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
 
       region: Yup.string().required('Required field'),
 
+      address: Yup.string()
+        .min(10, 'Address must be at least 10 characters')
+        .max(100, 'Address cannot be longer than 100 characters')
+        .required('Required field'),
+
       rol: Yup.string().required('Required field'),
     }),
     onSubmit: async (values, { setErrors, resetForm }) => {
@@ -96,9 +102,10 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
         lastName: user.last_name,
         birthDate: user.birth_date,
         phone: user.phone_number,
+        rol: user.rol,
         country: user.country,
         region: user.region,
-        rol: user.rol,
+        address: user.address,
       });
       setCountry(user.country);
       setRegion(user.region);
@@ -107,6 +114,12 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
 
   const handleButtonClick = () => {
     formik.handleSubmit();
+  };
+
+  const handleCancelClick = () => {
+    setUpdatemode(false);
+    formik.resetForm();
+    onUserAddedOrUpdated();
   };
 
   const selectCountry = (val) => {
@@ -161,6 +174,7 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
             change={formik.handleChange}
             blur={formik.handleBlur}
             tabIndex={3}
+            readOnly={updatemode}
           />
         </div>
         <div className="px-2 w-full sm:w-1/2">
@@ -210,6 +224,19 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
           />
         </div>
         <div className="px-2 w-full">
+          <AccountFormBox 
+            title="Address"
+            name="address"
+            type="text"
+            placeholder={"Enter the address"}
+            error={formik.touched.address && formik.errors.address}
+            value={formik.values.address}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={9}
+          />
+        </div>
+        <div className="px-2 w-full">
           {
             (updatemode == false)
             ?
@@ -217,9 +244,19 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
               Create Account
             </button>
             :
-            <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-green-400 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
-              Update Account
-            </button>
+            <div className='w-full flex flex-row'>
+              <div className="w-1/2 pr-2">
+              <button onClick={handleButtonClick} type='button' className="mt-4 w-full bg-green-400 hover:bg-green-700 text-white font-bold py-3  rounded-lg focus:outline-none focus:shadow-outline">
+                Update Account
+              </button>
+              </div>
+              <div className="w-1/2 pl-2">
+              <button onClick={handleCancelClick} type='button' className="mt-4 w-full  bg-red-400 hover:bg-red-700 text-white font-bold py-3  rounded-lg focus:outline-none focus:shadow-outline">
+                Cancel
+              </button>
+              </div>
+            </div>
+            
           }
         </div>
       </form>

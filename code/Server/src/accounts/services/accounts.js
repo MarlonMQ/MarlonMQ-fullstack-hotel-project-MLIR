@@ -6,7 +6,7 @@ import crypto from 'crypto';
 
 class AccountsServices {
   
-  static async signup(email, name, lastName, phone_number, birth_date, rol) {
+  static async signup(email, name, lastName, phone_number, birth_date, country, region, address, rol) {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
       .input('email', sql.VarChar, email)
@@ -14,8 +14,11 @@ class AccountsServices {
       .input('last_name', sql.VarChar, lastName)
       .input('phone_number', sql.VarChar, phone_number)
       .input('birth_date', sql.Date, new Date(birth_date))
+      .input('country', sql.VarChar, country)
+      .input('region', sql.VarChar, region)
+      .input('address', sql.VarChar, address)
       .input('rol', sql.VarChar, rol)
-      .query('INSERT INTO t_user(email, name, last_name, phone_number, birth_date, rol) VALUES (@email, @name, @last_name, @phone_number, @birth_date, @rol)');
+      .query('INSERT INTO t_user(email, name, last_name, phone_number, birth_date, country, region, address, rol) VALUES (@email, @name, @last_name, @phone_number, @birth_date, @country, @region, @address, @rol)');
     await DbConnection.getInstance().closeConnection();
     return result.recordset;
   }
@@ -78,7 +81,7 @@ class AccountsServices {
   static async getAllAccounts() {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request().query(`
-      SELECT email, name, last_name, phone_number, CONVERT(varchar, birth_date, 23) AS birth_date, rol 
+      SELECT email, name, last_name, phone_number, CONVERT(varchar, birth_date, 23) AS birth_date, address, region, country, rol 
       FROM t_user 
       WHERE rol != 'admin'
     `);
@@ -86,7 +89,7 @@ class AccountsServices {
     return result.recordset;
   }
 
-  static async updateUser(email, name, lastName, phone_number, birth_date, rol) {
+  static async updateUser(email, name, lastName, phone_number, birth_date, rol, country, region, address) {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
       .input('email', sql.VarChar, email)
@@ -95,7 +98,10 @@ class AccountsServices {
       .input('phone_number', sql.VarChar, phone_number)
       .input('birth_date', sql.Date, new Date(birth_date))
       .input('rol', sql.VarChar, rol)
-      .query('UPDATE t_user SET name = @name, last_name = @last_name, phone_number = @phone_number, birth_date = @birth_date, rol = @rol WHERE email = @email');
+      .input('country', sql.VarChar, country)
+      .input('region', sql.VarChar, region)
+      .input('address', sql.VarChar, address)
+      .query('UPDATE t_user SET name = @name, last_name = @last_name, phone_number = @phone_number, birth_date = @birth_date, rol = @rol, country = @country, region = @region, address = @address WHERE email = @email');
     await DbConnection.getInstance().closeConnection();
     return result.recordset;
   }

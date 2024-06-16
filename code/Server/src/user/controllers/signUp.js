@@ -6,7 +6,7 @@ dotenv.config();
 class SignupController {
   static async signup(req, res) {
     try {
-      const { email, password, name, lastName, phone, birthDate, rol } = req.body;
+      const { email, password, name, lastName, phone, birthDate, rol, country, region, address } = req.body;
 
       const user = await SignupServices.findUser(email);
 
@@ -16,14 +16,14 @@ class SignupController {
           message: 'User already exists'
         });
       } else {
-        if (!email || !password || !name || !lastName || !phone || !birthDate || !rol) {
+        if (!email || !password || !name || !lastName || !phone || !birthDate || !rol || !country || !region || !address) {
           res.status(400);
           res.send({
             message: 'User fields are empty'
           });
         }
 
-        const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol);
+        const result = await SignupServices.signup(email, name, lastName, phone, birthDate, rol, country, region, address);
 
         if (result === undefined) {
           const encryptedPassword = await SignupServices.encrypt(password, process.env.SECRET_KEY);

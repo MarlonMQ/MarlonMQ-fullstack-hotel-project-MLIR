@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 
 class SignupServices {
   
-  static async signup(email, name, lastName, phone_number, birth_date, rol) {
+  static async signup(email, name, lastName, phone_number, birth_date, rol, country, region, address) {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request()
       .input('email', sql.VarChar, email)
@@ -14,7 +14,10 @@ class SignupServices {
       .input('phone_number', sql.VarChar, phone_number)
       .input('birth_date', sql.Date, new Date(birth_date))
       .input('rol', sql.VarChar, rol)
-      .query('INSERT INTO t_user(email, name, last_name, phone_number, birth_date, rol) VALUES (@email, @name, @last_name, @phone_number, @birth_date, @rol)');
+      .input('country', sql.VarChar, country)
+      .input('region', sql.VarChar, region)
+      .input('address', sql.VarChar, address)
+      .query('INSERT INTO t_user(email, name, last_name, phone_number, birth_date, rol, address, country, region) VALUES (@email, @name, @last_name, @phone_number, @birth_date, @rol, @address, @country, @region)');
     await DbConnection.getInstance().closeConnection();
     return result.recordset;
   }
