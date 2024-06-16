@@ -74,6 +74,49 @@ class AccountsServices {
   static async generatePassword(length = 12) {
     return crypto.randomBytes(length).toString('base64').slice(0, length);
   }
+
+  static async getAllAccounts() {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request().query(`
+      SELECT email, name, last_name, phone_number, CONVERT(varchar, birth_date, 23) AS birth_date, rol 
+      FROM t_user 
+      WHERE rol != 'admin'
+    `);
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset;
+  }
+
+  static async updateUser(email, name, lastName, phone_number, birth_date, rol) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .input('name', sql.VarChar, name)
+      .input('last_name', sql.VarChar, lastName)
+      .input('phone_number', sql.VarChar, phone_number)
+      .input('birth_date', sql.Date, new Date(birth_date))
+      .input('rol', sql.VarChar, rol)
+      .query('UPDATE t_user SET name = @name, last_name = @last_name, phone_number = @phone_number, birth_date = @birth_date, rol = @rol WHERE email = @email');
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset;
+  }
+
+  static async deletePassword(email) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .query('DELETE FROM password WHERE email = @email');
+    await DbConnection.getInstance().closeConnection();
+    return result.rowsAffected > 0 ? undefined : 'User not found';
+  }
+
+  static async deleteAccount(email) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .query('DELETE FROM t_user WHERE email = @email');
+      await DbConnection.getInstance().closeConnection();
+      return result.rowsAffected > 0 ? undefined : 'User not found';
+  }
 }
 
 export default AccountsServices;

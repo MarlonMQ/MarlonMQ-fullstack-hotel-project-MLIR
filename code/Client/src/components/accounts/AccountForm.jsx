@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from '../../services/Axios';
 import { AuthContext } from '../loginComponents/AuthContext.jsx';
 import { toast } from 'react-toastify';
@@ -7,10 +7,30 @@ import * as Yup from 'yup';
 import AccountFormBox from './AccountFormBox.jsx';
 import AccountCountryRegionSelector from './AccountCountryRegionSelector.jsx';
 import RoleSelector from './AccountRolSelector.jsx';
+import {DeleteAlert} from './DeleteAlert.jsx';
 
 function AccountForm() {
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
+  const [users, setUsers] = useState([]);
+  const [updatemode, setUpdatemode] = useState(false);
+  const [showDeleteAlert, SetShowDeleteAlert] = useState(false);
+  const [usertoDelete, SetUserToDelete] = useState(null);
+
+  useEffect(() => {
+    // Función para obtener los usuarios
+    const fetchUsers = async () => {
+      try {
+        const response = await Axios.get('/accounts');
+        setUsers(response.data);
+      } catch (error) {
+        toast.error("Error fetching users");
+        console.error("Error fetching users", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -63,15 +83,22 @@ function AccountForm() {
       rol: Yup.string().required('Required field'),
     }),
     onSubmit: async (values, { setErrors, resetForm }) => {
-      // Logic to submit the form
-      console.log(values);
       try {
-        const response = await Axios.post('/accounts', values);
-        if (response.status === 201) {
-          console.log('Account created successfully');
-          resetForm();
-          toast.success('Account created successfully');
+        if (updatemode === true) {
+          console.log('Updating account');
+          const response = await Axios.put('/accounts', values);
+          if (response.status === 200) {
+            console.log('Account updated successfully');
+            toast.success('Account updated successfully');
+          }
+        } else {
+          const response = await Axios.post('/accounts', values);
+          if (response.status === 201) {
+            console.log('Account created successfully');
+            toast.success('Account created successfully');
+          }
         }
+        resetForm();
       } catch (error) {
         if (error.response && error.response.status === 400) {
           setErrors({ email: 'The email is already registered' });
@@ -81,9 +108,44 @@ function AccountForm() {
           toast.error('An error occurred. Please try again later');
         }
       }
+      setUpdatemode(false);
       return 0;
     },
   });
+
+  const handleUpdateUser = (user) => {
+    setUpdatemode(true);
+    formik.setValues({
+      email: user.email,
+      name: user.name,
+      lastName: user.last_name,
+      birthDate: user.birth_date,
+      phone: user.phone_number,
+      country: '',
+      region: '',
+      rol: user.rol,
+    });
+  };
+  
+  const deleleteUser = (user) => {
+    SetShowDeleteAlert(true);
+    SetUserToDelete(user);
+  }
+
+  const handleDeleteUser = async () =>{
+    try {
+      SetShowDeleteAlert(false);
+      const response = await Axios.delete(`/accounts/${usertoDelete.email}`);
+      if (response.status === 200) {
+        toast.success('User deleted successfully');
+        const updatedUsers = users.filter((user) => user.email !== usertoDelete.email);
+        setUsers(updatedUsers);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred while deleting the user');
+    }
+  };
 
   const handleButtonClick = () => {
     formik.handleSubmit();
@@ -101,103 +163,149 @@ function AccountForm() {
     setRegion(val);
   };
 
+
   return (
-    <div className=' px-12'>
-        <div className=' px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
-          <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Create an Account</h2>
-          <form className="flex flex-wrap -mx-2">
-                <div className="px-2 w-full sm:w-1/2">
-                  <AccountFormBox 
-                    title="Name"
-                    name="name"
-                    type="text"
-                    placeholder={"Enter the name"}
-                    error={formik.touched.name && formik.errors.name}
-                    value={formik.values.name}
-                    change={formik.handleChange}
-                    blur={formik.handleBlur}
-                    tabIndex={1}
-                  />
-                </div>
-                <div className="px-2 w-full sm:w-1/2">
-                  <AccountFormBox 
-                    title="Last Name"
-                    name="lastName"
-                    type="text"
-                    placeholder={"Enter the last name"}
-                    error={formik.touched.lastName && formik.errors.lastName}
-                    value={formik.values.lastName}
-                    change={formik.handleChange}
-                    blur={formik.handleBlur}
-                    tabIndex={2}
-                  />
-                </div>
-                <div className="px-2 w-full sm:w-1/2">
-                  <AccountFormBox 
-                      title="Email"
-                      name="email"
-                      type="email"
-                      placeholder={"Enter the email"}
-                      error={formik.touched.email && formik.errors.email}
-                      value={formik.values.email}
-                      change={formik.handleChange}
-                      blur={formik.handleBlur}
-                      tabIndex={3}
-                  />
-                </div>
-                <div className="px-2 w-full sm:w-1/2">
-                  <AccountFormBox
-                    title="Birth Date"
-                    name="birthDate"
-                    type="date"
-                    placeholder={"Enter the birth date"}
-                    error={formik.touched.birthDate && formik.errors.birthDate}
-                    value={formik.values.birthDate}
-                    change={formik.handleChange}
-                    blur={formik.handleBlur}
-                    tabIndex={4}
-                  />
-                </div>
-                <div className="px-2 w-full sm:w-1/2">
-                  <AccountFormBox 
-                    title="Phone"
-                    name="phone"
-                    type="text"
-                    placeholder={"Enter the phone number"}
-                    error={formik.touched.phone && formik.errors.phone}
-                    value={formik.values.phone}
-                    change={formik.handleChange}
-                    blur={formik.handleBlur}
-                    tabIndex={5}
-                  />
-                </div>
-                <div className="px-2 w-full sm:w-1/2">
-                  <RoleSelector
-                    value={formik.values.rol}
-                    handleChange={formik.handleChange}
-                    error={formik.touched.rol && formik.errors.rol}
-                    tabIndex={6}
-                  />
-                </div>
-                <div className="px-2 w-full">
-                    <AccountCountryRegionSelector 
-                        country={formik.values.country}
-                        selectCountry={selectCountry}
-                        region={formik.values.region}
-                        selectRegion={selectRegion}
-                        countryError={formik.touched.country && formik.errors.country}
-                        regionError={formik.touched.region && formik.errors.region}
-                        tabIndexCountry={7}
-                        tabIndexRegion={8}
-                    />
-                </div>
-                <div className="px-2 w-full">
-                    <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
-                        Create Account
-                    </button>
-                </div>
-            </form>
+    
+    <div className='px-4 py-5 bg-white shadow-lg rounded-lg border mx-auto'>
+      <h2 className="text-2xl font-semibold text-fourth text-center mb-6">Create an Account</h2>
+      <form className="flex flex-wrap -mx-2">
+        <div className="px-2 w-full sm:w-1/2">
+          <AccountFormBox 
+            title="Name"
+            name="name"
+            type="text"
+            placeholder={"Enter the name"}
+            error={formik.touched.name && formik.errors.name}
+            value={formik.values.name}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={1}
+          />
         </div>
+        <div className="px-2 w-full sm:w-1/2">
+          <AccountFormBox 
+            title="Last Name"
+            name="lastName"
+            type="text"
+            placeholder={"Enter the last name"}
+            error={formik.touched.lastName && formik.errors.lastName}
+            value={formik.values.lastName}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={2}
+          />
+        </div>
+        <div className="px-2 w-full sm:w-1/2">
+          <AccountFormBox 
+            title="Email"
+            name="email"
+            type="email"
+            placeholder={"Enter the email"}
+            error={formik.touched.email && formik.errors.email}
+            value={formik.values.email}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={3}
+          />
+        </div>
+        <div className="px-2 w-full sm:w-1/2">
+          <AccountFormBox
+            title="Birth Date"
+            name="birthDate"
+            type="date"
+            placeholder={"Enter the birth date"}
+            error={formik.touched.birthDate && formik.errors.birthDate}
+            value={formik.values.birthDate}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={4}
+          />
+        </div>
+        <div className="px-2 w-full sm:w-1/2">
+          <AccountFormBox 
+            title="Phone"
+            name="phone"
+            type="text"
+            placeholder={"Enter the phone number"}
+            error={formik.touched.phone && formik.errors.phone}
+            value={formik.values.phone}
+            change={formik.handleChange}
+            blur={formik.handleBlur}
+            tabIndex={5}
+          />
+        </div>
+        <div className="px-2 w-full sm:w-1/2">
+          <RoleSelector
+            value={formik.values.rol}
+            handleChange={formik.handleChange}
+            error={formik.touched.rol && formik.errors.rol}
+            tabIndex={6}
+          />
+        </div>
+        <div className="px-2 w-full">
+          <AccountCountryRegionSelector 
+            country={formik.values.country}
+            selectCountry={selectCountry}
+            region={formik.values.region}
+            selectRegion={selectRegion}
+            countryError={formik.touched.country && formik.errors.country}
+            regionError={formik.touched.region && formik.errors.region}
+            tabIndexCountry={7}
+            tabIndexRegion={8}
+          />
+        </div>
+        <div className="px-2 w-full">
+        {
+          (updatemode == false)
+          ?
+          <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-fourth hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+            Create Account
+          </button>
+          :
+          <button onClick={handleButtonClick} type='button' className="mt-4 w-full  bg-green-400 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+            Update Account
+          </button>
+        }
+        </div>
+      </form>
+        <table className="w-full mt-5">
+          <thead>
+            <tr>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Role
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.email}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'client' : user.rol}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <div className="flex space-x-5">
+                    <button className="text-blue-500 hover:text-blue-700" onClick={() => handleUpdateUser(user)}>Update</button>
+                    <button className="text-red-500 hover:text-red-700" onClick={() => deleleteUser(user)}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {showDeleteAlert && (
+          <DeleteAlert
+              show={showDeleteAlert}
+              onClose={() => SetShowDeleteAlert(false)}
+              onConfirm={handleDeleteUser}
+          />
+        )}
     </div>
   );
 }

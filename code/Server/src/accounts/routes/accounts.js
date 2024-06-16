@@ -11,6 +11,9 @@ class AccountsRoutes {
 
   accountsRoute() {
     this.router.post('/', AccountsController.createAccount);
+    this.router.put('/', AccountsController.updateAccount);
+    this.router.get('/', AccountsController.getAllAccounts);
+    this.router.delete('/:email', AccountsController.deleteAccount);
   }
 }
 

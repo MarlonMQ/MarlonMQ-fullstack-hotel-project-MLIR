@@ -37,6 +37,50 @@ class AccountsController {
       res.status(500).send(error.message);
     }
   }
+
+  static async updateAccount(req, res) {
+    try {
+      const {email, name, lastName, phone, birthDate, rol } = req.body;
+      const result = await AccountsServices.updateUser(email, name, lastName, phone, birthDate, rol);
+
+      res.status(200).send({
+        message: 'User updated successfully'
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+
+  static async getAllAccounts(req, res) {
+    try {
+      const users = await AccountsServices.getAllAccounts();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+
+  static async deleteAccount(req, res) {
+    try {
+      const { email } = req.params;
+      const user = await AccountsServices.findUser(email);
+    
+      if (user.length > 0) {
+        await AccountsServices.deletePassword(email);
+        await AccountsServices.deleteAccount(email);
+  
+        res.status(200).send({
+          message: 'User deleted successfully'
+        });
+      } else {
+        res.status(404).send({
+          message: 'User not found'
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
 }
 
 export default AccountsController;
