@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import AccountForm from './AccountForm';
+import AccountForm from './AccountsForm';
 import AccountTable from './AccountTable';
 
 function AccountsLabel() {
   const [user, setUser] = useState(null);
   const [updatemode, setUpdatemode] = useState(false);
+  const [shouldFetchUsers, setShouldFetchUsers] = useState(false);
 
   const handleUserAddedOrUpdated = () => {
     setUser(null);
     setUpdatemode(false);
+    setShouldFetchUsers((prev) => !prev);
   };
 
   const handleUserUpdated = (updatedUser) => {
@@ -25,6 +27,7 @@ function AccountsLabel() {
         onUserAddedOrUpdated={handleUserAddedOrUpdated}
       />
       <AccountTable 
+        shouldFetchUsers={shouldFetchUsers}
         onUserUpdated={handleUserUpdated}
         onUserDeleted={handleUserAddedOrUpdated}
       />

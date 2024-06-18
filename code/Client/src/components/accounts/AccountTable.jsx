@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Axios from '../../services/Axios';
+import Axios from '../../services/Axios.js';
 import { toast } from 'react-toastify';
-import DeleteAlert from './DeleteAlert.jsx';
+import DeleteAlert from './components/DeleteAlert.jsx';
 
-function AccountTable({ onUserUpdated, onUserDeleted }) {
+function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
@@ -11,19 +11,19 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
   const [roleFilter, setRoleFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await Axios.get('/accounts');
-        setUsers(response.data);
-        setFilteredUsers(response.data);
-      } catch (error) {
-        toast.error("Error fetching users");
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      const response = await Axios.get('/accounts');
+      setUsers(response.data);
+      setFilteredUsers(response.data);
+    } catch (error) {
+      toast.error("Error fetching users");
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [shouldFetchUsers]);
 
   useEffect(() => {
     filterUsers();
@@ -111,7 +111,7 @@ function AccountTable({ onUserUpdated, onUserDeleted }) {
               <tr key={user.email}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.email}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'client' : user.rol}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'Client' : 'Employee'}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex space-x-5">
                     <button className="text-blue-500 hover:text-blue-700" onClick={() => handleUpdateUser(user)}>Update</button>

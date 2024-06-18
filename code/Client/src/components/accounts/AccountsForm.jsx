@@ -3,9 +3,9 @@ import Axios from '../../services/Axios';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import AccountFormBox from './AccountFormBox.jsx';
-import AccountCountryRegionSelector from './AccountCountryRegionSelector.jsx';
-import RoleSelector from './AccountRolSelector.jsx';
+import AccountFormBox from './components/FormBox';
+import AccountCountryRegionSelector from './components/CountryRegionSelector';
+import RoleSelector from './components/RolSelector';
 
 function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) {
   const [country, setCountry] = useState('');
@@ -74,11 +74,15 @@ function AccountForm({ user, updatemode, setUpdatemode, onUserAddedOrUpdated }) 
           if (response.status === 200) {
             toast.success('Account updated successfully');
           }
+          // Dentro de onSubmit, después de mostrar el mensaje de éxito
+          document.dispatchEvent(new CustomEvent('accountFormSubmitted'));
         } else {
           const response = await Axios.post('/accounts', values);
           if (response.status === 201) {
             toast.success('Account created successfully');
           }
+          // Dentro de onSubmit, después de mostrar el mensaje de éxito
+          document.dispatchEvent(new CustomEvent('accountFormSubmitted'));
         }
         resetForm();
         onUserAddedOrUpdated();
