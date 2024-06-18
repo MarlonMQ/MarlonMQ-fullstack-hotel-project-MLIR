@@ -6,7 +6,7 @@ dotenv.config();
 class AccountsController {
   static async createAccount(req, res) {
     try {
-      const { email, name, lastName, phone, birthDate, rol } = req.body;
+      const { email, name, lastName, phone, birthDate, country, region, address, rol } = req.body;
 
       const user = await AccountsServices.findUser(email);
       if (user.length > 0) {
@@ -14,7 +14,7 @@ class AccountsController {
           message: 'User already exists'
         });
       } else {
-        const result = await AccountsServices.signup(email, name, lastName, phone, birthDate, rol);
+        const result = await AccountsServices.signup(email, name, lastName, phone, birthDate, country, region, address, rol);
 
         if (result === undefined) {
           const password = await AccountsServices.generatePassword();
@@ -32,6 +32,50 @@ class AccountsController {
             });
           }
         }
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+
+  static async updateAccount(req, res) {
+    try {
+      const {email, name, lastName, phone, birthDate, rol, country, region, address } = req.body;
+      const result = await AccountsServices.updateUser(email, name, lastName, phone, birthDate, rol, country, region, address );
+
+      res.status(200).send({
+        message: 'User updated successfully'
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+
+  static async getAllAccounts(req, res) {
+    try {
+      const users = await AccountsServices.getAllAccounts();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+
+  static async deleteAccount(req, res) {
+    try {
+      const { email } = req.params;
+      const user = await AccountsServices.findUser(email);
+    
+      if (user.length > 0) {
+        await AccountsServices.deletePassword(email);
+        await AccountsServices.deleteAccount(email);
+  
+        res.status(200).send({
+          message: 'User deleted successfully'
+        });
+      } else {
+        res.status(404).send({
+          message: 'User not found'
+        });
       }
     } catch (error) {
       res.status(500).send(error.message);

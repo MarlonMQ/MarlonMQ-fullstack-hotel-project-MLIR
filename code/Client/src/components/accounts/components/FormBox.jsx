@@ -1,9 +1,12 @@
 import React from 'react';
 
-const AccountFormBox = ({ title, name, type, error, value, change, blur, placeholder, tabIndex}) => {
+const AccountFormBox = ({ title, name, type, error, value, change, blur, placeholder, tabIndex, readOnly, required}) => {
     return (
       <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900">{title}</label>
+        <label className="block mb-2 text-sm font-medium text-gray-900">
+          {title}
+          {required && <span className="text-red-500"> *</span>}
+        </label>
           <input
               value={value}
               onChange={change}
@@ -14,6 +17,7 @@ const AccountFormBox = ({ title, name, type, error, value, change, blur, placeho
               placeholder={placeholder}
               className={`block w-full p-3 border ${error ? 'border-red-500' : 'border-gray-300'} rounded`}
               tabIndex={tabIndex}
+              readOnly={readOnly}
           />
           {error && <p className="text-red-500 text-xs italic">{error}</p>}
       </div>

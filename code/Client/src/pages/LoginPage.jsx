@@ -1,26 +1,29 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
 import GrayBox from '../components/registerComponents/GrayBox.jsx';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 import Axios from '../services/Axios.js';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-function LoginPage()  {
-  const location = useLocation();
-  const { login } = useContext(AuthContext); // Get the login function from the authentication context
+function LoginPage() {
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const toastShownRef = useRef(false); // UseRef to store if the toast has been shown
 
-  // Mostrar el toast si la cuenta fue creada
   useEffect(() => {
-    const accountCreated = window.localStorage.getItem('accountCreated');
-    if (accountCreated === 'true') {
-      toast.success('Cuenta creada con éxito');
-      window.localStorage.removeItem('accountCreated');
+    if (location.state && location.state.accountCreated && !toastShownRef.current) {
+      toast.success('You have been successfully registered!');
+      setTimeout(() => {
+        toast.info('Please, login');
+      }, 2000);
+      toastShownRef.current = true; // Set the ref to true to prevent showing the toast again
     }
-  }, []);
+  }, [location.state]);
+
 
   const formik = useFormik({
     initialValues: {

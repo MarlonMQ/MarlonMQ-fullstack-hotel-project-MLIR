@@ -85,8 +85,7 @@ function SignUpPage() {
       try {
         const response = await Axios.post('/signup', values);
         if (response.status === 201) {
-          window.localStorage.setItem('accountCreated', 'true');
-          window.location.href = '/login';
+          navigate('/login', { state: { accountCreated: true } });
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {

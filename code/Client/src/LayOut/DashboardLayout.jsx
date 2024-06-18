@@ -3,7 +3,8 @@ import Sidebar from './Sidebar';
 import ReservesAdmin from '../pages/ReservesAdmin';
 import AdminPanelServices from '../components/Services/AdminPanelServices';
 import FormCRUDRooms from '../components/Rooms/FormCRUDRooms';
-import AccountForm from '../components/accounts/AccountForm';
+import AccountForm from '../components/accounts/AccountsLabel';
+import AccountsLabel from '../components/accounts/AccountsLabel';
 
 function DashboardLayout() {
     // State to control which component to display
@@ -18,7 +19,7 @@ function DashboardLayout() {
                 {activeComponent === 'reserves' && <ReservesAdmin />}
                 {activeComponent === 'services' && <AdminPanelServices />}
                 {activeComponent === 'rooms' && <FormCRUDRooms />}
-                {activeComponent === 'accounts' && <AccountForm />}
+                {activeComponent === 'accounts' && <AccountsLabel />}
             </div>
         </div>
     );
