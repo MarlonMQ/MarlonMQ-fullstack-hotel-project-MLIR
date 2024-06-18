@@ -10,6 +10,8 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [userToDelete, setUserToDelete] = useState({});
   const [roleFilter, setRoleFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const fetchUsers = async () => {
     try {
@@ -27,7 +29,7 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
 
   useEffect(() => {
     filterUsers();
-  }, [roleFilter, searchTerm, users]);
+  }, [roleFilter, searchTerm, users, sortBy, sortDirection]);
 
   const filterUsers = () => {
     let filtered = users.filter((user) => {
@@ -38,6 +40,15 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
       const email = user.email.toLowerCase();
       return fullName.includes(searchTerm.toLowerCase()) || email.includes(searchTerm.toLowerCase());
     });
+
+    if (sortBy === 'name') {
+      filtered.sort((a, b) => (sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+    } else if (sortBy === 'email') {
+      filtered.sort((a, b) => (sortDirection === 'asc' ? a.email.localeCompare(b.email) : b.email.localeCompare(a.email)));
+    } else if (sortBy === 'role') {
+      filtered.sort((a, b) => (sortDirection === 'asc' ? a.rol.localeCompare(b.rol) : b.rol.localeCompare(a.rol)));
+    }
+
     setFilteredUsers(filtered);
   };
 
@@ -63,6 +74,20 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
     } catch (error) {
       toast.error('Error deleting user');
     }
+  };
+
+  const handleSort = (criteria) => {
+    if (criteria === sortBy) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(criteria);
+      setSortDirection('asc');
+    }
+  }
+
+  const handleCopyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.info('Email copied to clipboard');
   };
 
   return (
@@ -100,20 +125,26 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
+              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('name')}>
+                  <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Name</div>
+              </th>
+              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('email')}>
+                  <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Email</div>
+              </th>
+              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('role')}>
+                  <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Role</div>
+              </th>
+              <th className="px-5 py-3 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"/>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredUsers.map((user) => (
               <tr key={user.email}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.email}</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm hover:underline cursor-pointer" onClick={() => handleCopyToClipboard(user.email)}>{user.email}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'Client' : 'Employee'}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex space-x-5">
+                  <div className="flex space-x-5 justify-center">
                     <button className="text-blue-500 hover:text-blue-700" onClick={() => handleUpdateUser(user)}>Update</button>
                     <button className="text-red-500 hover:text-red-700" onClick={() => handleDeleteUser(user)}>Delete</button>
                   </div>
