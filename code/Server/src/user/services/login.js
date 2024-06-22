@@ -28,10 +28,10 @@ class LoginServices {
   }
 
 
-  static async generateAccessToken(user) {
+  static async generateAccessToken(email) {
     try {
       return jwt.sign(
-        { email: user[0].email },
+        { email: email },
         process.env.SECRET_KEY,
         { expiresIn: '1h' }
       );

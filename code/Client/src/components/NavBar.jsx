@@ -164,6 +164,7 @@ function NavBar() {
                       ) : (
                         <Menu.Item>
                           {({ active }) => (
+                            <>
                             <a
                               href="#"
                               onClick={logout}
@@ -171,6 +172,13 @@ function NavBar() {
                             >
                               Sign out
                             </a>
+                            <a
+                              href="/MyAccount"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              My Account
+                            </a>
+                            </>
                           )}
                         </Menu.Item>
                       )}

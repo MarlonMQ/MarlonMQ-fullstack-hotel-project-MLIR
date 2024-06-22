@@ -12,7 +12,7 @@ class LoginController {
         
       } else {
         const rol = await LoginServices.getRol(email);
-        const accessToken = await LoginServices.generateAccessToken(user);
+        const accessToken = await LoginServices.generateAccessToken(email);
 
         res.status(200);
         res.send({
