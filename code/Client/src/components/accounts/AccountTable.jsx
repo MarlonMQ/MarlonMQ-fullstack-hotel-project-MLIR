@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Axios from '../../services/Axios.js';
 import { toast } from 'react-toastify';
 import DeleteAlert from './components/DeleteAlert.jsx';
+import UserInformation from './components/UserInformation.jsx';
 
 function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,8 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [userToShow, setUserToShow] = useState({});
+  const [showUserInformation, setShowUserInformation] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -90,6 +93,11 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
     toast.info('Email copied to clipboard');
   };
 
+  const handleShowUserInformation = (user) => {
+    setUserToShow(user);
+    setShowUserInformation(true);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold text-fourth text-center mb-4">Accounts</h2>
@@ -139,8 +147,8 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredUsers.map((user) => (
-              <tr key={user.email}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
+              <tr key={user.email} className=''>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm hover:underline cursor-pointer " onClick={() => handleShowUserInformation(user)}>{user.name} {user.last_name}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm hover:underline cursor-pointer" onClick={() => handleCopyToClipboard(user.email)}>{user.email}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'Client' : 'Employee'}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -154,11 +162,16 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
           </tbody>
         </table>
       </div>
-      
       {showDeleteAlert && (
         <DeleteAlert
             onClose={() => setShowDeleteAlert(false)}
             onConfirm={deleteUser}
+        />
+      )}
+      {showUserInformation && (
+        <UserInformation
+        user={userToShow}
+        onClose={() => setShowUserInformation(false)}
         />
       )}
     </div>
