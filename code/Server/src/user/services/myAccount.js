@@ -7,7 +7,6 @@ class MyAccountServices {
   
   static async getEmail(token) {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(decoded.email);
     return decoded.email;
   }
 
