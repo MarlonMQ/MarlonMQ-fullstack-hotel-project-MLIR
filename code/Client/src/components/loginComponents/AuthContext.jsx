@@ -22,12 +22,15 @@ const AuthProvider = ({ children }) => {
   const login = (receivedToken, rol, profileImage) => {
     setToken(receivedToken);
     setRol(rol);
-    const base64Image = btoa(
-      new Uint8Array(profileImage.data).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ''
-      )
-    );
+    let base64Image = undefined;
+    if (profileImage) {
+      base64Image = btoa(
+        new Uint8Array(profileImage.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ''
+        )
+      );
+    }
     setProfileImage(base64Image);
     window.localStorage.setItem('authToken', JSON.stringify(receivedToken));
     window.localStorage.setItem('rol', JSON.stringify(rol));
