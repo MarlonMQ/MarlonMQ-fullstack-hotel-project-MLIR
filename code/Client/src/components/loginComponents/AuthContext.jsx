@@ -1,5 +1,4 @@
-// AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
@@ -15,19 +14,34 @@ const AuthProvider = ({ children }) => {
     return localRol && typeof localRol === 'string' && localRol !== 'undefined' ? JSON.parse(localRol) : null;
   });
 
-  const login = (receivedToken, rol) => {
+  const [profileImage, setProfileImage] = useState(() => {
+    const localProfileImage = window.localStorage.getItem('profileImage');
+    return localProfileImage && typeof localProfileImage === 'string' && localProfileImage !== 'undefined' ? localProfileImage : null;
+  });
+
+  const login = (receivedToken, rol, profileImage) => {
     setToken(receivedToken);
     setRol(rol);
+    const base64Image = btoa(
+      new Uint8Array(profileImage.data).reduce(
+        (data, byte) => data + String.fromCharCode(byte),
+        ''
+      )
+    );
+    setProfileImage(base64Image);
     window.localStorage.setItem('authToken', JSON.stringify(receivedToken));
     window.localStorage.setItem('rol', JSON.stringify(rol));
+    window.localStorage.setItem('profileImage', base64Image);
     toast.success('You have successfully logged in');
   };
 
   const logout = () => {
     setToken(null);
     setRol(null);
+    setProfileImage(null);
     window.localStorage.removeItem('authToken');
     window.localStorage.removeItem('rol');
+    window.localStorage.removeItem('profileImage');
     toast.info('You have been logged out');
   };
 
@@ -39,7 +53,7 @@ const AuthProvider = ({ children }) => {
   }, [token, logout]); // Este efecto se ejecutará cada vez que el token o la función logout cambien
 
   return (
-    <AuthContext.Provider value={{ token, rol, login, logout }}>
+    <AuthContext.Provider value={{ token, rol, login, logout, profileImage }}>
       {children}
     </AuthContext.Provider>
   );

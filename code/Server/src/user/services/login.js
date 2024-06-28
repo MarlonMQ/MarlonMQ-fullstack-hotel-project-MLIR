@@ -61,6 +61,15 @@ class LoginServices {
         throw new Error('Drecript error');
     }
   }
+
+  static async getProfileImage(email) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', email)
+      .query('SELECT profile_image FROM t_user WHERE email = @email');
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset[0].profile_image;
+  }
 }
 
 export default LoginServices;
