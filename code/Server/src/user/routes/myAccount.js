@@ -10,7 +10,7 @@ class MyAccountRoutes {
   }
 
   myAccountRoute() {
-    this.router.post('/', MyAccountController.getMyAccountData);
+    this.router.get('/', MyAccountController.getMyAccountData);
   }
 }
 

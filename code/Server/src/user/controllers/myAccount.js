@@ -5,7 +5,14 @@ dotenv.config();
 
 class MyAccountController {
   static async getMyAccountData(req, res) {
-    const { token } = req.body;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
     try {
       const email = await MyAccountServices.getEmail(token);
       
