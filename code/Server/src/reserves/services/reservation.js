@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 class ReservesServices {
 
-    static async createReservation(email, lastName, checkIn, checkOut, stat, id_room, services, roomNumber) {
+    static async createReservation(email, lastName, checkIn, checkOut, stat, id_room, services, roomNumber, totalAmount) {
         const pool = await DbConnection.getInstance().getConnection();
 
         
@@ -43,7 +43,8 @@ class ReservesServices {
             .input('fecha_fin', sql.Date, checkOut)
             .input('stat', sql.VarChar(), stat)
             .input('id_room', sql.UniqueIdentifier, id_room)
-            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room)');
+            .input('totalAmount', sql.Int, totalAmount)
+            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room, total) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room, @totalAmount)');
 
 
         let id;
@@ -116,6 +117,7 @@ class ReservesServices {
                 Res.email,
                 Res.arrival_date,
                 Res.departure_date,
+                Res.total,
                 Roo.room_type,
                 Roo.image_url,
                 Res.stat,

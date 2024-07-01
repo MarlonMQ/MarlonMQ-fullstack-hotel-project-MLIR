@@ -15,22 +15,6 @@ import SelectServices from '../components/Reserves/SelectServices';
 
 
 
-const howManyRooms = (roomsDates) => {
-    // Calcula la cantidad de habitaciones diferentes a partir de las reservaciones
-    let maxNumOfRooms = 0;
-    for (let index = 0; index < roomsDates.length; index++) {
-        if(roomsDates[index].num_room > maxNumOfRooms) {
-            maxNumOfRooms = roomsDates[index].num_room;
-        }
-    }
-    console.log("Max num of different rooms" , maxNumOfRooms);
-    return maxNumOfRooms;
-}
-
-
-
-
-
 export const SelectDateReserve = () => {
     const [roomNumber, setRoomNumber] = useState(0);
 
@@ -52,7 +36,8 @@ export const SelectDateReserve = () => {
             checkOut: '',
             id_room: '',
             services: [],
-            roomNumber: -1
+            roomNumber: -1,
+            totalAmount: -1
         },
         validationSchema: Yup.object().shape({
             checkIn: Yup.string().required('Required start date'),
@@ -72,7 +57,9 @@ export const SelectDateReserve = () => {
                 id_room: values.id_room,
                 status: "Outstanding",
                 services: formik.values.services,
-                roomNumber: roomNumber
+                roomNumber: roomNumber,
+                totalAmount: formik.values.totalAmount
+
             };
             
 

@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const Option = ({ image, text, selected, onSelect }) => (
+const Option = ({ image, text, price, selected, onSelect }) => (
   <div
     className={`border p-4 m-2 rounded ${selected ? 'opacity-50' : 'bg-white'}`}
     onClick={onSelect}
   >
     <img src={image} alt={text} className="w-24 h-24 mx-auto" />
     <p className="text-center mt-2">{text}</p>
+    <p className="text-center mt-2">${price}</p>
   </div>
 );
 
@@ -25,16 +26,27 @@ const SelectServices = ({formik, setTotalAmount, totalAmount}) => {
   
   const [selectedOptions, setSelectedOptions] = useState([]);
 
+
+  
   const handleSelect = (option) => {
-    setSelectedOptions((prev) =>
-      prev.some((selected) => selected.id_service === option.id_service)
-        ? prev.filter((selected) => selected.id_service !== option.id_service)
-        : [...prev, option]
+    setSelectedOptions(
+      (prev) => {
+        if (prev.some((selected) => selected.id_service === option.id_service)) {
+          setTotalAmount(totalAmount-option.price);
+          return prev.filter((selected) => selected.id_service !== option.id_service)
+        } else {
+          setTotalAmount(totalAmount+option.price);
+          return [...prev, option]
+        }
+        
+      }
+
     );
   };
 
   const handleSubmit = () => {
     formik.setFieldValue('services', selectedOptions);
+    formik.setFieldValue('totalAmount', totalAmount);
   };
   
 
@@ -48,6 +60,7 @@ const SelectServices = ({formik, setTotalAmount, totalAmount}) => {
                 key={option.id_service}
                 image={option.imageUrl}
                 text={option.title}
+                price={option.price}
                 selected={selectedOptions.some((selected) => selected.id_service === option.id_service)}
                 onSelect={() => handleSelect(option)}
             />

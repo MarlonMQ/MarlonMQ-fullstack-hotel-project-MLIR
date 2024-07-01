@@ -64,6 +64,7 @@ const MyReservations = () => {
                             <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{reservation.stat}</span>
                             </div>
                             <h2 className="text-xl font-bold mb-2">{reservation.room_type}</h2>
+                            <h4 className="text-l font-bold mb-2">Total ${reservation.total}</h4>
                             <p className="mb-1">To: <span className="text-gray-700">{email}</span></p>
                             <p className="mb-4">From <span className="text-gray-700">{reservation.arrival_date}</span> to <span className="text-gray-700">{reservation.departure_date}</span></p>
 
