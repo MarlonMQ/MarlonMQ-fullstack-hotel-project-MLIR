@@ -44,8 +44,8 @@ class ReservesServices {
             .input('stat', sql.VarChar(), stat)
             .input('id_room', sql.UniqueIdentifier, id_room)
             .input('totalAmount', sql.Int, totalAmount)
-            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room, total) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room, @totalAmount)');
-
+            .input('num_room', sql.Int, roomNumber)
+            .query('INSERT INTO reserve (id_reserve, email, last_name, arrival_date, departure_date, stat, id_room, total, num_room) VALUES (@id_reserve, @Email, @apellido, @fecha_inico, @fecha_fin, @stat, @id_room, @totalAmount, @num_room)');
 
         let id;
         if (services.length > 0) {
@@ -118,6 +118,7 @@ class ReservesServices {
                 Res.arrival_date,
                 Res.departure_date,
                 Res.total,
+                Res.num_room,
                 Roo.room_type,
                 Roo.image_url,
                 Res.stat,

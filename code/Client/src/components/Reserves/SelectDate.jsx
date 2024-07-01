@@ -25,16 +25,20 @@ const calculateDaysBetweenDates = (startDate, endDate) => {
     const numberOfDays = Math.ceil(difference / oneDay); 
     return numberOfDays+1;
 }
+
 const getDatesToRoom = async (idRoom, numRoom) => {
     const dates = await axios.get(`http://localhost:4000/rooms/consultDate/${idRoom}/${numRoom}`)
     return dates;
 }
+
 const generateDatePickerFormatToExclude = (datesFromNumberRoom) => {
-    
+
     const result = datesFromNumberRoom.map( (room) => {
+        console.log(room.departure_date);
         return {
-            start: room.arrival_Date,
-            end: addDays(room.departure_date, 1)
+            start: formatDate(addDays(room.arrival_Date, 1)),
+            end: formatDate(addDays(room.departure_date, 2))
+
         }
     })
 
@@ -44,6 +48,7 @@ const generateDatePickerFormatToExclude = (datesFromNumberRoom) => {
 export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber, totalAmount, setTotalAmount}) => {
     const [mincheckOut, setMincheckOut] = useState('');
     const [maxNumberRoom, setMaxNumberRoom] = useState(0);
+    const [maxDate, setMaxDate] = useState(addDays(new Date(), 365));
     const [excludedDates, setExcludedDates] = useState([]);
 
 
@@ -72,6 +77,22 @@ export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber
     const handlecheckInChange = (date) => {
         const dateCorrectFormat = formatDate(date);
         formik.setFieldValue('checkIn', dateCorrectFormat);
+
+        //! Buscar la start date mas pequenia antes del anio
+        let minorDate = addDays(new Date(), 365);
+        const dateSelected = new Date(dateCorrectFormat);
+        console.log("Dia seleccioanado: ", dateSelected.getDate()+1);
+
+        for (let i = 0; i < excludedDates.length; i++) {
+            const newMaxDate = addDays(new Date(excludedDates[i].start), 1);
+            console.log("iterando", newMaxDate);
+            if (newMaxDate < minorDate && newMaxDate > dateSelected) {
+                minorDate = newMaxDate;
+            }
+            
+        }
+        console.log("La menor fecha es en el dia: ", formatDate(minorDate));
+        setMaxDate(formatDate(minorDate));
         setMincheckOut(dateCorrectFormat);
     };
 
@@ -154,6 +175,7 @@ export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber
                         onChange={handlecheckInChange}
                         onBlur={formik.handleBlur}
                         excludeDateIntervals={excludedDates}
+                        maxDate={addDays(new Date(), 365)}
                         dateFormat="yyyy/MM/dd"
                         placeholderText="yyyy/mm/dd"
                         className={`border p-2 rounded ${formik.touched.checkIn && formik.errors.checkIn ? 'border-red-500' : 'border-gray-300'}`}
@@ -173,7 +195,8 @@ export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber
                         excludeDateIntervals={excludedDates}
                         dateFormat="yyyy/MM/dd"
                         placeholderText="yyyy/mm/dd"
-                        minDate={addDays(formik.values.checkIn, 2)}
+                        minDate={addDays(mincheckOut, 2)}
+                        maxDate={maxDate}
                         className={`border p-2 rounded ${formik.touched.checkIn && formik.errors.checkIn ? 'border-red-500' : 'border-gray-300'}`}
 
                     />

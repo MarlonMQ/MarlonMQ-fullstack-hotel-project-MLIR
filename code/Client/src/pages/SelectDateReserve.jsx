@@ -58,7 +58,8 @@ export const SelectDateReserve = () => {
                 status: "Outstanding",
                 services: formik.values.services,
                 roomNumber: roomNumber,
-                totalAmount: formik.values.totalAmount
+                totalAmount: formik.values.totalAmount,
+                
 
             };
             
