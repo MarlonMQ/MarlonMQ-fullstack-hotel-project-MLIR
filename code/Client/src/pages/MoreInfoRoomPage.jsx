@@ -56,7 +56,7 @@ const MoreInfoRoomPage = () => {
 
                 <Link
                     className="mt-4 px-4 py-2 bg-third text-white rounded-lg"
-                    to={`/rooms/SelectDateReserve/${room_id}/${0}`}
+                    to={`/rooms/SelectDateReserve/${room_id}/${price_per_night}`}
                     onClick={() => (console.log("hola mundo"))}
                 >
                     Choose a date
