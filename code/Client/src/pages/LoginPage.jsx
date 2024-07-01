@@ -5,7 +5,7 @@ import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
 import GrayBox from '../components/registerComponents/GrayBox.jsx';
 import FormBox from '../components/registerComponents/FormBox.jsx';
 import Axios from '../services/Axios.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function LoginPage() {
@@ -91,6 +91,7 @@ function LoginPage() {
               blur={formik.handleBlur}
               error={formik.touched.password && formik.errors.password}
             />
+            <Link to="/forgot-password" className="text-center text-sm absolute text-blue-500 hover:underline">Forgot your password?</Link>
           </GrayBox>
           
         </div>
