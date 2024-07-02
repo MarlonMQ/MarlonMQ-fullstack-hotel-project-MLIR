@@ -61,9 +61,10 @@ const formatDataMyRes = (dataReservations, setDataReservations) => {
 }
 
 
-const handleEditMode = (setEditMode, currentReserve, setCurrentUpdating) => {
+const handleEditMode = (setEditMode, currentReserve, setCurrentUpdating, setRoomNumber) => {
     setEditMode( (state) => state=1 );
     setCurrentUpdating(currentReserve);
+    setRoomNumber(currentReserve.num_room);
     console.log("presionada: ", currentReserve);
 }
 
@@ -194,7 +195,7 @@ const MyReservations = () => {
                                         <div className='mx-auto'>
                                             <button 
                                                 className=" mr-1 bg-blue-500 text-white px-4 py-2 rounded-lg"
-                                                onClick={() => handleEditMode(setEditMode, reservation, setCurrentUpdating)}
+                                                onClick={() => handleEditMode(setEditMode, reservation, setCurrentUpdating, setRoomNumber)}
                                             >
                                                 Update
                                             </button>
