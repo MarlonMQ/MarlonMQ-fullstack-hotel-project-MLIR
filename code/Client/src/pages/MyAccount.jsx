@@ -21,8 +21,7 @@ function MyAccount() {
       const response = await Axios.get('/myAccount');
       if (response.status === 200) {
         setAccount(response.data);
-        console.log(response.data);
-
+        
         if (response.data.profile_image) {
           const base64String = btoa(
             new Uint8Array(response.data.profile_image.data).reduce(
