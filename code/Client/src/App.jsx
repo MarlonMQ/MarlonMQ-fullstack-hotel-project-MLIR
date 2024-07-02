@@ -24,25 +24,13 @@ import ForgotPassword from './pages/ForgotPassword.jsx';
 import ChangePassword from './pages/ChangePassword.jsx';
 
 function App() {
-  const images = {
-    desktopImages: [
-      "../src/assets/hotelPictures/Hotel-image01.jpg", 
-      "../src/assets/hotelPictures/Hotel-image02.jpg",
-      "../src/assets/hotelPictures/Hotel-image03.jpg"
-    ],
-    mobileImages: [
-      "../src/assets/hotelPictures/Hotel-image04.jpg", 
-      "../src/assets/hotelPictures/Hotel-image06.jpg",
-      "../src/assets/hotelPictures/Hotel-image07.jpg"
-    ],
-  };
+  
 
   return (
     <Router>
       <AuthProvider>
         
         <NavBar />
-        <CarouselComponent images={images} />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
