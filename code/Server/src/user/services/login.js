@@ -28,10 +28,10 @@ class LoginServices {
   }
 
 
-  static async generateAccessToken(user) {
+  static async generateAccessToken(email) {
     try {
       return jwt.sign(
-        { email: user[0].email },
+        { email: email },
         process.env.SECRET_KEY,
         { expiresIn: '1h' }
       );
@@ -60,6 +60,15 @@ class LoginServices {
     } catch (error) {
         throw new Error('Drecript error');
     }
+  }
+
+  static async getProfileImage(email) {
+    const pool = await DbConnection.getInstance().getConnection();
+    const result = await pool.request()
+      .input('email', email)
+      .query('SELECT profile_image FROM t_user WHERE email = @email');
+    await DbConnection.getInstance().closeConnection();
+    return result.recordset[0].profile_image;
   }
 }
 

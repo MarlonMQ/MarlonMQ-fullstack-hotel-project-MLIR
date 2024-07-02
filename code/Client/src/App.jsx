@@ -19,6 +19,9 @@ import ProtectedRoute from './components/loginComponents/ProtectedRoute.jsx';
 import MoreInfoRoomPage from './pages/MoreInfoRoomPage.jsx';
 import MyReservations from './pages/MyReservations.jsx';
 import SelectDateReserve from './pages/SelectDateReserve.jsx';
+import MyAccount from './pages/MyAccount.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ChangePassword from './pages/ChangePassword.jsx';
 
 function App() {
   const images = {
@@ -43,16 +46,20 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ChangePassword />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/rooms/moreInfo/:room_id" element={<MoreInfoRoomPage/>} ></Route>
           <Route path="/rooms/SelectDateReserve/:room_id" element={<SelectDateReserve/>} ></Route>
-          
           <Route path="/rooms/myreservations" element={<MyReservations/>} ></Route>
           {/* <Route path="/rooms/myreservations/:id" element={<MyReservations/>} ></Route> */}
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute requiredROle = "admin" />}>
             <Route path="/dashboard" element={<DashboardLayout />} />
+          </Route>
+          <Route element={<ProtectedRoute/>}>
+            <Route path="/MyAccount" element={<MyAccount />} />
           </Route>
         </Routes>
         <Footer />
