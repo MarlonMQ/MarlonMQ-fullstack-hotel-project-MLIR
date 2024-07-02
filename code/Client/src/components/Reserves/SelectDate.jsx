@@ -45,7 +45,7 @@ const generateDatePickerFormatToExclude = (datesFromNumberRoom) => {
     return result;
 }
 
-export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber, totalAmount, setTotalAmount}) => {
+export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber, totalAmount, setTotalAmount, room_id, price, canPassThroughRooms}) => {
     const [mincheckOut, setMincheckOut] = useState('');
     const [maxNumberRoom, setMaxNumberRoom] = useState(0);
     const [maxDate, setMaxDate] = useState(addDays(new Date(), 365));
@@ -106,7 +106,6 @@ export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber
         setTotalAmount(daysBetweenInOut*price);
     }
 
-    const { room_id, price } = useParams();
 
     useEffect(() => {
         const getDates = async() => {
@@ -138,27 +137,42 @@ export const SelectDate = ({formik, setSelectingDates, roomNumber, setRoomNumber
             <h1 className="mb-6 text-2xl font-bold">Select Date Reserve ${totalAmount}</h1>
 
             <div className="grid grid-cols-3 w-screen text-center">
+
                 <div>
-                    <button
-                        type='button'
-                        className='bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded'
-                        onClick={() => handleBackRoom(roomNumber, setRoomNumber)}
-                    >
-                        Back
-                    </button>
+                    {
+                        (canPassThroughRooms == 1) 
+                        ?
+                            <button
+                                type='button'
+                                className='bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded'
+                                onClick={() => handleBackRoom(roomNumber, setRoomNumber)}
+                            >
+                                Back
+                            </button>
+                        : 
+                        null
+                    }
+
 
                 </div>
 
                 <p className='tertiary-title'>Room: {roomNumber}</p>
 
                 <div>
-                    <button 
-                        type='button' 
-                        className='bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded'
-                        onClick={() => handleNextRoom(roomNumber, setRoomNumber)}
-                    >
-                        Next
-                    </button>
+                    {
+                        (canPassThroughRooms == 1) 
+                        ? 
+                            <button 
+                                type='button' 
+                                className='bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded'
+                                onClick={() => handleNextRoom(roomNumber, setRoomNumber)}
+                            >
+                                Next
+                            </button>
+                        :
+                        null
+                    }
+
 
                 </div>
             </div>

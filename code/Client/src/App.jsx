@@ -19,6 +19,7 @@ import ProtectedRoute from './components/loginComponents/ProtectedRoute.jsx';
 import MoreInfoRoomPage from './pages/MoreInfoRoomPage.jsx';
 import MyReservations from './pages/MyReservations.jsx';
 import SelectDateReserve from './pages/SelectDateReserve.jsx';
+import { UpdateReservePage } from './pages/UpdateReservePage.jsx';
 
 function App() {
   const images = {
@@ -48,7 +49,7 @@ function App() {
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/rooms/moreInfo/:room_id" element={<MoreInfoRoomPage/>} ></Route>
           <Route path="/rooms/SelectDateReserve/:room_id/:price" element={<SelectDateReserve/>} ></Route>
-          
+          <Route path='/modifyReservation/:reserveId/:avId' element = { <UpdateReservePage/> }/>
           <Route path="/rooms/myreservations" element={<MyReservations/>} ></Route>
           {/* <Route path="/rooms/myreservations/:id" element={<MyReservations/>} ></Route> */}
           <Route element={<ProtectedRoute />}>

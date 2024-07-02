@@ -1,43 +1,25 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import { AuthContext } from '../components/loginComponents/AuthContext';
-
-import { v4 as uuidv4 } from 'uuid';
-
-import { toast } from 'react-toastify';
-import { addDays } from 'date-fns';
-
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { SelectDate } from '../components/Reserves/SelectDate';
 import SelectServices from '../components/Reserves/SelectServices';
 
+export const UpdateReservePage = () => {
+    const {reserveId, avId} = useParams();
 
-
-export const SelectDateReserve = () => {
     const [roomNumber, setRoomNumber] = useState(0);
-    const [canPassThroughRooms, setCanPassThroughRooms] = useState(1);
     const [selectingDates, setSelectingDates] = useState(1);
     const [totalAmount, setTotalAmount] = useState(0);
 
-    const { token } = useContext(AuthContext);
-    const { room_id, price } = useParams();
-    console.log("Desde padre: ", price);
-    const navigate = useNavigate();
-
-    const email = window.localStorage.getItem('email');
-    console.log("email: ", email.replace(/"/g, ""));
-
     const formik = useFormik({
         initialValues: {
-            email: '',
-            lastName: 'default',
+            reserveId: reserveId,
+            avId: avId,
             checkIn: '',
             checkOut: '',
-            id_room: '',
+            status: '',
             services: [],
-            roomNumber: -1,
             totalAmount: -1
         },
         validationSchema: Yup.object().shape({
@@ -51,27 +33,22 @@ export const SelectDateReserve = () => {
             values.id_room = room_id;
 
             const formData = {
-                email: values.email,
-                lastName: 'default',
+                reserveId: reserveId,
+                avId: avId,
                 checkIn: values.checkIn,
                 checkOut: values.checkOut,
-                id_room: values.id_room,
                 status: "Outstanding",
                 services: formik.values.services,
-                roomNumber: roomNumber,
                 totalAmount: formik.values.totalAmount,
-                
-
+            
             };
             
 
-
             try {
-                //! Subir todo lo relacionado a la reserva a la bd
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                const response = await axios.post('http://localhost:4000/reservations/', formData);
-                toast.success('Reservation pay pending successfully');
-                navigate("/rooms/myreservations");
+                // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                // const response = await axios.post('http://localhost:4000/reservations/', formData);
+                // toast.success('Reservation pay pending successfully');
+                // navigate("/rooms/myreservations");
             } catch (error) {
                 console.error('Error setting reserve room:', error);
                 if (error.response) {
@@ -93,30 +70,22 @@ export const SelectDateReserve = () => {
                     toast.error('Error setting reserve')
                 }
             }
-        
-
-
         }
     });
 
 
-
-
     return (
-    <form onSubmit={formik.handleSubmit} className="flex flex-col items-center space-y-6">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col items-center space-y-6">
         {
             (selectingDates === 1) 
                 ?
-                    <SelectDate
+                    <SelectDate 
                         formik= {formik}
                         setSelectingDates = {setSelectingDates}
                         roomNumber = {roomNumber}
                         setRoomNumber={setRoomNumber}
                         totalAmount = {totalAmount}
                         setTotalAmount = {setTotalAmount}
-                        room_id={room_id}
-                        price={price}
-                        canPassThroughRooms = {canPassThroughRooms}
 
                     />
                 :
@@ -130,8 +99,5 @@ export const SelectDateReserve = () => {
         }
 
     </form>
-
-    );
-};
-
-export default SelectDateReserve;
+    )
+}

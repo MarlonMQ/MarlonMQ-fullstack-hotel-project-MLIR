@@ -70,6 +70,34 @@ export class ReservationsController {
             res.status(500).send(error.message);
         }
     }
+    //! el que uso
+    static async updateReserveById(req, res) {
+        console.log("nuevo update by res llamado");
+        const {
+            reserveId,
+            avId,
+            checkIn,
+            checkOut,
+            status,
+            services,
+            roomNumber,
+            totalAmount,
+            ids_service
+        } = req.body;
+        console.log("id reserves", ids_service[0]);
+        try {
+            await ReservesServices.updateReserveById(reserveId, avId, checkIn, checkOut, status, 
+                services, roomNumber, totalAmount, ids_service);
+            res.status(204).send({
+                message: 'Reservation updated successfully.'
+            });
+
+        } catch (error) {
+            res.status(500).send(error.message);
+            
+        }
+
+    }
 
     static async updateReservation(req, res) {
         const { id } = req.params;

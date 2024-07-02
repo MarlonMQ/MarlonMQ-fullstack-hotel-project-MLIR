@@ -112,6 +112,7 @@ class ReservesServices {
         const result = await pool.request()
         .input("email", sql.VarChar, email)
         .query(`
+
             SELECT 
                 Res.id_reserve,
                 Res.email,
@@ -119,10 +120,14 @@ class ReservesServices {
                 Res.departure_date,
                 Res.total,
                 Res.num_room,
+                Res.id_room,
                 Roo.room_type,
                 Roo.image_url,
+                Roo.price_per_night,
                 Res.stat,
-                Srv.title
+                Srv.title,
+                Srv.id_service,
+                RA.id_room_availability
             FROM reserve Res
             LEFT JOIN room Roo
                 ON Res.id_room = Roo.id_room
@@ -130,20 +135,70 @@ class ReservesServices {
                 ON Res.id_reserve = RxS.id_reserve
             LEFT JOIN service Srv
                 ON RxS.id_service = Srv.id_service
+            LEFT JOIN room_availability RA
+                ON RA.room_number = (
+                    SELECT RN.id
+                    FROM room_number RN
+                    WHERE RN.num_room = Res.num_room AND RN.id_room_type = Res.id_room
+                    AND RA.arrival_date = Res.arrival_date
+                    AND RA.departure_date = Res.departure_date
+                )
             WHERE Res.email = @email
         `)
-
         // .query(`
-            // SELECT id_reserve, email, arrival_date, departure_date, room_type, image_url, stat
-            // FROM reserve Res
-            // LEFT JOIN room Roo
-            // ON Res.id_room = Roo.id_room
-            // WHERE Res.email = @email
-        // `);
-
+        //     SELECT 
+        //         Res.id_reserve,
+        //         Res.email,
+        //         Res.arrival_date,
+        //         Res.departure_date,
+        //         Res.total,
+        //         Res.num_room,
+        //         Roo.room_type,
+        //         Roo.image_url,
+        //         Res.stat,
+        //         Srv.title,
+        //         RA.id_room_availability
+        //     FROM reserve Res
+        //     LEFT JOIN room Roo
+        //         ON Res.id_room = Roo.id_room
+        //     LEFT JOIN reserveXservices RxS
+        //         ON Res.id_reserve = RxS.id_reserve
+        //     LEFT JOIN service Srv
+        //         ON RxS.id_service = Srv.id_service
+        //     LEFT JOIN room_availability RA
+        //         ON RA.room_number = (
+        //             SELECT RN.id
+        //             FROM room_number RN
+        //             WHERE RN.num_room = Res.num_room AND RN.id_room_type = Res.id_room
+        //             AND RA.arrival_date = Res.arrival_date
+        //             AND RA.departure_date = Res.departure_date
+        //         )
+        //     WHERE Res.email = @email
+        // `)
+        // .query(`
+        //     SELECT 
+        //         Res.id_reserve,
+        //         Res.email,
+        //         Res.arrival_date,
+        //         Res.departure_date,
+        //         Res.total,
+        //         Res.num_room,
+        //         Roo.room_type,
+        //         Roo.image_url,
+        //         Res.stat,
+        //         Srv.title
+        //     FROM reserve Res
+        //     LEFT JOIN room Roo
+        //         ON Res.id_room = Roo.id_room
+        //     LEFT JOIN reserveXservices RxS
+        //         ON Res.id_reserve = RxS.id_reserve
+        //     LEFT JOIN service Srv
+        //         ON RxS.id_service = Srv.id_service
+        //     WHERE Res.email = @email
+        // `)
 
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
-        console.log("recordset my res: ", result.recordset);
+        // console.log("recordset my res: ", result.recordset);
         return result.recordset;
     }
     static async deleteReservation(id) {
@@ -152,6 +207,69 @@ class ReservesServices {
             .input('id_reserva', sql.VarChar, id)
             .query('DELETE FROM reserve WHERE id_reserve = @id_reserva');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+        return result;
+    }
+
+
+    static async updateReserveById(reserveId, avId, checkIn, checkOut, status, services, roomNumber, totalAmount, id_service) {
+        //! Pasos (ocupo el id service)
+        // 1. Borrar las reservas con el reserveId de resXServ
+        // 2. Insertar los nuevos services reusando el reserveId
+        // 3. Actualizar la data nueva en reserve: checkIn, checkOut, totalAmount (no permitir que cambie el numero de hab)
+        // 4. Actualizar la data en room available: in y out
+        const pool = await DbConnection.getInstance().getConnection();
+        
+        //! 1
+        await pool.request()
+        .input('reserveId', sql.UniqueIdentifier, reserveId)
+        .query(`
+            DELETE FROM reserveXservices
+            WHERE id_reserve = @reserveId
+        `)
+        
+        //! 2
+        
+        for (let i = 0; i < services.length; i++) {
+            console.log("Services: ", services[i]);
+            const newRxSId = uuidv4();
+            id_service[i] = services[i].id_service;
+            console.log("Services ids: ", id_service[i]);
+            await pool.request()
+            .input('id_service', sql.UniqueIdentifier, id_service[i])
+            .input('id', sql.UniqueIdentifier, newRxSId)
+            .input('reserveId', sql.UniqueIdentifier, reserveId)
+            .query(`
+                INSERT INTO reserveXservices (id, id_reserve, id_service) VALUES
+                (@id, @reserveId, @id_service)
+            `)
+        }
+
+        //! 3
+        await pool.request()
+        .input('reserveId', sql.UniqueIdentifier, reserveId)
+        .input('In', sql.Date, checkIn)
+        .input('Out', sql.Date, checkOut)
+        .input('totalAmount', sql.Int, totalAmount)
+        .query(`
+            UPDATE reserve
+            SET arrival_date = @In,
+                departure_date = @Out,
+                total = @totalAmount
+            WHERE id_reserve = @reserveId
+        `)
+        console.log("Id en availab", avId);
+        const result = await pool.request()
+        .input('id_av', sql.UniqueIdentifier, avId)
+        .input('In', sql.Date, checkIn)
+        .input('Out', sql.Date, checkOut)
+        .query(`
+            UPDATE room_availability
+            SET arrival_Date = @In,
+                departure_date = @Out
+            WHERE id_room_availability = @id_av
+        `)  
+
+        await DbConnection.getInstance().closeConnection();
         return result;
     }
 
@@ -178,8 +296,6 @@ class ReservesServices {
         return result;
     }
 
-    
-    
 }
 
 export default ReservesServices;
