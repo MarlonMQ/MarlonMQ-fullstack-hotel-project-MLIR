@@ -27,6 +27,10 @@ class MyAccountController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  static async updateMyAccountData(req, res) {
+    
+  }
 }
 
 export default MyAccountController;
