@@ -1,13 +1,22 @@
-import React, { useContext, useEffect } from 'react';
-import '../index.css';
-import { AuthContext } from '../components/loginComponents/AuthContext.jsx';
+import { CarouselComponent } from '../components/Carousel.jsx';
 
 function HomePage() {
-
-  const { rol, logout } = useContext(AuthContext);
+  const images = {
+    desktopImages: [
+      "../src/assets/hotelPictures/Hotel-image01.jpg", 
+      "../src/assets/hotelPictures/Hotel-image02.jpg",
+      "../src/assets/hotelPictures/Hotel-image03.jpg"
+    ],
+    mobileImages: [
+      "../src/assets/hotelPictures/Hotel-image04.jpg", 
+      "../src/assets/hotelPictures/Hotel-image06.jpg",
+      "../src/assets/hotelPictures/Hotel-image07.jpg"
+    ],
+  };
 
   return (
     <>
+      <CarouselComponent images={images} />
     </>
   )
 }
