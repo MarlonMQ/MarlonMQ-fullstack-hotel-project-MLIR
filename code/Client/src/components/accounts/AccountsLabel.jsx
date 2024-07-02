@@ -19,7 +19,7 @@ function AccountsLabel() {
   };
 
   return (
-    <div className='bg-white shadow-lg rounded-lg p-4 border mx-auto space-y-5'> 
+    <div className='bg-white shadow-lg rounded-lg p-4 border mx-auto space-y-20'> 
       <AccountForm 
         user={user} 
         updatemode={updatemode} 
