@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Axios from '../../services/Axios.js';
 import { toast } from 'react-toastify';
 import DeleteAlert from './components/DeleteAlert.jsx';
+import UserInformation from './components/UserInformation.jsx';
 
 function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,8 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [userToShow, setUserToShow] = useState({});
+  const [showUserInformation, setShowUserInformation] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -90,6 +93,11 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
     toast.info('Email copied to clipboard');
   };
 
+  const handleShowUserInformation = (user) => {
+    setUserToShow(user);
+    setShowUserInformation(true);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold text-fourth text-center mb-4">Accounts</h2>
@@ -124,27 +132,50 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
-            <tr>
-              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('name')}>
+            <tr >
+              <th className="px-5 py-3 flex  border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('name')}>
+                <div className='flex justify-between w-full'>
                   <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Name</div>
+                  <div className='text-right text-xs text-gray-600 uppercase font-semibold select-none'>
+                    {sortBy === 'name' && sortDirection === 'asc' ? '▼' : (
+                      sortBy === 'name' && sortDirection !== 'asc' ? '▲' : '')
+                    }
+                  </div>
+                </div>
               </th>
-              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('email')}>
+              <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out " onClick={() => handleSort('email')}>
+                <div className='flex justify-between w-full'>
                   <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Email</div>
+                  <div className='text-right text-xs text-gray-600 uppercase font-semibold select-none'>
+                    {sortBy === 'email' && sortDirection === 'asc' ? '▼' : (
+                      sortBy === 'email' && sortDirection !== 'asc' ? '▲' : '')
+                    }
+                  </div>
+                </div>
               </th>
               <th className="px-5 py-3 border-gray-200 bg-gray-100 hover:bg-gray-300 tracking-wider cursor-pointer transition-all duration-150 ease-in-out" onClick={() => handleSort('role')}>
+                <div className='flex justify-between w-full'>  
                   <div className='text-left text-xs text-gray-600 uppercase font-semibold select-none'>Role</div>
+                  <div className='text-right text-xs text-gray-600 uppercase font-semibold select-none'>
+                    {roleFilter === 'all' && (
+                      sortBy === 'role' && sortDirection === 'asc' ? '▼' : (
+                        sortBy === 'role' && sortDirection !== 'asc' ? '▲' : '')
+                    )}
+                  </div>
+                </div>
               </th>
               <th className="px-5 py-3 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"/>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredUsers.map((user) => (
-              <tr key={user.email}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.name} {user.last_name}</td>
+              <tr key={user.email} className=''>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">{user.name} {user.last_name}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm hover:underline cursor-pointer" onClick={() => handleCopyToClipboard(user.email)}>{user.email}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{user.rol === 'user' ? 'Client' : 'Employee'}</td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex space-x-5 justify-center">
+                    <button className="text-gray-500 hover:text-gray-700" onClick={() => handleShowUserInformation(user)}>Details</button>
                     <button className="text-blue-500 hover:text-blue-700" onClick={() => handleUpdateUser(user)}>Update</button>
                     <button className="text-red-500 hover:text-red-700" onClick={() => handleDeleteUser(user)}>Delete</button>
                   </div>
@@ -154,11 +185,16 @@ function AccountTable({ shouldFetchUsers, onUserUpdated, onUserDeleted }) {
           </tbody>
         </table>
       </div>
-      
       {showDeleteAlert && (
         <DeleteAlert
             onClose={() => setShowDeleteAlert(false)}
             onConfirm={deleteUser}
+        />
+      )}
+      {showUserInformation && (
+        <UserInformation
+        user={userToShow}
+        onClose={() => setShowUserInformation(false)}
         />
       )}
     </div>
