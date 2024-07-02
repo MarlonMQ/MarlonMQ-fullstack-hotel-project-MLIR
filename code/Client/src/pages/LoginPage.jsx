@@ -43,7 +43,8 @@ function LoginPage() {
 
           const token = response.data.token;
           const rol = response.data.rol;
-          login(token,rol);
+          const profile_image = response.data.profile_image;
+          login(token,rol,profile_image);
           Axios.setToken(token);
           navigate('/'); // Navega a la página principal
         }
