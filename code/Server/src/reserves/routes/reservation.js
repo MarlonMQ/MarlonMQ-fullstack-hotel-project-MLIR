@@ -26,9 +26,14 @@ class ReservationRoutes {
         this.router.delete('/:id',checkToken,  (req, res) => {
             ReservationsController.deleteReservation(req, res);
         });
-        //! actual
+        //! actuales
         this.router.put("/updateReservation", checkToken, (req, res) => {
             ReservationsController.updateReserveById(req, res);
+        });
+        this.router.delete('/deleteRes/:id_res/:id_av', checkToken,  (req, res) => {
+            console.log("new delete reserve called 1");
+
+            ReservationsController.deleteReserve(req, res);
         });
 
         this.router.put('/:id',checkToken,  (req, res) => {

@@ -12,7 +12,7 @@ const Option = ({ image, text, price, selected, onSelect }) => (
   </div>
 );
 
-const SelectServices = ({formik, setTotalAmount, totalAmount}) => {
+const SelectServices = ({formik, setTotalAmount, totalAmount, canPassThroughRooms}) => {
     const [options, setOptions] = useState([]);
     useEffect(() => {
         const getServices = async() => {
@@ -47,6 +47,9 @@ const SelectServices = ({formik, setTotalAmount, totalAmount}) => {
   const handleSubmit = () => {
     formik.setFieldValue('services', selectedOptions);
     formik.setFieldValue('totalAmount', totalAmount);
+    if (canPassThroughRooms == 0) {
+      window.location.reload();
+    }
   };
   
 

@@ -209,7 +209,35 @@ class ReservesServices {
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result;
     }
+    //!
+    static async deleteReserve(id_reserve, id_room_availability) {
+        console.log("new delete reserve 3", id_reserve);
+        console.log("new delete reserve 3", id_room_availability);
+        const pool = await DbConnection.getInstance().getConnection();
 
+        await pool.request()
+        .input('id_res', sql.UniqueIdentifier, id_reserve)
+        .query(`
+            DELETE FROM reserveXservices WHERE id_reserve = @id_res;
+        `);
+
+
+        await pool.request()
+        .input('id_room_av', sql.UniqueIdentifier, id_room_availability)
+        .query(`
+            DELETE FROM room_availability WHERE id_room_availability = @id_room_av;
+        `);
+
+        const result = await pool.request()
+        .input('id_res', sql.UniqueIdentifier, id_reserve)
+        .query(`
+            DELETE FROM reserve WHERE id_reserve = @id_res;
+        `);
+
+        await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
+
+        return result;
+    }
 
     static async updateReserveById(reserveId, avId, checkIn, checkOut, status, services, roomNumber, totalAmount, id_service) {
         //! Pasos (ocupo el id service)

@@ -70,6 +70,23 @@ export class ReservationsController {
             res.status(500).send(error.message);
         }
     }
+
+    //! 
+    static async deleteReserve(req, res) {
+        const {id_res, id_av} = req.params;
+        console.log("new delete reserve called 2", id_res);
+        try {
+            const result = await ReservesServices.deleteReserve(id_res, id_av);
+            res.status(204).send({
+                message: 'Reservation deleted successfully.'
+            });
+        } catch (error) {
+            res.status(500).send(error.message);
+            
+        }
+    }
+
+
     //! el que uso
     static async updateReserveById(req, res) {
         console.log("nuevo update by res llamado");

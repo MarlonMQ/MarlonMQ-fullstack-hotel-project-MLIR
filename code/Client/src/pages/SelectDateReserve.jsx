@@ -124,6 +124,7 @@ export const SelectDateReserve = () => {
                         formik = {formik}
                         totalAmount = {totalAmount}
                         setTotalAmount = {setTotalAmount}
+                        canPassThroughRooms = {canPassThroughRooms}
                     />
 
                 

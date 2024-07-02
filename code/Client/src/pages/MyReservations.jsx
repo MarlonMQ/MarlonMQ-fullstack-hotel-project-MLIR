@@ -17,24 +17,6 @@ const getInfoAboutReservations = async (token, email) => {
 }
 
 
-// const formatDataMyRes = (dataReservations, setDataReservations) => {
-//     const mergedData = dataReservations.reduce((acc, item) => {
-//     const { title, ...rest } = item;
-//     const key = JSON.stringify(rest);
-    
-//     if (!acc[key]) {
-//         acc[key] = { ...rest, title: [title] };
-//     } else {
-//         acc[key].title.push(title);
-//     }
-    
-//     return acc;
-//     }, {});
-    
-//     const result = Object.values(mergedData);
-//     console.log(result);
-//     setDataReservations(result);
-// }
 const formatDataMyRes = (dataReservations, setDataReservations) => {
     const mergedData = dataReservations.reduce((acc, item) => {
         const { title, id_service, ...rest } = item;
@@ -67,6 +49,23 @@ const handleEditMode = (setEditMode, currentReserve, setCurrentUpdating, setRoom
     setRoomNumber(currentReserve.num_room);
     console.log("presionada: ", currentReserve);
 }
+
+const handleDelete = async (id_reserve, id_av, token) => {
+    console.log("handle delete llamado");
+    const data = {
+        id_reserve: id_reserve ,
+        id_room_availability: id_av
+    };
+    try {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const result = await axios.delete(`http://localhost:4000/reservations/deleteRes/${id_reserve}/${id_av}`);
+        toast.success('Reservation deleted successfully');
+        
+    } catch (error) {
+        console.error('Error setting reserve room:', error);
+        toast.error('Cant delete reserve');
+    }
+} 
 
 const MyReservations = () => {
     const email = window.localStorage.getItem('email').replace(/"/g, "");
@@ -134,9 +133,6 @@ const MyReservations = () => {
             
 
             try {
-                // console.log("nueva data: ");
-                // console.log("Nueva In:", formData.checkIn);
-                // console.log("Nuevos servicios: ", formData.services);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.put('http://localhost:4000/reservations/updateReservation', formData);
                 toast.success('Reservation pay pending successfully');
@@ -202,6 +198,7 @@ const MyReservations = () => {
         
                                             <button 
                                                 className=" ml-1 bg-red-500 text-white px-4 py-2 rounded-lg"
+                                                onClick={() => handleDelete(reservation.id_reserve, reservation.id_room_availability, token)}
                                             >
                                                 Delete
                                             </button>
@@ -250,14 +247,14 @@ const MyReservations = () => {
                             formik = {formik}
                             totalAmount = {totalAmount}
                             setTotalAmount = {setTotalAmount}
+                            canPassThroughRooms = {canPassThroughRooms}
+
                         />
 
                 }
 
             </form>
         }
-
-        
 
     </>
   )
