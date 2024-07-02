@@ -1,4 +1,7 @@
 import { CarouselComponent } from '../components/Carousel.jsx';
+import ColourCard from '../components/homePage/ColourCard.jsx'
+import ServiceIndex from '../components/homePage/ServiceIndex.jsx';
+import image from '../assets/hotelPictures/Hotel-image01.jpg'
 
 function HomePage() {
   const images = {
@@ -17,6 +20,12 @@ function HomePage() {
   return (
     <>
       <CarouselComponent images={images} />
+      <ColourCard 
+        title="WELCOME TO HAZBIN HOTEL"
+        text="We are a hotel located in the heart of the city. We offer the best service to make your stay as pleasant as possible. We have a variety of rooms, from simple to luxury suites. We also have a restaurant, a bar, a gym and a swimming pool. We are waiting for you!"
+        serviceImage={image}
+      />
+      <ServiceIndex />
     </>
   )
 }
