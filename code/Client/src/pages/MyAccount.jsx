@@ -144,6 +144,7 @@ function MyAccount() {
       setEditMode(false);
       fetchAccount();
       if (response.status === 201) {
+        updateProfileImage(formik.values.profile_image);
         toast.success('Account updated successfully');
       }
       try {
@@ -181,7 +182,6 @@ function MyAccount() {
   };
 
   const handleSaveInformation = async () => {
-    updateProfileImage(formik.values.profile_image);
     formik.handleSubmit();
   };
 
