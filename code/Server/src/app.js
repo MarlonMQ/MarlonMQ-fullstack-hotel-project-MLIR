@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import serviceRoutes from './facilities/routes/service.js';
 import path from 'path';
+import bodyParser from 'body-parser';
 import LoginRoutes from './user/routes/login.js';
 import SignUpRoutes from './user/routes/signUp.js';
 import reservationRoutes from './reserves/routes/reservation.js';
@@ -19,6 +20,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Create express app
 const app = express();
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

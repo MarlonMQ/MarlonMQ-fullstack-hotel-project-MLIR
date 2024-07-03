@@ -15,7 +15,7 @@ const FormBox = ({ title, name, type, error, value, change, blur, placeholder, t
               type={type}
               onBlur={blur}
               placeholder={placeholder}
-              className={`block w-full h-8 p-3 border ${error ? 'border-red-500' : 'border-gray-300'} rounded`}
+              className={`block w-full h-12 p-3 border ${error ? 'border-red-500' : 'border-gray-300'} rounded`}
               tabIndex={tabIndex}
               readOnly={readOnly}
           />
