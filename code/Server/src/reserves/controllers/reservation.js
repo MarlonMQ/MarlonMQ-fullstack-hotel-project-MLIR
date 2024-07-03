@@ -8,10 +8,10 @@ export class ReservationsController {
 
     // Metodo para ingresar una reserva
     static async createReservation(req, res) {
-        const { email, lastName, checkIn, checkOut, status, id_room  } = req.body;
-        console.log("Create reservation controller: ", email, lastName, checkIn, checkOut, status, id_room);
+        const { email, lastName, checkIn, checkOut, status, id_room, services, roomNumber, totalAmount  } = req.body;
+        console.log("Create reservation controller: ", roomNumber);
         try {
-            await ReservesServices.createReservation(email, lastName, checkIn, checkOut, status, id_room);
+            await ReservesServices.createReservation(email, lastName, checkIn, checkOut, status, id_room, services, roomNumber, totalAmount);
             res.status(201).send({
                 message: 'Reservation created successfully.'
             })
@@ -69,6 +69,51 @@ export class ReservationsController {
         } catch (error) {
             res.status(500).send(error.message);
         }
+    }
+
+    //! 
+    static async deleteReserve(req, res) {
+        const {id_res, id_av} = req.params;
+        console.log("new delete reserve called 2", id_res);
+        try {
+            const result = await ReservesServices.deleteReserve(id_res, id_av);
+            res.status(204).send({
+                message: 'Reservation deleted successfully.'
+            });
+        } catch (error) {
+            res.status(500).send(error.message);
+            
+        }
+    }
+
+
+    //! el que uso
+    static async updateReserveById(req, res) {
+        console.log("nuevo update by res llamado");
+        const {
+            reserveId,
+            avId,
+            checkIn,
+            checkOut,
+            status,
+            services,
+            roomNumber,
+            totalAmount,
+            ids_service
+        } = req.body;
+        console.log("id reserves", ids_service[0]);
+        try {
+            await ReservesServices.updateReserveById(reserveId, avId, checkIn, checkOut, status, 
+                services, roomNumber, totalAmount, ids_service);
+            res.status(204).send({
+                message: 'Reservation updated successfully.'
+            });
+
+        } catch (error) {
+            res.status(500).send(error.message);
+            
+        }
+
     }
 
     static async updateReservation(req, res) {

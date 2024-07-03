@@ -11,11 +11,15 @@ const EditServiceForm = ({ service, onSave, onCancel, token }) => {
   const formik = useFormik({
     initialValues: {
       title: service.title,
+      price: service.price,
       image: null,
     },
   
     validationSchema: Yup.object({
       title: Yup.string().required('Title is required'),
+      price: Yup.number()
+      .required("Price is required")
+      .test("Price test", "Price must be greater than zero", value => value > 0),
       image: Yup.mixed()
         .test("fileSize", "The file is too large", value => !value || (value && value.size <= 2056 * 2056))
         .test("fileFormat", "Unsupported format", value => !value || (value && ["image/jpg", "image/jpeg", "image/gif", "image/png", "image/avif"].includes(value.type)))
@@ -24,6 +28,7 @@ const EditServiceForm = ({ service, onSave, onCancel, token }) => {
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('title', values.title);
+      formData.append('price', values.price);
       if (values.image) {
         formData.append('image', values.image);
       }
@@ -71,6 +76,19 @@ const EditServiceForm = ({ service, onSave, onCancel, token }) => {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
           />
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
+        </div>
+
+        <div>
+          <label htmlFor="price" className="text-sm font-medium text-gray-700">Price</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            onChange={formik.handleChange}
+            value={formik.values.price}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
+          />
+          {formik.errors.price && <div className="text-red-500 text-xs italic">{formik.errors.price}</div>}
         </div>
         
         <div>

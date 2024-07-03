@@ -11,6 +11,7 @@ class RoomsServices {
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset; // Record set devuelve un arreglo con un json por cada registro
     }
+
     static async getDataRoom(id) {
         const pool = await DbConnection.getInstance().getConnection();
         const result = await pool.request()
@@ -18,6 +19,37 @@ class RoomsServices {
         .query('SELECT quantity_available, id_room, room_type, price_per_night, capacity, description, image_url FROM room WHERE id_room = @id');
         await DbConnection.getInstance().closeConnection(); // Cierra la conexión aquí
         return result.recordset; // Record set devuelve un arreglo con un json por cada registro
+    }
+
+    static async getMaxRoomNumber(id) {
+        const pool = await DbConnection.getInstance().getConnection();
+        const result = await pool.request()
+        .input("id", sql.UniqueIdentifier, id)
+        .query(`
+            SELECT TOP 1 num_room -- para calcular el precio total
+            FROM room_number 
+            WHERE id_room_type = @id
+            ORDER BY num_room DESC
+        `)
+        return result.recordset;
+    }
+
+    static async getConsultDateRoom(id, num_room) {
+        console.log("Consult date services called");
+        const pool = await DbConnection.getInstance().getConnection();
+        const result = await pool.request()
+        .input("id", sql.UniqueIdentifier, id)
+        .input("num_room", sql.Int, num_room)
+        .query(`
+            SELECT room_type, num_room, arrival_Date, departure_date, price_per_night
+            FROM room R
+            INNER JOIN room_number RN
+            ON R.id_room = RN.id_room_type
+            LEFT JOIN room_availability RA
+            ON  RN.id = RA.room_number
+            WHERE R.id_room = @id AND RN.num_room = @num_room
+        `)
+        return result.recordset;
     }
 
     static async uploadRoom(id, type, price, availables, capacity, description, imageUrl) {

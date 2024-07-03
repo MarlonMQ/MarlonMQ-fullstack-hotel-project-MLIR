@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 function ReservationForm() {
   const { token } = useContext(AuthContext);
-
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,6 +15,9 @@ function ReservationForm() {
     checkOut: '',
     status: 'Outstanding',
     id_room: '',
+    services: [],
+    roomNumber: 0,
+    totalAmount: 0
   });
   const [errors, setErrors] = useState({});
   const [rooms, setRooms] = useState([]);
@@ -103,6 +106,9 @@ function ReservationForm() {
           checkOut: '',
           status: 'Outstanding',
           id_room: '',
+          services: [],
+          roomNumber: 0,
+          totalAmount: 0
         });
       } catch (error) {
         toast.error('Error creating reservation');

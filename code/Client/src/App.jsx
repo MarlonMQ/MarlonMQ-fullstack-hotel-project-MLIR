@@ -22,6 +22,7 @@ import SelectDateReserve from './pages/SelectDateReserve.jsx';
 import MyAccount from './pages/MyAccount.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ChangePassword from './pages/ChangePassword.jsx';
+import { UpdateReservePage } from './pages/UpdateReservePage.jsx';
 
 function App() {
   
@@ -41,6 +42,7 @@ function App() {
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/rooms/moreInfo/:room_id" element={<MoreInfoRoomPage/>} ></Route>
           <Route path="/rooms/SelectDateReserve/:room_id" element={<SelectDateReserve/>} ></Route>
+          <Route path='/modifyReservation/:reserveId/:avId' element = { <UpdateReservePage/> }/>
           <Route path="/rooms/myreservations" element={<MyReservations/>} ></Route>
           {/* <Route path="/rooms/myreservations/:id" element={<MyReservations/>} ></Route> */}
           <Route element={<ProtectedRoute requiredROle = "admin" />}>

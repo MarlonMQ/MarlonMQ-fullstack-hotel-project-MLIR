@@ -10,7 +10,7 @@ const getRoom = async (room_id) => {
 const MoreInfoRoomPage = () => {
     const [roomData, setRoomData] = useState({});
     const { room_id } = useParams();
-    console.log("Room id desde more info page: ", room_id);
+
     
     useEffect(() => {
         const fetchRoomData = async () => {
@@ -56,7 +56,7 @@ const MoreInfoRoomPage = () => {
 
                 <Link
                     className="mt-4 px-4 py-2 bg-third text-white rounded-lg"
-                    to={`/rooms/SelectDateReserve/${room_id}`}
+                    to={`/rooms/SelectDateReserve/${room_id}/${price_per_night}`}
                     onClick={() => (console.log("hola mundo"))}
                 >
                     Choose a date

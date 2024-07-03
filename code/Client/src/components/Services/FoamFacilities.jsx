@@ -17,6 +17,7 @@ const UploadServiceForm = () => {
   const formik = useFormik({
     initialValues: {
       title: '',
+      price: 0,
       image: null,
     },
   
@@ -24,6 +25,9 @@ const UploadServiceForm = () => {
     validationSchema: Yup.object({
       title: Yup.string()
         .required('Title is required'),
+      price: Yup.number()
+        .required("Price is required")
+        .test("Price test", "Price must be greater than zero", value => value > 0),
       image: Yup.mixed()
         .required('An image is required')
         .test("fileSize", "The file is too large", value => !value || (value && value.size <= 2056 * 2056))
@@ -35,6 +39,7 @@ const UploadServiceForm = () => {
       const formData = new FormData();
       formData.append('title', values.title);
       formData.append('image', values.image);
+      formData.append('price', values.price);
 
       try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -92,7 +97,7 @@ const UploadServiceForm = () => {
       )}
       <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="text-sm font-medium text-gray-700">Service Title</label>
+          <label htmlFor="title" className="text-sm font-medium text-gray-700">Title</label>
           <input
             id="title"
             name="title"
@@ -103,10 +108,23 @@ const UploadServiceForm = () => {
           />
           {formik.errors.title && <div className="text-red-500 text-xs italic">{formik.errors.title}</div>}
         </div>
+
+        <div>
+          <label htmlFor="price" className="text-sm font-medium text-gray-700">Price</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            onChange={formik.handleChange}
+            value={formik.values.price}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-fourth focus:border-fourth"
+          />
+          {formik.errors.price && <div className="text-red-500 text-xs italic">{formik.errors.price}</div>}
+        </div>
         
         {/* Field 02 */}
         <div>
-          <label htmlFor="image" className="text-sm font-medium text-gray-700">Service Image</label>
+          <label htmlFor="image" className="text-sm font-medium text-gray-700">Image</label>
           <input 
             id="image"
             name="image"

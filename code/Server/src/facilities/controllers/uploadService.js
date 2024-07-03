@@ -13,11 +13,11 @@ export class UploadServiceController {
     static async uploadService(req, res) {
 
         try {
-            const { title } = req.body;
+            const { title, price } = req.body;
 
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
             
-            const result = await ServiceServices.uploadService(title, imageUrl);
+            const result = await ServiceServices.uploadService(title, price, imageUrl);
             res.status(201).send({
                 message: 'Service uploaded successfully',
             });
@@ -62,11 +62,11 @@ export class UploadServiceController {
     static async updateService(req, res) {
         console.log("llegue aqui");
         const { id } = req.params;
-        const { title } = req.body;
+        const { title, price } = req.body;
 
         try {
             const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
-            const result = await ServiceServices.updateService(id, title, imageUrl);
+            const result = await ServiceServices.updateService(id, title, imageUrl, price);
             res.status(200).send({
                 message: 'Service updated successfully',
             });
