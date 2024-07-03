@@ -81,7 +81,6 @@ class MyAccountServices {
       .input('password', sql.VarChar, encryptedNewPassword)
       .query('UPDATE password SET password = @password WHERE email = @email');
     await DbConnection.getInstance().closeConnection();
-    console.log(result.recordset );
     return result.recordset;
   }
 

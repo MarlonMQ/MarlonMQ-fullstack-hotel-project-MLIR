@@ -61,9 +61,9 @@ function MyAccount() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        console.log(error.response.data);
+        toast.error('User not found');
       } else {
-        console.log('Error fetching account');
+        console.error(error);
       }
     }
   };
@@ -182,7 +182,6 @@ function MyAccount() {
   };
 
   const handleSaveInformation = async () => {
-    console.log(formik.values);
     updateProfileImage(formik.values.profile_image);
     formik.handleSubmit();
   };
@@ -232,7 +231,6 @@ function MyAccount() {
 
       try {
         const response = await Axios.post('/myAccount', values);
-        console.log(response.status);
           setShowChangePassword(false);
           formik.resetForm(); // Utiliza resetForm para resetear los valores y el estado de touched
           toast.success('Password changed successfully');
@@ -267,7 +265,6 @@ function MyAccount() {
 
   const handleDeleteAccount = async () => {
     if (formik.values.password !== '') {
-      console.log('Deleting account');
       const values = {
         email: account.email,
         password: formik.values.password,
@@ -288,7 +285,7 @@ function MyAccount() {
           formik.setErrors({ password: 'Wrong password' });
         } else {
           if(error.response){
-            console.log(error.response.data);
+            console.error(error)
           }
           console.error(error);
         }
