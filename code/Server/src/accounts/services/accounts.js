@@ -81,7 +81,17 @@ class AccountsServices {
   static async getAllAccounts() {
     const pool = await DbConnection.getInstance().getConnection();
     const result = await pool.request().query(`
-      SELECT email, name, last_name, phone_number, CONVERT(varchar, birth_date, 23) AS birth_date, address, region, country, rol, profile_image 
+      SELECT 
+        email, 
+        COALESCE(name, '') AS name, 
+        COALESCE(last_name, '') AS last_name, 
+        COALESCE(phone_number, '') AS phone_number, 
+        CONVERT(varchar, birth_date, 23) AS birth_date, 
+        COALESCE(address, '') AS address, 
+        COALESCE(region, '') AS region, 
+        COALESCE(country, '') AS country, 
+        COALESCE(rol, '') AS rol, 
+        COALESCE(profile_image, '') AS profile_image 
       FROM t_user 
       WHERE rol != 'admin'
     `);

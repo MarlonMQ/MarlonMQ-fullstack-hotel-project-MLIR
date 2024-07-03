@@ -38,6 +38,21 @@ const AuthProvider = ({ children }) => {
     toast.success('You have successfully logged in');
   };
 
+  const updateProfileImage = (newProfileImage) => {
+    let base64Image = undefined;
+    if (newProfileImage) {
+      base64Image = btoa(
+        new Uint8Array(newProfileImage.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ''
+        )
+      );
+    }
+    setProfileImage(base64Image);
+    window.localStorage.setItem('profileImage', base64Image);
+    toast.success('Profile image updated successfully');
+  };
+
   const logout = () => {
     setToken(null);
     setRol(null);
@@ -56,7 +71,7 @@ const AuthProvider = ({ children }) => {
   }, [token, logout]); // Este efecto se ejecutará cada vez que el token o la función logout cambien
 
   return (
-    <AuthContext.Provider value={{ token, rol, login, logout, profileImage }}>
+    <AuthContext.Provider value={{ token, rol, login, logout, profileImage, updateProfileImage }}>
       {children}
     </AuthContext.Provider>
   );

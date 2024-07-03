@@ -5,23 +5,50 @@ import * as Yup from 'yup';
 import { AuthContext } from '../components/loginComponents/AuthContext';
 import FormBox from '../components/MyAccount/FormBox'; 
 import CountryRegionSelector from '../components/MyAccount/CountryRegionSelector';
+import ChangePhoto from '../components/MyAccount/ChangePhoto';
+import ChangePassword from '../components/MyAccount/ChangePassword';
+import DeleteAccount from '../components/MyAccount/DeleteAccount';
 import { toast } from 'react-toastify';
+import { Buffer } from 'buffer';
+import { useNavigate } from 'react-router-dom';
 
 function MyAccount() {
-  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const {rol, token, updateProfileImage, logout } = useContext(AuthContext);
   const [base64Image, setBase64Image] = useState('');
   const [account, setAccount] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
+  const [showChangePhoto, setShowChangePhoto] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];;
+  
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      const buffer = Buffer.from(base64String.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+      const bufferImage = {
+        type: 'Buffer',
+        data: Array.from(buffer)
+      };
+      setBase64Image(base64String);
+      formik.setFieldValue('profile_image', bufferImage);
+    };
+    setShowChangePhoto(false)
+  };
 
   const fetchAccount = async () => {
     try {
       Axios.setToken(token);
       const response = await Axios.get('/myAccount');
       if (response.status === 200) {
-        setAccount(response.data);
-        
+        setAccount(response.data);     
         if (response.data.profile_image) {
           const base64String = btoa(
             new Uint8Array(response.data.profile_image.data).reduce(
@@ -46,28 +73,33 @@ function MyAccount() {
 
   const formik = useFormik({
     initialValues: {
-      email: account.email,
-      name: account.name,
-      lastName: account.last_name,
-      birthDate: account.birth_date,
-      phone: account.phone_number,
-      country: account.country,
-      region: account.region,
-      address: account.address,
-      photo: account.profile_image,
+      email: '',
+      name: '',
+      lastName: '',
+      birthDate: '',
+      phone: '',
+      country: '',
+      region: '',
+      address: '',
+      profile_image: '',
+      password: '121',
+      newPassword: '12qwW12',
+      confirmPassword: '12qwW12',
+      changingPassword: 0,
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string().email('Invalid email').required('Required field'),
-      password: Yup.string()
-        .min(5, 'Password must be at least 5 characters')
-        .max(20, 'Password cannot be longer than 20 characters')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .required('Required field'),
-      
-      confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required field'),
-      
+
+      password: Yup.string().required('Required field'),
+      newPassword: Yup.string()
+      .min(5, 'Password must be at least 5 characters')
+      .max(20, 'Password cannot be longer than 20 characters')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one number')
+      .required('Required field'),
+    
+      confirmPassword: Yup.string().oneOf([Yup.ref('confirmPassword'), null], 'Passwords must match').required('Required field'),
+    
       name: Yup.string()
         .matches(/^[a-zA-Z]+$/, 'Invalid name')
         .min(2, 'Invalid name')
@@ -108,13 +140,14 @@ function MyAccount() {
         .required('Required field'),
     }),
 
-    onSubmit: async (values, { setErrors }) => {
-      // Logic to submit the form
+    onSubmit: async (values) => {
+      const response = await Axios.post('/myAccount', values);
+      setEditMode(false);
+      fetchAccount();
+      if (response.status === 201) {
+        toast.success('Account updated successfully');
+      }
       try {
-        const response = await Axios.post('/MyAccount', values);
-        if (response.status === 201) {
-          toast.success('Account updated successfully');
-        }
       } catch (error) {
         // handle errors
       }
@@ -123,7 +156,10 @@ function MyAccount() {
   });
 
   const birthDate = new Date(account.birth_date).toLocaleDateString('en-CA');
-  useEffect(() => {
+
+
+  const handleEditMode = () => {
+    fetchAccount();
     if (account) {
       formik.setValues({
         email: account.email,
@@ -131,16 +167,25 @@ function MyAccount() {
         lastName: account.last_name,
         birthDate: birthDate,
         phone: account.phone_number,
-        rol: account.rol,
         country: account.country,
         region: account.region,
         address: account.address,
-        photo: account.profile_image,
+        profile_image: account.profile_image,
+        password: '121',
+        newPassword: '12qwW12',
+        confirmPassword: '12qwW12',
       });
       setCountry(account.country);
       setRegion(account.region);
     }
-  }, [account]);
+    setEditMode(true);
+  };
+
+  const handleSaveInformation = async () => {
+    console.log(formik.values);
+    updateProfileImage(formik.values.profile_image);
+    formik.handleSubmit();
+  };
 
   const selectCountry = (val) => {
     formik.handleChange('country')(val);
@@ -153,6 +198,104 @@ function MyAccount() {
     setRegion(val);
   };
 
+  const handleChangePhoto = () => {
+    setShowChangePhoto(true);
+  }
+
+  const handleDeletePhoto = () => {
+    setBase64Image('');
+    formik.setFieldValue('profile_image', '');
+    setShowChangePhoto(false);
+  }
+  const handleOpenChangePassword = () => {
+    formik.setValues({
+      password: '',
+      newPassword: '',
+      confirmPassword: '',
+    });
+    setShowChangePassword(true);
+  }
+
+  const handleChangePassword = async () => {
+    if (
+      formik.values.password !== '' &&
+      formik.values.newPassword !== '' &&
+      formik.values.confirmPassword !== '' &&
+      formik.values.newPassword === formik.values.confirmPassword
+    ) {
+      const values = {
+        email: account.email,
+        password: formik.values.password,
+        newPassword: formik.values.newPassword,
+        changingPassword: 1,
+      };
+
+      try {
+        const response = await Axios.post('/myAccount', values);
+        console.log(response.status);
+          setShowChangePassword(false);
+          formik.resetForm(); // Utiliza resetForm para resetear los valores y el estado de touched
+          toast.success('Password changed successfully');
+          formik.setValues({
+            password: '121',
+              newPassword: '12qwW12',
+              confirmPassword: '12qwW12',
+          });
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          toast.error('Wrong password, please try again');
+          formik.setErrors({ password: 'Wrong password' });
+        } else {
+          console.error(error);
+        }
+      }
+    }
+  };
+
+  const closeChangePassword = () => {
+    setShowChangePassword(false);
+    setShowDeleteAccount(false);
+    formik.resetForm();
+  }
+
+  const handleOpenDeleteAccount = () => {
+    formik.setValues({
+      password: '',
+    });
+    setShowDeleteAccount(true);
+  }
+
+  const handleDeleteAccount = async () => {
+    if (formik.values.password !== '') {
+      console.log('Deleting account');
+      const values = {
+        email: account.email,
+        password: formik.values.password,
+        changingPassword: 2,
+      }
+      try {
+
+        const response = await Axios.post('/myAccount', values);
+  
+        if (response.status === 202) {
+          toast.info('your account has been deleted');
+          logout();
+          navigate('/');
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          toast.error('Wrong password, please try again');
+          formik.setErrors({ password: 'Wrong password' });
+        } else {
+          if(error.response){
+            console.log(error.response.data);
+          }
+          console.error(error);
+        }
+      }
+    }
+  };
+
 
   return (
     <div className="flex flex-col sm:flex-row h-full w-full bg-gray-100 pt-5">
@@ -163,20 +306,21 @@ function MyAccount() {
             <h1 className="text-4xl font-bold text-fourth mb-8">My Account</h1>
             {editMode ? (        
               <div className='relative size-80 flex group items-center justify-center'>
-                {base64Image ?
-                  (<div className='flex items-center justify-center cursor-pointer'>
-                    <img src={base64Image} className='object-cover rounded-full absolute w-full h-full group-hover:opacity-75 transition-all duration-300 ease-in-out' />
-                    <div className='absolute w-3/6 h-3/6 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out text-center text-2xl font-semibold'>
-                      Change profile image
-                    </div>
-                  </div>)
-                  :
-                  (<div className='flex items-center justify-center cursor-pointer'>
-                    <img src="src/assets/images/no_profile_image.png" className='absolute w-full h-full group-hover:opacity-75 transition-all duration-300 ease-in-out' />
-                    <img src="src/assets/images/add_profile_image.png" className='absolute w-3/6 h-3/6 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out' />
-                  </div>)
-                }
-              </div>
+              {base64Image ?
+                (<div className='flex items-center justify-center cursor-pointer' onClick={handleChangePhoto}>
+                  <img src={base64Image} className='object-cover rounded-full absolute w-full h-full group-hover:opacity-75 transition-all duration-300 ease-in-out' />
+                  <div className='absolute w-3/6 h-3/6 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out text-center text-2xl font-semibold'>
+                    Change profile image
+                  </div>
+                </div>)
+                :
+                (<div className='flex items-center justify-center cursor-pointer' onClick={() => document.getElementById('profile_image_input').click()}>
+                  <img src="src/assets/images/no_profile_image.png" className='absolute w-full h-full group-hover:opacity-75 transition-all duration-300 ease-in-out' />
+                  <img src="src/assets/images/add_profile_image.png" className='absolute w-3/6 h-3/6 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out' />
+                </div>)
+              }
+              <input type="file" id="profile_image_input" onChange={handleFileChange} className="hidden" />
+            </div>
             ) : (
               <div className='relative size-80 flex items-center justify-center'>
                 {base64Image ?
@@ -307,9 +451,19 @@ function MyAccount() {
         </div>
         <div className='flex flex-row space-x-2 mt-7 '>
           {!editMode && (
-            <button className="w-1/2 mx-auto mt-8 justify-end bg-fourth text-white font-semibold py-2 px-4 rounded-lg" onClick={() => setEditMode(true)}>
-              Edit your information
-            </button>
+            <div className='w-full flex flex-row justify-between '>
+              <button className="w-1/2 mx-auto mt-8 text-start text-blue-500 hover:text-blue-700 font-semibold py-2 px-4 rounded-lg" onClick={handleOpenChangePassword}>
+                Change your password
+              </button>
+              <button className="w-1/2 mx-auto mt-8 text-start text-blue-500 hover:text-blue-700 font-semibold py-2 px-4 rounded-lg" onClick={handleEditMode}>
+                Edit your information
+              </button>
+              {rol !== 'admin' &&
+                <button className="w-1/2 mx-auto mt-8 ml-14 text-end text-red-500 hover:text-red-700 font-semibold py-2 px-4 rounded-lg" onClick={handleOpenDeleteAccount}>
+                  Delete your account
+                </button>
+              }
+            </div>
           )}
           {editMode && (
             <button className="w-1/2 mx-auto mt-8 bg-red-400 text-white font-semibold py-2 px-4 rounded-lg" onClick={() => setEditMode(false)}>
@@ -317,13 +471,42 @@ function MyAccount() {
             </button>
           )}
           {editMode && (
-            <button className="w-1/2 mx-auto mt-8 bg-green-400 text-white font-semibold py-2 px-4 rounded-lg" onClick={() => setEditMode(true)}>
-              Edit your information
+            <button className="w-1/2 mx-auto mt-8 bg-green-400 text-white font-semibold py-2 px-4 rounded-lg" onClick={handleSaveInformation}>
+              Save you information
             </button>
           )}
         </div>
         
       </div>
+      {showChangePhoto && (
+        <ChangePhoto
+            onUploadPhoto={() => document.getElementById('profile_image_input').click()}
+            onDeletePhoto={handleDeletePhoto}
+            onClose={() => setShowChangePhoto(false)}
+        />
+      )}
+      {showChangePassword && (
+        <ChangePassword
+            onConfirm={handleChangePassword}
+            onClose={closeChangePassword}
+            handleChange={formik.handleChange}
+            values={formik.values}
+            errors={formik.errors}
+            handleBlur={formik.handleBlur}
+            touched={formik.touched}
+        />
+      )}
+      {showDeleteAccount && (
+        <DeleteAccount
+            onConfirm={handleDeleteAccount}
+            onClose={closeChangePassword}
+            handleChange={formik.handleChange}
+            values={formik.values}
+            errors={formik.errors}
+            handleBlur={formik.handleBlur}
+            touched={formik.touched}
+        />
+      )}
     </div>
   );
 }
