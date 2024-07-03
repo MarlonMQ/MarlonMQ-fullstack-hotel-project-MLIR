@@ -9,6 +9,7 @@ import reservationRoutes from './reserves/routes/reservation.js';
 import AccountsRoutes from './accounts/routes/accounts.js';
 import MyAccountRoutes from './user/routes/myAccount.js';
 import ForgotPasswordRoutes from './user/routes/forgotPassword.js';
+import PaymentRoutes from './payment/routes/payment.js';
 
 import { fileURLToPath } from 'url';
 import RoomsRoutes from './rooms/routes/rooms.js';
@@ -47,8 +48,8 @@ app.use('/reservations', reservationRoutes);
 app.use('/accounts', AccountsRoutes);
 app.use('/myAccount', MyAccountRoutes);
 app.use('/forgot-password', ForgotPasswordRoutes);
+app.use('/payment', PaymentRoutes);
 
-// Start server
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
