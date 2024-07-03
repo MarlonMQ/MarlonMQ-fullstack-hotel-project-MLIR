@@ -282,8 +282,10 @@ function MyAccount() {
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          toast.error('Wrong password, please try again');
-          formik.setErrors({ password: 'Wrong password' });
+          formik.setErrors({ password: 'Wrong password, try again' });
+          formik.setValues({
+            password: '',
+          });
         } else {
           if(error.response){
             console.error(error)

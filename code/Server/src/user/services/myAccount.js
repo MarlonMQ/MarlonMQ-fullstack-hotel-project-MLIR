@@ -64,7 +64,7 @@ class MyAccountServices {
       .query('SELECT password FROM password WHERE email = @email');
   
     if (result.recordset.length === 0) {
-      return null; // El usuario no existe
+      return null;
     }
 
     const encryptedPasswordFromDB = result.recordset[0].password;
@@ -106,11 +106,9 @@ class MyAccountServices {
       const pool = await DbConnection.getInstance().getConnection();
       const transaction = new sql.Transaction(pool);
   
-      // Iniciar la transacción
       await transaction.begin();
   
       try {
-        // Verificar si el usuario existe y obtener el password_id
         const userResult = await pool.request()
           .input('email', sql.VarChar, email)
           .query('SELECT password FROM password WHERE email = @email');
@@ -118,34 +116,38 @@ class MyAccountServices {
         if (userResult.recordset.length === 0) {
           await transaction.rollback();
           await DbConnection.getInstance().closeConnection();
-          return null; // El usuario no existe
+          return null;
         }
-  
-        // Eliminar primero la entrada de contraseña (referencia)
+        const decryptedPasswordFromBD = await MyAccountServices.decrypt(userResult.recordset[0].password, process.env.SECRET_KEY);
+
+        if (decryptedPasswordFromBD !== password) {
+          await transaction.rollback();
+          await DbConnection.getInstance().closeConnection();
+          return null;
+        }
+
+
         await pool.request()
           .input('email', sql.VarChar, email)
           .query('DELETE FROM password WHERE email = @email');
   
-        // Luego eliminar la cuenta de usuario
         await pool.request()
           .input('email', sql.VarChar, email)
           .query('DELETE FROM t_user WHERE email = @email');
   
-        // Commit la transacción si todas las operaciones fueron exitosas
         await transaction.commit();
         await DbConnection.getInstance().closeConnection();
   
-        return userResult.recordset; // Cuenta eliminada exitosamente
+        return userResult.recordset; 
       } catch (error) {
-        // Si ocurre un error, hacer rollback de la transacción
         await transaction.rollback();
         console.error('Error deleting account:', error.message);
         await DbConnection.getInstance().closeConnection();
-        return null; // Manejar cualquier error de base de datos o conexión
+        return null;
       }
     } catch (error) {
       console.error('Error connecting to database:', error.message);
-      return null; // Manejar cualquier error de conexión a la base de datos
+      return null;
     }
   }
   

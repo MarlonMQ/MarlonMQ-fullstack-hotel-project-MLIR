@@ -47,9 +47,16 @@ class MyAccountController {
     } else if(changingPassword === 2) {
       try {
         const result = await MyAccountServices.deleteMyAccount(email, password);
-        res.status(202).send({
-          message: 'User deleted successfully'
-        });
+        if (!result) {
+          res.status(404).send({
+            message: 'User not found'
+          });
+          return;
+        } else {
+          res.status(202).send({
+            message: 'User deleted successfully'
+          });
+        }
       } catch (error) {
         res.status(500).send(error.message);
       }

@@ -24,13 +24,13 @@ function DeleteAccount({onClose, onConfirm, handleChange, values, errors, handle
         </div>
       <div className="pt-3 flex flex-row justify-between w-full">
         <button
-          className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-md "
+          className="bg-sky-400 hover:bg-sky-300 text-white font-bold py-2 px-4 rounded-md "
           onClick={onClose}
         >
           Cancel
         </button>
         <button
-          className="bg-sky-400 hover:bg-sky-300 text-white font-bold py-2 px-4 rounded-md "
+          className=" bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-md "
           onClick={onConfirm}
         >
           Delete Account
