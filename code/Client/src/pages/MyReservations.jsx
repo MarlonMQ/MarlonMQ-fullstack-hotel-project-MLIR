@@ -1,5 +1,4 @@
-
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import Axios from '../services/Axios';
 import { AuthContext } from '../components/loginComponents/AuthContext';
 import { Link } from 'react-router-dom';
@@ -15,7 +14,6 @@ const getInfoAboutReservations = async (token, email) => {
     const response = await Axios.get(`/reservations/myreservations/${email}`);
     return response.data;
 }
-
 
 const formatDataMyRes = (dataReservations, setDataReservations) => {
     const mergedData = dataReservations.reduce((acc, item) => {
@@ -42,7 +40,6 @@ const formatDataMyRes = (dataReservations, setDataReservations) => {
     setDataReservations(result);
 }
 
-
 const handleEditMode = (setEditMode, currentReserve, setCurrentUpdating, setRoomNumber) => {
     setEditMode( (state) => state=1 );
     setCurrentUpdating(currentReserve);
@@ -53,19 +50,18 @@ const handleEditMode = (setEditMode, currentReserve, setCurrentUpdating, setRoom
 const handleDelete = async (id_reserve, id_av, token) => {
     console.log("handle delete llamado");
     const data = {
-        id_reserve: id_reserve ,
+        id_reserve: id_reserve,
         id_room_availability: id_av
     };
     try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         const result = await axios.delete(`http://localhost:4000/reservations/deleteRes/${id_reserve}/${id_av}`);
         toast.success('Reservation deleted successfully');
-        
     } catch (error) {
         console.error('Error setting reserve room:', error);
         toast.error('Cant delete reserve');
     }
-} 
+}
 
 const MyReservations = () => {
     const email = window.localStorage.getItem('email').replace(/"/g, "");
@@ -74,30 +70,24 @@ const MyReservations = () => {
     const [currentUpdating, setCurrentUpdating] = useState({});
     const { token } = useContext(AuthContext);
     const [canPassThroughRooms, setCanPassThroughRooms] = useState(0);
-
     const [roomNumber, setRoomNumber] = useState(0);
     const [selectingDates, setSelectingDates] = useState(1);
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
-      const fetchReservations = async(email) => {
-        const response = await getInfoAboutReservations(token, email);
-        console.log("response.data", response);
-        formatDataMyRes(response, setDataReservations);
-      };
+        const fetchReservations = async (email) => {
+            const response = await getInfoAboutReservations(token, email);
+            console.log("response.data", response);
+            formatDataMyRes(response, setDataReservations);
+        };
 
-      fetchReservations(email);
-
+        fetchReservations(email);
     }, [])
 
     useEffect(() => {
         console.log(dataReservations);
-        
-    }, [dataReservations])  
-    
+    }, [dataReservations])
 
-    //! formik
-    
     const formik = useFormik({
         initialValues: {
             reserveId: currentUpdating.id_reserve,
@@ -114,7 +104,6 @@ const MyReservations = () => {
             checkOut: Yup.string().required('Required finish date'),
         }),
         onSubmit: async (values) => {
-
             console.log("Onsubmit llamado: MyRes");
             values.email = email.replace(/"/g, "");
             values.id_room = currentUpdating.id_room;
@@ -130,36 +119,46 @@ const MyReservations = () => {
                 totalAmount: formik.values.totalAmount,
                 ids_service: currentUpdating.id_services
             };
-            
 
             try {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.put('http://localhost:4000/reservations/updateReservation', formData);
                 toast.success('Reservation pay pending successfully');
-                // navigate("/rooms/myreservations");
             } catch (error) {
                 console.error('Error setting reserve room:', error);
                 if (error.response) {
-                    // The request was made and the server responded with an error status
                     console.log('Error data:', error.response.data);
                     console.log('Error status:', error.response.status);
                     console.log('Error headers:', error.response.headers);
-                    //alert(`Error setting reserve  room: ${error.response.data.message || 'Unspecified error'}`);
                     toast.error('Error setting reserve (response)')
                 } else if (error.request) {
-                    // The request was made but no response was received
                     console.log('Request error:', error.request);
-                    //alert('Error setting reserve : No response received from the server');
                     toast.error('Error setting reserve (request)')
                 } else {
-                    // Something happened in setting up the request that triggered an Error
                     console.log('Error message:', error.message);
-                    //alert(`Error to do reserve: ${error.message}`);
                     toast.error('Error setting reserve')
                 }
             }
         }
     });
+
+    const downloadInvoice = async (reservationId) => {
+        try {
+            const response = await axios.get(`http://localhost:4000/payment/download/${reservationId}`, {
+                responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${reservationId}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            toast.success('Invoice downloaded successfully');
+        } catch (error) {
+            toast.error('Error downloading invoice');
+        }
+    };
+
   return (
     <>
         <h1 className='text-xl text-center py-6'>My Reservations</h1>
@@ -202,21 +201,25 @@ const MyReservations = () => {
                                             >
                                                 Delete
                                             </button>
-                                            {
-                                                (reservation.stat == "Outstanding") 
-                                                ?
-                                                    <Link 
-                                                        className="ml-1 bg-green-500 text-white px-8 py-2 rounded-lg"
-                                                        to="/"
-                                                    >
-                                                        Pay
-                                                    </Link>
-                                                :
-                                                    null
-                                            }   
+                                            {reservation.stat === "Outstanding" && (
+                                            <Link 
+                                                className="ml-1 bg-green-500 text-white px-8 py-2 rounded-lg"
+                                                to={`/paymentReserve/${reservation.id_reserve}/${reservation.total}/${reservation.arrival_date}/${reservation.departure_date}/${5}/${reservation.num_room}`}
+                                            >
+                                                Pay
+                                            </Link>
+                                                  )}
+                                                    {reservation.stat === "paid" && (
+                                                        <button
+                                                            className="ml-1 bg-yellow-500 text-white px-8 py-2 rounded-lg"
+                                                            onClick={() => downloadInvoice(reservation.id_reserve)}
+                                                        >
+                                                            Download Billing
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
                                 <div className="flex-none max-w-md">
                                     <img src={reservation.image_url} alt="Room" className="w-full h-full object-cover" />
                                 </div>
