@@ -27,7 +27,7 @@ export const RoomCard = ({data}) => {
                 </div>
                 <p className='primary-text text-secondary'>{`${price_per_night}$`}</p>
             </div>
-            <p className="primary-text text-secondary text-center">Available: {`${quantity_available}`}</p>
+            <p className="primary-text text-secondary text-center">Total rooms: {`${quantity_available}`}</p>
         </div>
 
     </>

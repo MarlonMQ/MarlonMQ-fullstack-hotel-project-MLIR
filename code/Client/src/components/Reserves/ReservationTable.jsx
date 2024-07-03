@@ -23,8 +23,8 @@ function ReservationTable() {
         .then(response => {
             const formattedReservations = response.data.map(reservation => ({
                 ...reservation,
-                arrival_date: moment(reservation.arrival_date).format('YYYY-MM-DD'),
-                departure_date: moment(reservation.departure_date).format('YYYY-MM-DD'),
+                arrival_date: moment(reservation.arrival_date).add(1, "days").format('YYYY-MM-DD'),
+                departure_date: moment(reservation.departure_date).add(1, "days").format('YYYY-MM-DD'),
                 room_type: reservation.room_type
             }));
             setReservations(formattedReservations);

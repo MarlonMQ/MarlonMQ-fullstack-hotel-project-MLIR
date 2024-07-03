@@ -162,15 +162,15 @@ const MyReservations = () => {
     });
   return (
     <>
-        <h1>My Reservations</h1>
+        <h1 className='text-xl text-center py-6'>My Reservations</h1>
         {
             (editMode == 0)
             ? 
             <div>
                 {
-                    dataReservations.map( (reservation) => {
+                    dataReservations.map( (reservation, index) => {
                         return (
-                            <div key={reservation.id_reserve} className="flex bg-white shadow-md rounded-lg overflow-hidden max-w-4xl mx-auto mb-12">
+                            <div key={index} className="flex bg-white shadow-md rounded-lg overflow-hidden max-w-4xl mx-auto mb-12">
                                 <div className="flex-1 p-4 text-center my-auto">
                                     <div className="bg-gray-200 p-2 rounded-tl-lg rounded-bl-lg">
                                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{reservation.stat}</span>
