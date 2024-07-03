@@ -22,7 +22,6 @@ function MyAccount() {
   const [region, setRegion] = useState('');
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
-  const [changingPassword, setChangingPassword] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
 
   const handleFileChange = (e) => {
@@ -207,6 +206,7 @@ function MyAccount() {
     setShowChangePhoto(false);
   }
   const handleOpenChangePassword = () => {
+    formik.setTouched({}, false);
     formik.setValues({
       password: '',
       newPassword: '',
@@ -257,6 +257,7 @@ function MyAccount() {
   }
 
   const handleOpenDeleteAccount = () => {
+    formik.setTouched({}, false);
     formik.setValues({
       password: '',
     });
