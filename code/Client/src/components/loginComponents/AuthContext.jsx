@@ -50,7 +50,6 @@ const AuthProvider = ({ children }) => {
     }
     setProfileImage(base64Image);
     window.localStorage.setItem('profileImage', base64Image);
-    toast.success('Profile image updated successfully');
   };
 
   const logout = () => {
