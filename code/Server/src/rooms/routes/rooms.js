@@ -12,6 +12,8 @@ class RoomsRoutes {
         this.deleteRoom();
         this.updateRoomRoute();
         this.getDataRoomRoute();
+        this.getConsultDateRoomRoute();
+        this.getMaxRoomNumberRoute();
     }
 
 
@@ -21,6 +23,17 @@ class RoomsRoutes {
         });
     }
 
+    getMaxRoomNumberRoute() {
+        this.router.get('/consultDate/:id', (req, res) => {
+            RoomsController.getMaxRoomNumber(req, res);
+        });
+    }
+
+    getConsultDateRoomRoute() {
+        this.router.get('/consultDate/:id/:room_number', (req, res) => {
+            RoomsController.getConsultDateRoom(req, res);
+        });
+    }
     getDataRoomRoute() {
         console.log("En routes");
         this.router.get('/moreInfo/:id', (req, res) => {

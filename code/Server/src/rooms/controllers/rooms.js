@@ -16,11 +16,35 @@ class RoomsController {
 
     static async getDataRoom(req, res) {
         const id  = req.params.id;
-        // console.log("id es: ", id);
-        try {
-            const room = await RoomsServices.getDataRoom(id);
 
-            res.status(200).send(room);
+        try {
+            const result = await RoomsServices.getDataRoom(id);
+
+            res.status(200).send(result);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+
+    static async getMaxRoomNumber(req, res) {
+        const id  = req.params.id;
+        try {
+            const roomsDates = await RoomsServices.getMaxRoomNumber(id);
+            res.status(200).send(roomsDates);
+
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+
+    static async getConsultDateRoom(req, res) {
+        const id  = req.params.id;
+        const room_number = req.params.room_number;
+        try {
+            const roomsDates = await RoomsServices.getConsultDateRoom(id, room_number);
+
+            res.status(200).send(roomsDates);
+
         } catch (error) {
             res.status(500).send(error.message);
         }
