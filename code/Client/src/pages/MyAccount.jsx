@@ -143,7 +143,7 @@ function MyAccount() {
       const response = await Axios.post('/myAccount', values);
       setEditMode(false);
       fetchAccount();
-      if (response.status === 201) {
+      if (response.status === 200) {
         updateProfileImage(formik.values.profile_image);
         toast.success('Account updated successfully');
       }
