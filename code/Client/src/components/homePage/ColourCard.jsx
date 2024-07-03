@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 export default function ColourCard({ serviceImage, title, text }) {
   return (
     <div className="">
-      <div className=" lg:p-24 bg-gradient-to-b from-zinc-700 to-teal-500 flex items-center justify-center">
+      <div className=" lg:p-24 bg-black flex items-center justify-center">
 
         <div className="max-w-screen px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Primera columna para título y texto */}
