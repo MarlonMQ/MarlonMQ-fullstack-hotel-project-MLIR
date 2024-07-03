@@ -5,7 +5,10 @@ const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRe
   return (
     <div className="flex flex-wrap">
       <div className="block mb-2 w-1/2 pr-2">
-      <label className="block mb-2 text-sm font-medium text-gray-900 w-1/2 pr-2">Country</label>
+      <label className="block mb-2 text-sm font-medium text-gray-900 w-1/2 pr-2">
+        Country
+        {!country && <span className="text-red-500"> *</span>}
+      </label>
       <CountryDropdown
         className={`block w-full p-3 border ${countryError ? 'border-red-500' : 'border-gray-300'} rounded`}
         value={country}
@@ -16,7 +19,10 @@ const AccountCountryRegionSelector = ({ country, selectCountry, region, selectRe
         {countryError && <p className="text-red-500 text-xs italic">{countryError}</p>}
       </div>
       <div className="block mb-2 w-1/2  pl-2">
-        <label className="block mb-2 text-sm font-medium text-gray-900 w-1/2 pr-2">Region</label>
+        <label className="block mb-2 text-sm font-medium text-gray-900 w-1/2 pr-2">
+          Region
+          {!region && <span className="text-red-500"> *</span>}
+        </label>
         <RegionDropdown
           className={`block w-full p-3 border ${regionError ? 'border-red-500' : 'border-gray-300'} rounded`}
           country={country}

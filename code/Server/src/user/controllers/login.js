@@ -12,13 +12,14 @@ class LoginController {
         
       } else {
         const rol = await LoginServices.getRol(email);
-        const accessToken = await LoginServices.generateAccessToken(user);
-
+        const profile_image = await LoginServices.getProfileImage(email);
+        const accessToken = await LoginServices.generateAccessToken(email);
         res.status(200);
         res.send({
-            message: 'Login successful',
-            rol: rol,
-            token: accessToken
+          message: 'Login successful',
+          rol: rol,
+          token: accessToken,
+          profile_image: profile_image
         });
         
       }
