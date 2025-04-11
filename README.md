@@ -1,27 +1,26 @@
 # Hazbín Hotel
 
-Esta es una página web para un hotel, desarrollada como parte de un proyecto full-stack.
+### Description
 
-## Tabla de contenidos
+This is a full-stack hotel website project in which users can not only view information about the hotel, its rooms, and services, but also register and make reservations. The site includes views for administrators and receptionists, enabling them to efficiently manage rooms, bookings, and hotel services in order to deliver a high-quality experience to guests.
+
+## Table of Contents
 
 - [Hazbín Hotel](#hazbín-hotel)
-  - [Tabla de contenidos](#tabla-de-contenidos)
-    - [Descripción](#descripción)
-    - [Tecnologías usadas](#tecnologías-usadas)
-      - [Frontend](#frontend)
-      - [Backend](#backend)
-    - [Base de Datos](./BD/base_de_datos.md)
-    - [Prototipo de baja fidelidad](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
-    - [Prototipo de baja fidelidad: enlace web](https://www.figma.com/file/OFNy7myUIhZMrpd3iX6IKa/Low-Fidelity-Prototype?type=design&node-id=0-1&mode=design)
-    - [Prototipo de alta fidelidad: enlace web](https://www.figma.com/file/hjViTUlKTKIMrYMe83SLJ5/Fullstack-Project%3A-Hazbin-Hotel?type=design&node-id=0-1&mode=design&t=Y2T9fhSSNfyS9fqc-0)
-    - [Manual de Usuario](#manual-de-usuario)
-    - [Autores](#autores)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [Technologies Used](#technologies-used)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+  - [Database](./BD/base_de_datos.md)
+  - [Low-Fidelity Prototype](./Planeacion/low_fidelity_prototype/Low%20Fidelity%20Prototype%20P.I.pdf)
+  - [Low-Fidelity Prototype: Web Link](https://www.figma.com/file/OFNy7myUIhZMrpd3iX6IKa/Low-Fidelity-Prototype?type=design&node-id=0-1&mode=design)
+  - [High-Fidelity Prototype: Web Link](https://www.figma.com/file/hjViTUlKTKIMrYMe83SLJ5/Fullstack-Project%3A-Hazbin-Hotel?type=design&node-id=0-1&mode=design&t=Y2T9fhSSNfyS9fqc-0)
+  - [User Manual](#user-manual)
+    - [Authors](#authors)
 
-### Descripción
 
-Este es un proyecto fullstack de la página web de un hotel en la cual no solamente se puede ver información del mismo, de sus habitaciones y de sus servicios, sino que además es posible registrarse para realizar reservas. Además la página contiene una vista de administrador y de recepcionista, para permitirles a los mismos administrar de forma optima las habitaciones, reservaciones y facilidades del hotel para lograr brindar un servicio de calidad a los huéspedes.
-
-### Tecnologías usadas
+### Technologies Used
 
 #### Frontend
 
@@ -35,13 +34,13 @@ Este es un proyecto fullstack de la página web de un hotel en la cual no solame
 - Express.js
 - SQL
 
- ### [User Persona ](https://www.canva.com/design/DAGB-ZCBiA0/2AxU5ZSihHsgPBm9dHqHkQ/edit?utm_content=DAGB-ZCBiA0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+### [User Persona](https://www.canva.com/design/DAGB-ZCBiA0/2AxU5ZSihHsgPBm9dHqHkQ/edit?utm_content=DAGB-ZCBiA0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-En este otro readme se ve lo necesario de la base de datos
+See this other README for database details.
 
-### Instalacion
+### Installation
 
-1. Clonar el repositorio
+1. Clone the repository.
 2. Install frontend and backend dependencies:
 
 ```bash
@@ -51,30 +50,30 @@ cd frontend
 npm install
 ```
 
-### Manual de Usuario
+### User Manual
 
-1. Clona el repertorio.
-2. Para levantar el servidor habra la carpeta del Backend:
+1. Clone the repository.
+2. To start the server, open the Backend folder:
  ```
  fullstack-hotel-project-mlir\code\Server
  ```
- Dentro de esta carpeta ejecute los siguientes comandos:
+ Inside this folder, run the following commands:
  ```cmd
  npm install
  npm start
  ```
-3. Habra la carpeta del Frontend:
+3. Open the Frontend folder:
 ```
 fullstack-hotel-project-mlir\code\Client
 ```
-Ejecute los siguiente comandos:
+Run the following commands:
 ```cmd
 npm install
 npm run dev
 ```
-4. Abre un navegador y visita [http://localhost:5173](http://localhost:5173) para ver el sitio web del hotel.
+4. Open a browser and go to [http://localhost:5173](http://localhost:5173) to view the hotel website.
 
-### Autores
+### Authors
 
 Jose Ignacio Sanchez Zeledon
 
