@@ -1,5 +1,8 @@
 # Hazbín Hotel
 
+[![Last Commit](https://img.shields.io/github/last-commit/MarlonMQ/MarlonMQ-fullstack-hotel-project-MLIR)](https://github.com/MarlonMQ/MarlonMQ-fullstack-hotel-project-MLIR/commits/main)
+[![Open Issues](https://img.shields.io/github/issues/MarlonMQ/MarlonMQ-fullstack-hotel-project-MLIR)](https://github.com/MarlonMQ/MarlonMQ-fullstack-hotel-project-MLIR/issues)
+
 ### Description
 
 This is a full-stack hotel website project in which users can not only view information about the hotel, its rooms, and services, but also register and make reservations. The site includes views for administrators and receptionists, enabling them to efficiently manage rooms, bookings, and hotel services in order to deliver a high-quality experience to guests.
